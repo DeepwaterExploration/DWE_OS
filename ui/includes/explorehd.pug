@@ -1,0 +1,50 @@
+include switch
+
+mixin exploreHD(device, index)
+    .explorehd-wrapper
+        .mdl-grid
+            .mdl-cell.mdl-cell--4-col
+                .mdl-card.mdl-shadow--2dp.explorehd-card
+                    .mdl-card__title
+                        h3.mdl-card__title-text exploreHD
+                        //- span.material-icons(style="font-size: 8px; margin-left: 5px; transform: translate(0, -50%); color: rgb(63,81,181)") circle
+                    .mdl-card__supporting-text
+                        span="Device: " + device
+                        .mdl-layout-spacer
+                        br
+                        div
+                            span(id="bitrate-text-" + index) Bitrate: 0 Mbps
+                            input.mdl-slider.mdl-js-slider(
+                                type="range" 
+                                min="0" max="20" value="0" tabindex="0" step="0.1" 
+                                id="bitrate-slider-" + index
+                                onInput="this.parentElement.parentElement.getElementsByTagName('span')[0].innerText = 'Bitrate: ' + this.value + ' Mbps'"
+                            )
+                        br
+                        div
+                            +switch('H.264', 'gop-slider', index)
+                            +switch('VBR (Variable Bitrate)', 'vbr-slider', index)
+                        script.
+                            {
+                            let slider = document.getElementById('bitrate-slider-' + #{index});
+                            let vbr = document.getElementById('vbr-slider-' + #{index});
+                            let bitrate = document.getElementById('bitrate-text-' + #{index});
+                            let h264Slider = document.getElementById('gop-slider-' + #{index});
+                            let h264Label = document.getElementById('gop-slider-label-' + #{index});
+                            vbr.onclick = function() {
+                                slider.disabled = vbr.checked;
+                                if (vbr.checked) {
+                                    h264Label.classList.remove('is-checked');
+                                    h264Slider.checked = false;
+                                }
+                                h264Slider.disabled = vbr.checked;
+                                bitrate.style.color = vbr.checked ? '#0000005A' : '#0000008A';
+                            }
+                            }
+                        if index == 0
+                            br
+                            button.mdl-button.mdl-js-button.mdl-button--raised(id="set-default") Set as Default
+                    .mdl-card__menu
+                        button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
+                            i.material-icons settings
+            //- .mdl-layout-spacer

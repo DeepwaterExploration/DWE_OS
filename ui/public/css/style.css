@@ -1,0 +1,27 @@
+.explorehd-card.mdl-card {
+    width: 512px;
+}
+
+.default-dialog.mdl-dialog {
+    width: 512px;
+}
+
+.mdl-layout__header {
+    background-color: #212121;
+}
+
+input:disabled {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}
+
+.explorehd-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+label:disabled {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}

@@ -1,0 +1,13 @@
+extends layout
+include ../includes/explorehd
+include ../includes/defaultDialog
+
+block content
+    .mdl-grid
+        .mdl-cell.mdl-cell--12-col
+            +exploreHD('/dev/video4', 0)
+            +exploreHD('/dev/video6', 1)
+            +exploreHD('/dev/video8', 2)
+    +defaultDialog
+
+    script(src="/js/exploreHD.js")
