@@ -2,6 +2,8 @@
 
 **This project is in development.**
 
+**NOTE: exploreHD settings can only be adjusted on the lower bandwidth / configurable firmware. See how to upgrade [here](https://docs.exploredeepwater.com/software/firmware.html)**
+
 ## Documentation
 
 The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [documentation site](https://docs.exploredeepwater.com/).
