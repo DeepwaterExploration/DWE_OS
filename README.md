@@ -1,5 +1,7 @@
 # exploreHD Controls
 
+**This project is in development.**
+
 ## Documentation
 
 The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [documentation site](https://docs.exploredeepwater.com/).
