@@ -6,12 +6,16 @@ var port = 3000;
 app.set('views', './views');
 app.set('view engine', 'pug');
 
-app.locals.sliderId = 0;
-
 app.use('/', express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
-    res.render('index');
+    res.render('index', {
+        devices: [
+            '/dev/video2', 
+            '/dev/video4', 
+            '/dev/video6'
+        ]
+    });
 })
 
 app.listen(port, function() {
