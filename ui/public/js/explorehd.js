@@ -4,15 +4,13 @@ function stringToHTML(str) {
     return dom.firstChild;
 }
 
-var deviceIndex = 0;
-
-function createDevice(device) {
+function createDevice(device, index) {
     let req = $.ajax({
         url: '/device',
         type: 'get', 
         data: {
             device, 
-            index: deviceIndex
+            index
         }, 
         success: function(res) {
             var ehd = stringToHTML(res);
@@ -20,9 +18,9 @@ function createDevice(device) {
             componentHandler.upgradeDom();
 
             let slider = ehd.querySelector('#bitrate-slider');
-            let vbr = ehd.querySelector('#vbr-slider-' + deviceIndex);
+            let vbr = ehd.querySelector('#vbr-slider-' + index);
             let bitrate = ehd.querySelector('#bitrate-text');
-            let h264Slider = ehd.querySelector('#gop-slider-' + deviceIndex);
+            let h264Slider = ehd.querySelector('#gop-slider-' + index);
             let h264Label = ehd.querySelector('#gop-slider-label');
             vbr.onclick = function() {
                 slider.disabled = vbr.checked;
@@ -38,7 +36,6 @@ function createDevice(device) {
             console.error('Error getting /device');
         }
     });
-    deviceIndex++;
     return req;
 }
 
@@ -48,8 +45,9 @@ var devices = [
     '/dev/video6',
 ];
 let requests = [];
-for (let device of devices) {
-    requests.push(createDevice(device));
+for (let i = 0; i < devices.length; i++) {
+    let device = devices[i];
+    requests.push(createDevice(device, i));
 }
 
 $.when(...requests).done(function() {
