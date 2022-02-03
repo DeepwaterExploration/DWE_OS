@@ -12,7 +12,7 @@ mixin exploreHD(device, index)
                         span="Device: " + device
                         .mdl-layout-spacer
                         br
-                        div
+                        div(id='bitrate-wrapper')
                             span(id="bitrate-text") Bitrate: 0 Mbps
                             input.mdl-slider.mdl-js-slider(
                                 type="range" 
@@ -21,7 +21,7 @@ mixin exploreHD(device, index)
                                 onInput="this.parentElement.parentElement.getElementsByTagName('span')[0].innerText = 'Bitrate: ' + this.value + ' Mbps'"
                             )
                         br
-                        div
+                        div(id='switch-wrapper')
                             +switch('H.264', 'gop-slider', index)
                             +switch('VBR (Variable Bitrate)', 'vbr-slider', index)
                         if index == 0

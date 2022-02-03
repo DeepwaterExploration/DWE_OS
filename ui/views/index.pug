@@ -4,8 +4,6 @@ include ../includes/defaultDialog
 
 block content
     .mdl-grid
-        .mdl-cell.mdl-cell--12-col
-            each val, index in devices
-                +exploreHD(val, index)
+        .mdl-cell.mdl-cell--12-col(id='device-wrapper')
     +defaultDialog
     script(src="/js/explorehd.js")
