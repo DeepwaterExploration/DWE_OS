@@ -5,7 +5,6 @@ for (let i = 0; i < exploreHD.length; i++) {
     let ehd = exploreHD[i];
     let slider = ehd.querySelector('#bitrate-slider');
     let vbr = ehd.querySelector('#vbr-slider-' + i);
-    console.log(vbr)
     let bitrate = ehd.querySelector('#bitrate-text');
     let h264Slider = ehd.querySelector('#gop-slider-' + i);
     let h264Label = ehd.querySelector('#gop-slider-label');
