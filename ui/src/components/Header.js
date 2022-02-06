@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, AppBar, Toolbar, Typography, IconButton, Drawer } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 
 export default class Header extends React.Component {
@@ -10,7 +10,7 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            <AppBar position="sticky">
+            <AppBar position="fixed" style={{ overflow: 'hidden' }}>
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                         <Menu />

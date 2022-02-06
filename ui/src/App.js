@@ -17,13 +17,16 @@ export default class App extends React.Component {
             <>
                 <CssBaseline />
                 <Header />
-                <DevicesContainer>
-                    <DeviceCard device="/dev/video2">
-                        <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button>
-                    </DeviceCard>
-                    <DeviceCard device="/dev/video4" />
-                    <DeviceCard device="/dev/video6" />
-                </DevicesContainer>
+                <div style={{ minHeight: '64px' }} />
+                <div style={{ overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
+                    <DevicesContainer>
+                        <DeviceCard device="/dev/video2">
+                            <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button>
+                        </DeviceCard>
+                        <DeviceCard device="/dev/video4" />
+                        <DeviceCard device="/dev/video6" />
+                    </DevicesContainer>
+                </div>
             </>
         )
     }
