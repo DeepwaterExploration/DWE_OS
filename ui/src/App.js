@@ -18,7 +18,7 @@ export default class App extends React.Component {
                 <CssBaseline />
                 <Header />
                 <div style={{ minHeight: '64px' }} />
-                <div style={{ overflowY: 'scroll', height: 'calc(100vh - 64px)' }}>
+                <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                     <DevicesContainer>
                         <DeviceCard device="/dev/video2">
                             <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button>

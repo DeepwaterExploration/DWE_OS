@@ -1,6 +1,6 @@
-import { Settings } from "@mui/icons-material";
+import { ConstructionOutlined, Settings } from "@mui/icons-material";
 import { Card, CardContent, CardHeader, FormControlLabel, FormGroup, Grid, IconButton, Slider, Switch, Typography } from "@mui/material";
-import React, { createRef } from "react";
+import React, { createRef, useState } from "react";
 
 function SupportingText(props) {
     return (
@@ -12,7 +12,7 @@ function SupportingText(props) {
 
 function DeviceSwitch(props) {
     return (
-        <FormControlLabel onChange={ props.onChange } sx={{mt: '-10px'}} control={ <Switch /> } label={ 
+        <FormControlLabel onChange={ props.onChange } sx={{mt: '-10px'}} control={ <Switch name={ props.name } checked={props.checked} /> } label={ 
             <Typography color="text.secondary">{ props.text }</Typography>
         } />
     )
@@ -23,36 +23,30 @@ class DeviceOptions extends React.Component {
         super(props);
 
         this.state = {
-            bitrate: 0,
-            isH264: false,
-            isVbr: false
+            bitrateSlider: 0,
+            h264Switch: false,
+            vbrSwitch: false
         };
+        
         this.bitrateText = createRef();
-        this.vbrSwitch = createRef();
-        this.h264Switch = createRef();
-
         this.handleInputChange = this.handleInputChange.bind(this);
-    }
-
-    componentDidMount() {
-        // this.vbrSwitch.current.name = 'vbr-switch';
-        // this.h264Switch.current.name = 'h264-switch
-        console.log(this.vbrSwitch);
     }
 
     handleInputChange(event) {
         const target = event.target;
-        const value = target.value;
+        const value = (target.type === 'checkbox') ? target.checked : target.value;
         const name = target.name;
         this.setState({
             [name]: value
         });
-        console.log(name);
-        if (name === 'bitrate-slider') {
+        if (name === 'bitrateSlider') {
             this.bitrateText.current.innerText = `Bitrate: ${value} Mbps`;
-        } else if (name === 'vbr-switch') {
-            console.log('asd');
-            this.h264Switch.current.value = !value;
+        } else if (name === 'h264Switch') {
+            this.state.vbrSwitch = !value;
+        } else if (name === 'vbrSwitch') {
+            if (value) {
+                this.state.h264Switch = !value;
+            }
         }
     }
 
@@ -61,11 +55,11 @@ class DeviceOptions extends React.Component {
             <>
                 <SupportingText>
                     <span ref={this.bitrateText}>Bitrate: 0 Mbps</span>
-                    <Slider name="bitrate-slider" onChange={ this.handleInputChange } style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
+                    <Slider disabled={ this.state.vbrSwitch } name="bitrateSlider" onChange={ this.handleInputChange } style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
                 </SupportingText>
                 <FormGroup>
-                    <DeviceSwitch inputRef={ this.h264Switch } name="h264-switch" onChange={ this.handleInputChange } text="H.264" />
-                    <DeviceSwitch inputProps={{ inputRef: this.vbrSwitch, name: 'vbr-switch' }} name="vbr-switch" onChange={ this.handleInputChange } text="VBR (Variable Bitrate)" />
+                    <DeviceSwitch checked={ this.state.h264Switch } name="h264Switch" onChange={ this.handleInputChange } text="H.264" />
+                    <DeviceSwitch checked={ this.state.vbrSwitch } name="vbrSwitch" onChange={ this.handleInputChange } text="VBR (Variable Bitrate)" />
                 </FormGroup>
             </>
         );
