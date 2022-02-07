@@ -42,7 +42,9 @@ class DeviceOptions extends React.Component {
         if (name === 'bitrateSlider') {
             this.bitrateText.current.innerText = `Bitrate: ${value} Mbps`;
         } else if (name === 'h264Switch') {
-            this.state.vbrSwitch = !value;
+            if (value) {
+                this.state.vbrSwitch = !value;
+            }
         } else if (name === 'vbrSwitch') {
             if (value) {
                 this.state.h264Switch = !value;
