@@ -10,6 +10,20 @@ import DevicesContainer from './components/DevicesContainer';
 export default class App extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            cards: []
+        };
+
+        this.addCard = this.addCard.bind(this);
+    }
+
+    addCard(device) {
+        this.setState({
+            cards: this.state.cards.concat(
+                <DeviceCard key={ this.state.cards.length } device={ device } />
+            )
+        })
     }
 
     render() {
@@ -25,6 +39,7 @@ export default class App extends React.Component {
                         </DeviceCard>
                         <DeviceCard device="/dev/video4" />
                         <DeviceCard device="/dev/video6" />
+                        { this.state.cards }
                     </DevicesContainer>
                 </div>
             </>
