@@ -69,7 +69,7 @@ h264Cameras.forEach((cam) => {
         let vid = info.ID_VENDOR_ID;
         let pid = info.ID_MODEL_ID;
         // check vid/pid for exploreHD
-        if (vid === '0c45' && pid === '6366') {
+        if (vid === '0c45' && pid === '6366') { // DO NOT REMOVE: Could result in issues with unsupported cameras
             exploreHD_cameras.push(cam);
             console.log(`Found exploreHD: ${cam.device}`);
         }
