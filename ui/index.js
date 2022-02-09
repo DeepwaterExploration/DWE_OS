@@ -45,7 +45,7 @@ function getUdevOptions(device, onResult) {
 
 // h264 cameras
 var h264Cameras = [];
-for (let i = 0; ; i++) {
+for (let i = 0; i < 64; i++) {
     try {
         var cam = new v4l2camera.Camera('/dev/video' + i);
         var h264Support = false;
@@ -57,7 +57,7 @@ for (let i = 0; ; i++) {
         if (h264Support)
             h264Cameras.push(cam)
     } catch (err) { // error due to camera not found; finished enumerating
-        break;
+        continue;
     }
 }
 
@@ -80,8 +80,12 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 // API endpoints
 app.get('/devices', (req, res) => {
+    let devices = [];
+    for (let cam of exploreHD_cameras) {
+        devices.push(cam.device);
+    }
     res.send({
-        devices: exploreHD_cameras
+        devices
     });
 });
 
