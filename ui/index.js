@@ -3,8 +3,10 @@ const path = require('path');
 const app = express();
 
 const { findDevices } = require('./devices');
+const { setOption, getOption } = require('./driver');
 
 app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.json());
 
 // API endpoints
 app.get('/devices', (req, res) => {

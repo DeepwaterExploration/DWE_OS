@@ -50,6 +50,13 @@ class DeviceOptions extends React.Component {
                 this.state.h264Switch = !value;
             }
         }
+        
+        var options = [
+            { option: '--xuset-gop', value: !this.state.h264Switch ? '28' : '0' }, 
+            { option: '--xuset-cvm', value: !this.state.vbrSwitch ? '2' : '1' }, 
+            { option: '--xuset-br', value: (this.state.bitrateSlider * 1000).toString() }, 
+        ];
+        this.props.onUpdate(options);
     }
 
     render() {
@@ -68,23 +75,37 @@ class DeviceOptions extends React.Component {
     }
 }
 
-export default function DeviceCard(props) {
-    return (
-        <Grid item xs={3} style={{ paddingTop: '30px' }}>
-            <Card sx={{ minWidth: 512, boxShadow: 3 }}>
-                <CardHeader 
-                    action={
-                        <IconButton>
-                            <Settings />
-                        </IconButton>
-                    } 
-                    title="exploreHD" />
-                <CardContent>
-                    <SupportingText>Device: { props.device }</SupportingText>
-                    <DeviceOptions />
-                    { props.children }
-                </CardContent>
-            </Card>
-        </Grid>
-    )
+export default class DeviceCard extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.handleStateChange = this.handleStateChange.bind(this);
+    }
+    
+    handleStateChange(options) {
+        for (let option of options) {
+            console.log(option);
+        }
+    }
+
+    render() {
+        return (
+            <Grid item xs={3} style={{ paddingTop: '30px' }}>
+                <Card sx={{ minWidth: 512, boxShadow: 3 }}>
+                    <CardHeader 
+                        action={
+                            <IconButton>
+                                <Settings />
+                            </IconButton>
+                        } 
+                        title="exploreHD" />
+                    <CardContent>
+                        <SupportingText>Device: { this.props.device }</SupportingText>
+                        <DeviceOptions onUpdate={ this.handleStateChange } />
+                        { this.props.children }
+                    </CardContent>
+                </Card>
+            </Grid>
+        )
+    }
 }
