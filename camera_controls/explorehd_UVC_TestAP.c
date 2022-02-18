@@ -32,6 +32,11 @@
 #include <sys/utsname.h>
 #include <pthread.h>
 
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "explorehd_opts.h" /* Options enum */
 #include "v4l2uvc.h"
 #include "explorehd_xu_ctrls.h"
@@ -101,20 +106,20 @@ static int video_open(const char *devname)
 
 	dev = open(devname, O_RDWR);
 	if (dev < 0) {
-		TestAp_Printf(TESTAP_DBG_ERR, "Error opening device %s: %d.\n", devname, errno);
+		TestAp_Printf(TESTAP_DBG_ERR, "E: Error opening device %s: %d.\n", devname, errno);
 		return dev;
 	}
 
 	memset(&cap, 0, sizeof cap);
 	ret = ioctl(dev, VIDIOC_QUERYCAP, &cap);
 	if (ret < 0) {
-		TestAp_Printf(TESTAP_DBG_ERR, "Error opening device %s: unable to query device.\n",
-			devname);
+		TestAp_Printf(TESTAP_DBG_ERR, "E: Error opening device %s: unable to query device.\n",
+		 	devname);
 		close(dev);
 		return ret;
 	}
 
-	printf( "Device %s opened: %s.\n", devname, cap.card);
+	printf("I: Device %s opened: %s.\n", devname, cap.card);
 	return dev;
 }
 
@@ -252,18 +257,117 @@ int video_get_framerate(int dev, int *framerate)
 	return 0;
 }
 
+typedef enum {gop, bitrate, cvm, NONE} SETTING;
+
+const static struct {
+	SETTING setting;
+	const char *str;
+} conversion [] = {
+	{gop, "gop"},
+	{bitrate, "bitrate"},
+	{cvm, "cvm"}
+};
+
+void usage(char *argv[]) {
+	fprintf(stderr, "Usage: %s [-s] [option] [value] [-g] [option] [-d] [device]\n", argv[0]);
+}
+
+SETTING option_from_string(const char *str) {
+	for (int i = 0; i < sizeof(conversion) / sizeof(conversion[0]); i++) {
+		if (!strcmp(str, conversion[i].str)) return conversion[i].setting;
+	}
+	return NONE;
+}
+
+int set_option(int fd, char *setting, char* value) {
+	SETTING option = option_from_string(setting);
+	char *ptr;
+	int ret;
+	switch (option) {
+		case gop: ret = XU_H264_Set_GOP(fd, atoi(value)); break;
+		case bitrate: ret = XU_H264_Set_BitRate(fd, strtod(value, &ptr)); break;
+		case cvm: ret = XU_H264_Set_Mode(fd, atoi(value)); break;
+		default: ret = 1;
+	}
+	return ret;
+}
+
+int get_option(int fd, char *setting) {
+	SETTING option = option_from_string(setting);
+	char *ptr;
+	int ret;
+	unsigned int _gop;
+	double _bitrate;
+	unsigned int _cvm;
+	switch (option) {
+		case gop:
+			ret = XU_H264_Get_GOP(fd, &_gop);
+			printf("V: GOP=%d\n", _gop);
+			break;
+		case bitrate:
+			ret = XU_H264_Get_BitRate(fd, &_bitrate);
+			printf("V: BITRATE=%f\n", _bitrate);
+			break;
+		case cvm:
+			ret = XU_H264_Get_Mode(fd, &_cvm);
+			printf("V: MODE=%d\n", _cvm);
+			break;
+		default: ret = 1;
+	}
+	return ret;
+}
+
 int main(int argc, char *argv[])
 {
 	int dev, ret;
 
-	/* Open the video device. */
-	dev = video_open(argv[optind]);
-	if (dev < 0)
-		return 1;
+	int opt;
+	enum { SET_OPT, GET_OPT } mode = SET_OPT;
+	while ((opt = getopt(argc, argv, "sgd")) != -1) {
+		switch (opt) {
+			case 's': mode = SET_OPT; break;
+			case 'g': mode = GET_OPT; break;
+			case 'd':
+				if (optind < argc) {
+					/* Open the video device. */
+					dev = video_open(argv[optind]);
+					if (dev < 0)
+						return 1;
+					optind++;
+				}
+				break;
+			default:
+				usage(argv);
+				return 1;
+		}
+	}
 
-	ret = XU_H264_Set_GOP(dev, 0);
-	ret = XU_H264_Set_Mode(dev, 2);
-	ret = XU_H264_Set_BitRate(dev, 1000);
+	if (!dev) {
+		usage(argv);
+	}
+
+	char* setting = {0};
+	char* value = {0};
+	switch (mode) {
+		case SET_OPT:
+			if (optind > argc - 2) {
+				usage(argv);
+				return 1;
+			}
+			setting = argv[optind++];
+			value = argv[optind];
+			set_option(dev, setting, value);
+			break;
+		case GET_OPT:
+			if (optind > argc - 1) {
+				usage(argv);
+				return 1;
+			}
+			setting = argv[optind++];
+			get_option(dev, setting);
+			break;
+	}
+
 
 	close(dev);
 	return 0;
