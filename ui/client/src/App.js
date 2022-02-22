@@ -34,7 +34,7 @@ export default class App extends React.Component {
             .then((data) => {
                 let devices = data.devices;
                 for (let device of devices) {
-                    this.addCard(device);
+                    this.addCard(device.device);
                 }
             })
     }
@@ -47,11 +47,6 @@ export default class App extends React.Component {
                 <div style={{ minHeight: '64px' }} />
                 <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                     <DevicesContainer>
-                        {/* <DeviceCard device="/dev/video2">
-                            <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button>
-                        </DeviceCard>
-                        <DeviceCard device="/dev/video4" />
-                        <DeviceCard device="/dev/video6" /> */}
                         { this.state.cards }
                     </DevicesContainer>
                 </div>

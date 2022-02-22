@@ -1,18 +1,4 @@
 {
     "DRIVER_EXECUTABLE": "../camera_controls/explorehd_UVC_TestAP", 
-    "DRIVER_BASE_PATH": "../camera_controls/", 
-    "OPTIONS": {
-        "gop": {
-            "get": "--xuget-gop",
-            "set": "--xuset-gop"
-        }, 
-        "bitrate": {
-            "get": "--xuget-br",
-            "set": "--xuset-br"
-        }, 
-        "vbr": {
-            "get": "--xuget-cvm", 
-            "set": "--xuset-cvm"
-        }
-    }
+    "DRIVER_BASE_PATH": "../camera_controls/"
 }
