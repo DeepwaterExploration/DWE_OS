@@ -1,5 +1,5 @@
 import { ConstructionOutlined, Settings } from "@mui/icons-material";
-import { Card, CardContent, CardHeader, FormControlLabel, FormGroup, Grid, IconButton, Slider, Switch, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, FormControlLabel, FormGroup, Grid, IconButton, Slider, Switch, Typography } from "@mui/material";
 import React, { createRef, useState } from "react";
 
 function SupportingText(props) {
@@ -23,13 +23,18 @@ class DeviceOptions extends React.Component {
         super(props);
 
         this.state = {
-            bitrateSlider: 0,
-            h264Switch: false,
-            vbrSwitch: false
+            bitrateSlider: this.props.bitrate / 1000,
+            bitrate: this.props.bitrate / 1000,
+            h264Switch: this.props.gop > 0,
+            vbrSwitch: this.props.mode == 2
         };
+
+        this.timeout = null;
         
         this.bitrateText = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSliderChange = this.handleSliderChange.bind(this);
+        this.updateDeviceState = this.updateDeviceState.bind(this);
     }
 
     handleInputChange(event) {
@@ -39,9 +44,7 @@ class DeviceOptions extends React.Component {
         this.setState({
             [name]: value
         });
-        if (name === 'bitrateSlider') {
-            this.bitrateText.current.innerText = `Bitrate: ${value} Mbps`;
-        } else if (name === 'h264Switch') {
+        if (name === 'h264Switch') {
             if (value) {
                 this.state.vbrSwitch = !value;
             }
@@ -50,21 +53,41 @@ class DeviceOptions extends React.Component {
                 this.state.h264Switch = !value;
             }
         }
-        
-        var options = [
-            { option: '--xuset-gop', value: !this.state.h264Switch ? '28' : '0' }, 
-            { option: '--xuset-cvm', value: !this.state.vbrSwitch ? '2' : '1' }, 
-            { option: '--xuset-br', value: (this.state.bitrateSlider * 1000).toString() }, 
-        ];
-        this.props.onUpdate(options);
+        this.timeout && clearTimeout(this.timeout);
+        // Note: This delay results in the proper value being sent
+        this.timeout = setTimeout(() => {
+            this.updateDeviceState();
+        }, 200);
+    }
+
+    handleSliderChange(e, newValue) {
+        this.timeout && clearTimeout(this.timeout);
+        this.bitrateText.current.innerText = `Bitrate: ${newValue} Mbps`;
+        this.timeout = setTimeout(() => {
+            this.state.bitrate = newValue;
+            this.updateDeviceState();
+        }, 200);
+    }
+
+    updateDeviceState() {
+        var deviceState = {
+            device: this.props.device, 
+            options: {
+                GOP: this.state.h264Switch ? 29 : 0, 
+                MODE: this.state.vbrSwitch ? 2 : 1, 
+                BITRATE: this.state.bitrate * 1000
+            }
+        };
+        console.log(deviceState.options);
+        this.props.onUpdate(deviceState);
     }
 
     render() {
         return (
             <>
                 <SupportingText>
-                    <span ref={this.bitrateText}>Bitrate: 0 Mbps</span>
-                    <Slider disabled={ this.state.vbrSwitch } name="bitrateSlider" onChange={ this.handleInputChange } style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
+                    <span ref={this.bitrateText}>Bitrate: { this.state.bitrateSlider } Mbps</span>
+                    <Slider defaultValue={ this.state.bitrateSlider } disabled={ this.state.vbrSwitch } onChange={ this.handleSliderChange } name="bitrateSlider" style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
                 </SupportingText>
                 <FormGroup>
                     <DeviceSwitch checked={ this.state.h264Switch } name="h264Switch" onChange={ this.handleInputChange } text="H.264" />
@@ -82,10 +105,11 @@ export default class DeviceCard extends React.Component {
         this.handleStateChange = this.handleStateChange.bind(this);
     }
     
-    handleStateChange(options) {
-        for (let option of options) {
-            console.log(option);
-        }
+    handleStateChange(deviceState) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/option', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(deviceState));
     }
 
     render() {
@@ -101,7 +125,7 @@ export default class DeviceCard extends React.Component {
                         title="exploreHD" />
                     <CardContent>
                         <SupportingText>Device: { this.props.device }</SupportingText>
-                        <DeviceOptions onUpdate={ this.handleStateChange } />
+                        <DeviceOptions bitrate={ this.props.bitrate } gop={ this.props.gop } mode={ this.props.mode } onUpdate={ this.handleStateChange } />
                         { this.props.children }
                     </CardContent>
                 </Card>

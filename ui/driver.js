@@ -40,7 +40,7 @@ function setOption(device, option, value) {
 }
 
 function getOption(device, option) {
-    return invokeDriver(`-d ${device} -g ${option}`);
+    return invokeDriver(('-d ' + device + ' -g ' + option).toString());
 }
 
 module.exports.setOption = setOption;
