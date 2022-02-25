@@ -22,6 +22,8 @@ class DeviceOptions extends React.Component {
     constructor(props) {
         super(props);
 
+        this.device = props.device;
+
         this.state = {
             bitrateSlider: this.props.bitrate / 1000,
             bitrate: this.props.bitrate / 1000,
@@ -71,14 +73,14 @@ class DeviceOptions extends React.Component {
 
     updateDeviceState() {
         var deviceState = {
-            device: this.props.device, 
+            device: this.device, 
             options: {
                 GOP: this.state.h264Switch ? 29 : 0, 
                 MODE: this.state.vbrSwitch ? 2 : 1, 
                 BITRATE: this.state.bitrate * 1000
             }
         };
-        console.log(deviceState.options);
+        console.log(deviceState);
         this.props.onUpdate(deviceState);
     }
 
@@ -125,7 +127,7 @@ export default class DeviceCard extends React.Component {
                         title="exploreHD" />
                     <CardContent>
                         <SupportingText>Device: { this.props.device }</SupportingText>
-                        <DeviceOptions bitrate={ this.props.bitrate } gop={ this.props.gop } mode={ this.props.mode } onUpdate={ this.handleStateChange } />
+                        <DeviceOptions device={ this.props.device } bitrate={ this.props.bitrate } gop={ this.props.gop } mode={ this.props.mode } onUpdate={ this.handleStateChange } />
                         { this.props.children }
                     </CardContent>
                 </Card>

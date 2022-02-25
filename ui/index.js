@@ -33,6 +33,20 @@ async function exploreHDCamera(device) {
     return result;
 }
 
+async function setDeviceState(deviceState) {
+    const optionMap = {
+        'GOP': 'gop', 
+        'MODE': 'cvm',
+        'BITRATE': 'bitrate'
+    };
+    let device = deviceState.device;
+    let options = deviceState.options;
+    for (let option of Object.keys(options)) {
+        let arg = optionMap[option];
+        await setOption(device, arg, options[option].toString());
+    }
+}
+
 // API endpoints
 // TODO: make devices sent over socket
 app.get('/devices', (req, res) => {
@@ -53,8 +67,9 @@ app.get('/devices', (req, res) => {
 });
 
 app.post('/option', (req, res) => {
-    console.log(req.body);
-    res.sendStatus(200);
+    setDeviceState(req.body).then(() => {
+        res.sendStatus(200);
+    });
 })
 
 // socket.io

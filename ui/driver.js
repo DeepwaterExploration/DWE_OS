@@ -36,6 +36,7 @@ function invokeDriver(args) {
 }
 
 function setOption(device, option, value) {
+    console.log(`-d ${device} -s ${option} ${value}`);
     return invokeDriver(`-d ${device} -s ${option} ${value}`);
 }
 
