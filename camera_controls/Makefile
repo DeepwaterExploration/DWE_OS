@@ -9,7 +9,7 @@ CFLAGS += -I/usr/src/linux-$(shell uname -r)/include
 #CFLAGS = -g -I/usr/src/linux-2.6.36.4/include
 
 #objects
-OBJS = explorehd_UVC_TestAP.o explorehd_xu_ctrls.o v4l2uvc.o nalu.o cap_desc_parser.o cap_desc.o
+OBJS = explorehd_UVC_TestAP.o explorehd_xu_ctrls.o v4l2uvc.o cap_desc_parser.o cap_desc.o
 
 #install path
 INSTALL_PATH = ./
@@ -27,5 +27,6 @@ explorehd_xu_ctrls.o: explorehd_xu_ctrls.c explorehd_xu_ctrls.h
 
 clean:
 	-rm -f *.o *.ko .*.cmd .*.flags *.mod.c
+	-rm -f explorehd_UVC_TestAP
 
 

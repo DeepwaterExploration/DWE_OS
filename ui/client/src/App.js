@@ -21,7 +21,7 @@ export default class App extends React.Component {
     addCard(device) {
         this.setState({
             cards: this.state.cards.concat(
-                <DeviceCard key={ this.state.cards.length } device={ device }>
+                <DeviceCard key={ this.state.cards.length } device={ device.device } bitrate={ device.options.BITRATE } gop={ device.options.GOP } mode={ device.options.MODE } >
                     { this.state.cards.length == 0 ? <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button> : undefined }
                 </DeviceCard>
             )
@@ -34,6 +34,7 @@ export default class App extends React.Component {
             .then((data) => {
                 let devices = data.devices;
                 for (let device of devices) {
+                    console.log(device);
                     this.addCard(device);
                 }
             })
@@ -47,11 +48,6 @@ export default class App extends React.Component {
                 <div style={{ minHeight: '64px' }} />
                 <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                     <DevicesContainer>
-                        {/* <DeviceCard device="/dev/video2">
-                            <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button>
-                        </DeviceCard>
-                        <DeviceCard device="/dev/video4" />
-                        <DeviceCard device="/dev/video6" /> */}
                         { this.state.cards }
                     </DevicesContainer>
                 </div>
