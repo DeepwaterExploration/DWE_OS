@@ -848,81 +848,82 @@ int XU_H264_Set_QP(int fd, int QP_Val)
 
 int XU_H264_Get_BitRate(int fd, double *BitRate)
 {
-	TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Get_BitRate ==>\n");
-	int i = 0;
-	int ret = 0;
-	int err = 0;
-	__u8 ctrldata[11]={0};
-	int BitRate_CtrlNum = 0;
-	*BitRate = -1.0;
+    TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Get_BitRate ==>\n");
+    int i = 0;
+    int ret = 0;
+    int err = 0;
+    __u8 ctrldata[11]={0};
+    int BitRate_CtrlNum = 0;
+    *BitRate = -1.0;
 
-	//uvc_xu_control parmeters
-	__u8 xu_unit= 0; 
-	__u8 xu_selector= 0;
-	__u16 xu_size= 11;
-	__u8 *xu_data= ctrldata;
+    //uvc_xu_control parmeters
+    __u8 xu_unit= 0; 
+    __u8 xu_selector= 0;
+    __u16 xu_size= 11;
+    __u8 *xu_data= ctrldata;
 
-	xu_unit = XU_explorehd_USR_ID;
-	xu_selector = XU_explorehd_USR_H264_CTRL;
+    xu_unit = XU_explorehd_USR_ID;
+    xu_selector = XU_explorehd_USR_H264_CTRL;
 
-	// Switch command
+    // Switch command
 	xu_data[0] = 0x9A;				// Tag
 	xu_data[1] = 0x02;				// H264_BitRate
 
-	if ((err=XU_Set_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
+    if ((err=XU_Set_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
 	{
 		TestAp_Printf(TESTAP_DBG_ERR,"XU_H264_Get_BitRate ==> Switch cmd : ioctl(UVCIOC_CTRL_SET) FAILED (%i)\n",err);
 		if(err==EINVAL)
 			TestAp_Printf(TESTAP_DBG_ERR,"Invalid arguments\n");
 		return err;
 	}
-	
-	// Get Bit rate ctrl number
-	memset(xu_data, 0, xu_size);
-	if ((err=XU_Get_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
+        
+    // Get Bit rate ctrl number
+    memset(xu_data, 0, xu_size);
+    if ((err=XU_Get_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
 	{
 		TestAp_Printf(TESTAP_DBG_ERR,"XU_H264_Get_BitRate ==> ioctl(UVCIOC_CTRL_GET) FAILED (%i)\n",err);
 		if(err==EINVAL)
 			TestAp_Printf(TESTAP_DBG_ERR,"Invalid arguments\n");
 		return err;
 	}
-	
-	TestAp_Printf(TESTAP_DBG_FLOW, "   == XU_H264_Get_BitRate Success == \n");
-	
-	for(i=0; i<3; i++)
-		TestAp_Printf(TESTAP_DBG_FLOW, "      Get data[%d] : 0x%x\n", i, xu_data[i]);
+        
+    TestAp_Printf(TESTAP_DBG_FLOW, "   == XU_H264_Get_BitRate Success == \n");
+        
+    for(i=0; i<3; i++)
+        TestAp_Printf(TESTAP_DBG_FLOW, "      Get data[%d] : 0x%x\n", i, xu_data[i]);
 
-	BitRate_CtrlNum =  ( xu_data[0]<<16 )| ( xu_data[1]<<8 )| (xu_data[2]) ;
+	// BitRate_CtrlNum =  ( xu_data[0]<<16 )| ( xu_data[1]<<8 )| (xu_data[2]) ;
+	BitRate_CtrlNum =  ( xu_data[0]<<24 )| ( xu_data[1]<<16 )| (xu_data[2] <<8) | (xu_data[3]) ;
 
-	*BitRate = BitRate_CtrlNum;
+    *BitRate = BitRate_CtrlNum;
 
-	
-	TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Get_BitRate (%.2f)<==\n", *BitRate);
-	return ret;
+
+    TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Get_BitRate (%.2f)<==\n", *BitRate);
+    return ret;
 }
 
 int XU_H264_Set_BitRate(int fd, double BitRate)
-{	
-	TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Set_BitRate (%.2f) ==>\n",BitRate);
-	int ret = 0;
-	int err = 0;
-	__u8 ctrldata[11]={0};
-	int BitRate_CtrlNum = 0;
+{       
+    TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Set_BitRate (%.2f) ==>\n",BitRate);
+    int ret = 0;
+    int err = 0;
+    __u8 ctrldata[11]={0};
+    int BitRate_CtrlNum = 0;
 
-	//uvc_xu_control parmeters
-	__u8 xu_unit= 0; 
-	__u8 xu_selector= 0;
-	__u16 xu_size= 11;
-	__u8 *xu_data= ctrldata;
+    //uvc_xu_control parmeters
+    __u8 xu_unit= 0; 
+    __u8 xu_selector= 0;
+    __u16 xu_size= 11;
+    __u8 *xu_data= ctrldata;
 
-	xu_unit = XU_explorehd_USR_ID;
-	xu_selector = XU_explorehd_USR_H264_CTRL;
+    xu_unit = XU_explorehd_USR_ID;
+    xu_selector = XU_explorehd_USR_H264_CTRL;
 
-	// Switch command
-	xu_data[0] = 0x9A;				// Tag
-	xu_data[1] = 0x02;				// H264_BitRate
+    // Switch command
+	xu_data[0] = 0x9A;                          // Tag
+	xu_data[1] = 0x02;                          // H264_BitRate
 
-	if ((err=XU_Set_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
+    if ((err=XU_Set_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
 	{
 		TestAp_Printf(TESTAP_DBG_ERR,"XU_H264_Set_BitRate ==> Switch cmd : ioctl(UVCIOC_CTRL_SET) FAILED (%i)\n",err);
 		if(err==EINVAL)
@@ -930,21 +931,22 @@ int XU_H264_Set_BitRate(int fd, double BitRate)
 		return err;
 	}
 
-	// Set Bit Rate Ctrl Number
-	xu_data[0] = ((int)BitRate & 0x00FF0000)>>16;
-	xu_data[1] = ((int)BitRate & 0x0000FF00)>>8;
-	xu_data[2] = ((int)BitRate & 0x000000FF);
+    // Set Bit Rate Ctrl Number
+	xu_data[0] = ((int)BitRate & 0xFF000000)>>24;
+	xu_data[1] = ((int)BitRate & 0x00FF0000)>>16;
+	xu_data[2] = ((int)BitRate & 0x0000FF00)>>8;
+	xu_data[3] = ((int)BitRate & 0x000000FF);
 
-	if ((err=XU_Set_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
+    if ((err=XU_Set_Cur(fd, xu_unit, xu_selector, xu_size, xu_data)) < 0) 
 	{
 		TestAp_Printf(TESTAP_DBG_ERR,"XU_H264_Set_BitRate ==> ioctl(UVCIOC_CTRL_SET) FAILED (%i)\n",err);
 		if(err==EINVAL)
 			TestAp_Printf(TESTAP_DBG_ERR,"Invalid arguments\n");
 		return err;
 	}
-	
-	TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Set_BitRate <== Success \n");
-	return ret;
+        
+    TestAp_Printf(TESTAP_DBG_FLOW, "XU_H264_Set_BitRate <== Success \n");
+    return ret;
 }
 
 int XU_H264_Set_IFRAME(int fd)
