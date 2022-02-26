@@ -25,8 +25,8 @@ class DeviceOptions extends React.Component {
         this.device = props.device;
 
         this.state = {
-            bitrateSlider: this.props.bitrate / 1000,
-            bitrate: this.props.bitrate / 1000,
+            bitrateSlider: this.props.bitrate / 1000000,
+            bitrate: this.props.bitrate / 1000000,
             h264Switch: this.props.gop > 0,
             vbrSwitch: this.props.mode == 2
         };
@@ -77,7 +77,7 @@ class DeviceOptions extends React.Component {
             options: {
                 GOP: this.state.h264Switch ? 29 : 0, 
                 MODE: this.state.vbrSwitch ? 2 : 1, 
-                BITRATE: this.state.bitrate * 1000
+                BITRATE: this.state.bitrate * 1000000
             }
         };
         console.log(deviceState);
