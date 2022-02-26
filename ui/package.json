@@ -13,7 +13,6 @@
     "client": "file:client",
     "express": "^4.17.2",
     "socket.io": "^4.4.1",
-    "usb-detection": "^4.13.0",
     "v4l2camera-pr48": "^1.2.1"
   }
 }
