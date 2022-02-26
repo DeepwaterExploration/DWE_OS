@@ -4,6 +4,8 @@ import { StyledEngineProvider, createTheme, ThemeProvider } from '@mui/material/
 import App from './App';
 import { grey } from '@mui/material/colors';
 
+import '@fontsource/roboto';
+
 import { io } from 'socket.io-client';
 
 const theme = createTheme({
