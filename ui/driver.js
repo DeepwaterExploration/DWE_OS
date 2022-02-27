@@ -1,11 +1,11 @@
 const path = require('path');
 const config = require('./config.json');
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 
 // invoke the driver executable directly with args
 function invokeDriver(args) {
     return new Promise((resolve, reject) => {
-        exec(path.join(__dirname, config.DRIVER_EXECUTABLE) + ' ' + args, (error, stdout, stderr) => {
+        execFile(path.join(__dirname, config.DRIVER_EXECUTABLE), args, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
                 reject(error);
@@ -36,12 +36,11 @@ function invokeDriver(args) {
 }
 
 function setOption(device, option, value) {
-    console.log(`-d ${device} -s ${option} ${value}`);
-    return invokeDriver(`-d ${device} -s ${option} ${value}`);
+    return invokeDriver(['-d', device, '-s', option, value]);
 }
 
 function getOption(device, option) {
-    return invokeDriver(('-d ' + device + ' -g ' + option).toString());
+    return invokeDriver(['-d', device, '-g', option]);
 }
 
 module.exports.setOption = setOption;

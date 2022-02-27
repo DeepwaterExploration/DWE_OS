@@ -1,5 +1,5 @@
-import { ConstructionOutlined, Settings } from "@mui/icons-material";
-import { Button, Card, CardContent, CardHeader, FormControlLabel, FormGroup, Grid, IconButton, Slider, Switch, Typography } from "@mui/material";
+import { ConstructionOutlined, Settings, Warning } from "@mui/icons-material";
+import { Button, Card, CardContent, CardHeader, FormControlLabel, FormGroup, Grid, Icon, IconButton, Slider, Switch, Tooltip, Typography } from "@mui/material";
 import React, { createRef, useState } from "react";
 
 function SupportingText(props) {
@@ -116,26 +116,31 @@ export default class DeviceCard extends React.Component {
 
     render() {
         let deviceOptions;
+        let deviceWarning;
         if (this.props.device.driverCompatible) {
             deviceOptions = <DeviceOptions device={ this.props.device.device } 
                                            bitrate={ this.props.device.options.BITRATE } 
                                            gop={ this.props.device.options.GOP } 
                                            mode={ this.props.device.options.MODE } 
-                                           onUpdate={ this.handleStateChange } />
+                                           onUpdate={ this.handleStateChange } />;
+            deviceWarning = null;
         } else {
             deviceOptions = null;
+            deviceWarning = (
+                <Tooltip title="This device is incompatible with the DWE Driver UI">
+                    <Icon>
+                        <Warning />
+                    </Icon>
+                </Tooltip>
+            )
         }
 
         return (
             <Grid item xs={3} style={{ paddingTop: '30px' }}>
                 <Card sx={{ minWidth: 512, boxShadow: 3 }}>
                     <CardHeader 
-                        action={
-                            <IconButton>
-                                <Settings />
-                            </IconButton>
-                        } 
-                        title={ this.props.device.cam_info.name } subheader={ `Model: ${ this.props.device.cam_info.model }` } />
+                        action={ deviceWarning } 
+                        title={ this.props.device.cam_info.name } subheader={ this.props.device.cam_info.model ? `Model: ${ this.props.device.cam_info.model }` : undefined } />
                     <CardContent>
                         <SupportingText>Device: { this.props.device.device }</SupportingText>
                         { deviceOptions }
