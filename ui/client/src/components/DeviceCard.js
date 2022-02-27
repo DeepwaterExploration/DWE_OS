@@ -140,7 +140,16 @@ export default class DeviceCard extends React.Component {
                 <Card sx={{ minWidth: 512, boxShadow: 3 }}>
                     <CardHeader 
                         action={ deviceWarning } 
-                        title={ this.props.device.cam_info.name } subheader={ this.props.device.cam_info.model ? `Model: ${ this.props.device.cam_info.model }` : undefined } />
+                        title={ this.props.device.cam_info.name } subheader={
+                            <>
+                                <div>
+                                    { this.props.device.cam_info.manufacturer ? `Manufacturer: ${ this.props.device.cam_info.manufacturer }` : undefined }
+                                </div>
+                                <div>
+                                    { this.props.device.cam_info.model ? `Model: ${ this.props.device.cam_info.model }` : undefined }
+                                </div>
+                            </>
+                        } />
                     <CardContent>
                         <SupportingText>Device: { this.props.device.device }</SupportingText>
                         { deviceOptions }

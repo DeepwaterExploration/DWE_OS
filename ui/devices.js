@@ -47,8 +47,8 @@ function hexDecode(str_enc) {
 }
 
 const NAME_LUT = {
-    '0c45/6366': 'DWE', 
-    '32e4/9422': 'ELP'
+    '0c45/6366': 'DeepWater Exploration Inc.', 
+    '32e4/9422': 'Shenzhen Ailipu Technology Co., Ltd'
 };
 
 const MODEL_LUT = {
@@ -56,10 +56,9 @@ const MODEL_LUT = {
     '32e4/9422': 'ELP-USBFHD06H'
 }
 
-function updateName(name, vid, pid) {
+function getManufacturerName(vid, pid) {
     let vid_pid = `${vid}/${pid}`;
-    if (!NAME_LUT[vid_pid]) return name;
-    return `${NAME_LUT[vid_pid]}: ${name}`;
+    return NAME_LUT[vid_pid] || undefined;
 }
 
 function getModelNum(vid, pid) {
@@ -90,7 +89,8 @@ function findDevices() {
                             info: {
                                 vid: vid, 
                                 pid: pid, 
-                                name: updateName(name, vid, pid), 
+                                name: name, 
+                                manufacturer: getManufacturerName(vid, pid), 
                                 model: getModelNum(vid, pid)
                             }, 
                             device: cam.device
