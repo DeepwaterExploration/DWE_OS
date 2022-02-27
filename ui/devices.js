@@ -41,10 +41,35 @@ function getUdevOptions(device) {
     })
 }
 
+
+function hexDecode(str_enc) {
+    return str_enc.replace(/\\x20/g, ' ');
+}
+
+const NAME_LUT = {
+    '0c45/6366': 'DWE', 
+    '32e4/9422': 'ELP'
+};
+
+const MODEL_LUT = {
+    '0c45/6366': 'DWE-EHDUSBR2', 
+    '32e4/9422': 'ELP-USBFHD06H'
+}
+
+function updateName(name, vid, pid) {
+    let vid_pid = `${vid}/${pid}`;
+    if (!NAME_LUT[vid_pid]) return name;
+    return `${NAME_LUT[vid_pid]}: ${name}`;
+}
+
+function getModelNum(vid, pid) {
+    let vid_pid = `${vid}/${pid}`;
+    return MODEL_LUT[vid_pid] || undefined;
+}
+
 function findDevices() {
     return new Promise((resolve, reject) => {
-        // exploreHD device
-        let exploreHD_cameras = [];
+        let h264_cameras = []
         let promises = [];
         for (let i = 0; i < 64; i++) {
             try {
@@ -60,11 +85,16 @@ function findDevices() {
                     promises.push(getUdevOptions(cam.device).then((info) => {
                         let vid = info.ID_VENDOR_ID;
                         let pid = info.ID_MODEL_ID;
-                        // check vid/pid for exploreHD
-                        if (vid === '0c45' && pid === '6366') { // DO NOT REMOVE: Could result in issues with unsupported cameras
-                            exploreHD_cameras.push(cam);
-                            // console.log(`Found exploreHD: ${cam.device}`);
-                        }
+                        let name = hexDecode(info.ID_MODEL_ENC);
+                        h264_cameras.push({
+                            info: {
+                                vid: vid, 
+                                pid: pid, 
+                                name: updateName(name, vid, pid), 
+                                model: getModelNum(vid, pid)
+                            }, 
+                            device: cam.device
+                        });
                     }));
                 }
             } catch (err) { // error due to camera not found; continue
@@ -72,7 +102,7 @@ function findDevices() {
             }
         }
         // resolve once all promises are resolved
-        Promise.all(promises).then(() => resolve(exploreHD_cameras));
+        Promise.all(promises).then(() => resolve(h264_cameras));
     });
 }
 

@@ -50,13 +50,26 @@ async function setDeviceState(deviceState) {
 // API endpoints
 // TODO: make devices sent over socket
 app.get('/devices', (req, res) => {
-    findDevices().then((exploreHD_cameras) => {
+    findDevices().then((h264_cameras) => {
         let devices = [];
         let promises = [];
-        for (let cam of exploreHD_cameras) {
-            promises.push(exploreHDCamera(cam.device).then((result) => {
-                devices.push(result);
-            }));
+        for (let cam of h264_cameras) {
+            if (cam.info.vid === '0c45' && cam.info.pid === '6366') { // DO NOT REMOVE: Could result in issues with unsupported cameras
+                promises.push(exploreHDCamera(cam.device).then((result) => {
+                    devices.push({
+                        options: result.options, 
+                        driverCompatible: true, 
+                        cam_info: cam.info, 
+                        device: cam.device
+                    });
+                }));
+            } else {
+                devices.push({
+                    driverCompatible: false, 
+                    cam_info: cam.info, 
+                    device: cam.device
+                })
+            }
         }
         Promise.all(promises).then(() => {
             res.send({

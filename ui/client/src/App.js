@@ -12,20 +12,29 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            cards: []
+            exploreHD_cards: [], 
+            other_cards: []
         };
 
         this.addCard = this.addCard.bind(this);
     }
 
     addCard(device) {
-        this.setState({
-            cards: this.state.cards.concat(
-                <DeviceCard key={ this.state.cards.length } device={ device.device } bitrate={ device.options.BITRATE } gop={ device.options.GOP } mode={ device.options.MODE } >
-                    { this.state.cards.length == 0 ? <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button> : undefined }
-                </DeviceCard>
-            )
-        })
+        if (device.driverCompatible) {
+            this.setState({
+                exploreHD_cards: this.state.exploreHD_cards.concat(
+                    <DeviceCard key={ this.state.exploreHD_cards.length } device={ device } >
+                        { this.state.exploreHD_cards.length == 0 ? <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button> : undefined }
+                    </DeviceCard>
+                )
+            });
+        } else {
+            this.setState({
+                other_cards: this.state.other_cards.concat(
+                    <DeviceCard key={ this.state.other_cards.length } device={ device } />
+                )
+            });
+        }
     }
 
     componentDidMount() {
@@ -48,7 +57,8 @@ export default class App extends React.Component {
                 <div style={{ minHeight: '64px' }} />
                 <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                     <DevicesContainer>
-                        { this.state.cards }
+                        { this.state.exploreHD_cards }
+                        { this.state.other_cards }
                     </DevicesContainer>
                 </div>
             </>

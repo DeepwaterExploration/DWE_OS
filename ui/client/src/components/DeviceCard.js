@@ -115,6 +115,17 @@ export default class DeviceCard extends React.Component {
     }
 
     render() {
+        let deviceOptions;
+        if (this.props.device.driverCompatible) {
+            deviceOptions = <DeviceOptions device={ this.props.device.device } 
+                                           bitrate={ this.props.device.options.BITRATE } 
+                                           gop={ this.props.device.options.GOP } 
+                                           mode={ this.props.device.options.MODE } 
+                                           onUpdate={ this.handleStateChange } />
+        } else {
+            deviceOptions = null;
+        }
+
         return (
             <Grid item xs={3} style={{ paddingTop: '30px' }}>
                 <Card sx={{ minWidth: 512, boxShadow: 3 }}>
@@ -124,10 +135,10 @@ export default class DeviceCard extends React.Component {
                                 <Settings />
                             </IconButton>
                         } 
-                        title="exploreHD" />
+                        title={ this.props.device.cam_info.name } subheader={ `Model: ${ this.props.device.cam_info.model }` } />
                     <CardContent>
-                        <SupportingText>Device: { this.props.device }</SupportingText>
-                        <DeviceOptions device={ this.props.device } bitrate={ this.props.bitrate } gop={ this.props.gop } mode={ this.props.mode } onUpdate={ this.handleStateChange } />
+                        <SupportingText>Device: { this.props.device.device }</SupportingText>
+                        { deviceOptions }
                         { this.props.children }
                     </CardContent>
                 </Card>
