@@ -13,6 +13,10 @@ const theme = createTheme({
         grey: {
             main: grey[200], 
             dark: grey[300]
+        },
+        primary: {
+            dark: '#092037',
+            main: '#15314d'
         }
     }
 });
