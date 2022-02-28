@@ -35,7 +35,6 @@ class DeviceOptions extends React.Component {
         this.device = props.device;
 
         this.state = {
-            bitrateSlider: this.props.bitrate / 1000000,
             bitrate: this.props.bitrate / 1000000,
             h264Switch: this.props.gop > 0,
             vbrSwitch: this.props.mode == 2
@@ -45,7 +44,6 @@ class DeviceOptions extends React.Component {
         
         this.bitrateText = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSliderChange = this.handleSliderChange.bind(this);
         this.updateDeviceState = this.updateDeviceState.bind(this);
     }
 
@@ -58,25 +56,16 @@ class DeviceOptions extends React.Component {
         });
         if (name === 'h264Switch') {
             if (value) {
-                this.state.vbrSwitch = !value;
+                this.setState({ vbrSwitch: !value });
             }
         } else if (name === 'vbrSwitch') {
             if (value) {
-                this.state.h264Switch = !value;
+                this.setState({ h264Switch: !value });
             }
         }
         this.timeout && clearTimeout(this.timeout);
         // Note: This delay results in the proper value being sent
         this.timeout = setTimeout(() => {
-            this.updateDeviceState();
-        }, 200);
-    }
-
-    handleSliderChange(e, newValue) {
-        this.timeout && clearTimeout(this.timeout);
-        this.bitrateText.current.innerText = `Bitrate: ${newValue} Mbps`;
-        this.timeout = setTimeout(() => {
-            this.state.bitrate = newValue;
             this.updateDeviceState();
         }, 200);
     }
@@ -98,8 +87,8 @@ class DeviceOptions extends React.Component {
         return (
             <>
                 <SupportingText>
-                    <span ref={this.bitrateText}>Bitrate: { this.state.bitrateSlider } Mbps</span>
-                    <Slider defaultValue={ this.state.bitrateSlider } disabled={ this.state.vbrSwitch } onChange={ this.handleSliderChange } name="bitrateSlider" style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
+                    <span>Bitrate: { this.state.bitrate } Mbps</span>
+                    <Slider defaultValue={ this.state.bitrate } disabled={ this.state.vbrSwitch } onChange={ this.handleInputChange } name="bitrate" style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
                 </SupportingText>
                 <FormGroup>
                     <DeviceSwitch checked={ this.state.h264Switch } name="h264Switch" onChange={ this.handleInputChange } text="H.264" />
