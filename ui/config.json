@@ -1,4 +1,4 @@
 {
-    "DRIVER_EXECUTABLE": "../camera_controls/explorehd_UVC_TestAP", 
-    "DRIVER_BASE_PATH": "../camera_controls/"
+    "DRIVER_EXECUTABLE": "./camera_controls/explorehd_UVC_TestAP", 
+    "DRIVER_BASE_PATH": "./camera_controls/"
 }
