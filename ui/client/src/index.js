@@ -6,8 +6,6 @@ import { grey } from '@mui/material/colors';
 
 import '@fontsource/roboto';
 
-import { io } from 'socket.io-client';
-
 const theme = createTheme({
     palette: {
         grey: {
@@ -20,10 +18,6 @@ const theme = createTheme({
         }
     }
 });
-
-// connect to sockets
-var socket = io();
-console.log(socket);
 
 // theme.shadows.push('0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%)');
 

@@ -3,11 +3,9 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
-const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
 const { findDevices } = require('./devices');
 const { setOption, getOption } = require('./driver');
@@ -86,17 +84,6 @@ app.post('/option', (req, res) => {
         res.sendStatus(200);
     });
 })
-
-// socket.io
-io.on('connection', (socket) => {
-    console.log('socket connected');
-    socket.on('disconnect', () => {
-        console.log('socket disconnected');
-    });
-    socket.on('set-value', (data) => {
-        console.log(data);
-    })
-});
 
 // send a friendly page instead of 404
 app.get('*', (req, res) => {

@@ -19,7 +19,6 @@
   "license": "GPL-3.0",
   "dependencies": {
     "express": "^4.17.2",
-    "socket.io": "^4.4.1",
     "v4l2camera-pr48": "^1.2.1"
   }
 }
