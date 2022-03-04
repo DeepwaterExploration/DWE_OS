@@ -1,9 +1,13 @@
 {
   "name": "@deepwaterexploration/dwe-controls",
   "version": "0.0.1",
-  "description": "",
+  "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
   "main": "index.js",
   "bin": "index.js",
+  "repository": {
+    "url": "https://github.com/DeepwaterExploration/exploreHD_Controls"
+  },
+  "homepage": "https://github.com/DeepwaterExploration/exploreHD_Controls#readme",
   "scripts": {
     "build": "cd client && npm run build",
     "prepack": "npm run build",
