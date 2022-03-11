@@ -19,6 +19,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "express": "^4.17.2",
+    "node-persist": "^3.1.0",
     "v4l2camera-pr48": "^1.2.1"
   }
 }
