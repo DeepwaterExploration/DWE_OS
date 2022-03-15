@@ -206,6 +206,7 @@ class DeviceManager {
 
     async enumerateCameras(h264_cameras) {
         this.devices = [];
+        this.settings = [];
         let deviceIndex = 0;
         for (let cam of h264_cameras) {
             let device = { cam };
