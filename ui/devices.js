@@ -137,7 +137,11 @@ class DeviceManager {
         await storage.init({
             dir: path.join(homedir, '/.dwe/driver')
         });
-        this.settings = await storage.getItem('settings') || await storage.setItem('settings', []);
+        this.settings = await storage.getItem('settings');
+        if (!this.settings) {
+            this.settings = [];
+            await storage.setItem('settings', this.settings);
+        }
     }
 
     getDeviceFromIndex(index) {
@@ -206,7 +210,6 @@ class DeviceManager {
 
     async enumerateCameras(h264_cameras) {
         this.devices = [];
-        this.settings = [];
         let deviceIndex = 0;
         for (let cam of h264_cameras) {
             let device = { cam };
