@@ -41,8 +41,7 @@ export default class App extends React.Component {
     componentDidMount() {
         fetch('/devices')
             .then((response) => response.json())
-            .then((data) => {
-                let devices = data.devices;
+            .then((devices) => {
                 for (let device of devices) {
                     console.log(device);
                     this.addCard(device);

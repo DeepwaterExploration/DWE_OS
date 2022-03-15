@@ -74,9 +74,9 @@ class DeviceOptions extends React.Component {
         var deviceState = {
             device: this.device, 
             options: {
-                GOP: this.state.h264Switch ? 29 : 0, 
-                MODE: this.state.vbrSwitch ? 2 : 1, 
-                BITRATE: this.state.bitrate * 1000000
+                gop: this.state.h264Switch ? 29 : 0, 
+                cvm: this.state.vbrSwitch ? 2 : 1, 
+                bitrate: this.state.bitrate * 1000000
             }
         };
         console.log(deviceState);
@@ -117,10 +117,10 @@ export default class DeviceCard extends React.Component {
         let deviceOptions;
         let deviceWarning;
         if (this.props.device.driverCompatible) {
-            deviceOptions = <DeviceOptions device={ this.props.device.device } 
-                                           bitrate={ this.props.device.options.BITRATE } 
-                                           gop={ this.props.device.options.GOP } 
-                                           mode={ this.props.device.options.MODE } 
+            deviceOptions = <DeviceOptions device={ this.props.device.cam.device } 
+                                           bitrate={ this.props.device.options.bitrate } 
+                                           gop={ this.props.device.options.gop } 
+                                           mode={ this.props.device.options.cvm } 
                                            onUpdate={ this.handleStateChange } />;
             deviceWarning = null;
         } else {
@@ -139,18 +139,18 @@ export default class DeviceCard extends React.Component {
                 <Card sx={{ minWidth: 512, boxShadow: 3 }}>
                     <CardHeader 
                         action={ deviceWarning } 
-                        title={ this.props.device.cam_info.name } subheader={
+                        title={ this.props.device.cam.info.name } subheader={
                             <>
                                 <div>
-                                    { this.props.device.cam_info.manufacturer ? `Manufacturer: ${ this.props.device.cam_info.manufacturer }` : undefined }
+                                    { this.props.device.cam.info.manufacturer ? `Manufacturer: ${ this.props.device.cam.info.manufacturer }` : undefined }
                                 </div>
                                 <div>
-                                    { this.props.device.cam_info.model ? `Model: ${ this.props.device.cam_info.model }` : undefined }
+                                    { this.props.device.cam.info.model ? `Model: ${ this.props.device.cam.info.model }` : undefined }
                                 </div>
                             </>
                         } />
                     <CardContent>
-                        <SupportingText>Device: { this.props.device.device }</SupportingText>
+                        <SupportingText>Device: { this.props.device.cam.device }</SupportingText>
                         { deviceOptions }
                         { this.props.children }
                     </CardContent>
