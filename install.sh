@@ -1,1 +1,0 @@
-# Install the camera controls for linux

@@ -20,10 +20,13 @@ To connect to the pi, we suggest using ssh with Putty. You can read our document
 
 ### Installing
 
-To install, run
-`./install.sh`
-from the root of the repository.
+In order to run, first install nodejs with:
+```sh
+curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt install nodejs
+curl -L https://npmjs.org/install.sh | sudo sh
+```
 
-### Running
+Next, install the dwe-controls application from npmjs with:
 
-If you are not on a Raspberry Pi or do not wish to install the driver into the system, you can run the UI temporarily with `./start.sh`
+`sudo npm install -g @deepwaterexploration/dwe-controls`

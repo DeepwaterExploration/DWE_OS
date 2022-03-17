@@ -1,47 +1,39 @@
 #!/usr/bin/env node
 
-const express = require('express');
+const { hideBin } = require('yargs/helpers');
+const yargs = require('yargs/yargs');
+const serve = require('./server');
 const path = require('path');
-const http = require('http');
+const AutoLaunch = require('auto-launch');
 
-const { findDevices, DeviceManager } = require('./devices');
-
-const app = express();
-const server = http.createServer(app);
-
-const port = process.env.PORT || 5000;
-
-var deviceManager = new DeviceManager();
-
-app.use(express.static(path.join(__dirname, 'client/build')));
-app.use(express.json());
-
-async function init() {
-    // initial camera enumeration
-    let h264_cameras = await findDevices();
-    await deviceManager.initStorage(); // storage must be initialized before enumeration
-    await deviceManager.enumerateCameras(h264_cameras);
-
-    // server
-    server.listen(port, '0.0.0.0', () => {
-        console.log(`App listening on port: ${port}`);
-    });
-}
-
-// API endpoints
-app.get('/devices', (req, res) => {
-    res.send(deviceManager.devices);
+var launcher = new AutoLaunch({
+    name: 'dwe-controls', 
+    path: path.join(__dirname, './index.js')
 });
 
-app.post('/option', (req, res) => {
-    deviceManager.setState(req.body.device, req.body.options).then(() => {
-        res.send();
-    });
-})
-
-// send a friendly page instead of 404
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'));
-});
-
-init();
+yargs(hideBin(process.argv))
+.command(['start [port] [host]', '*'], 'start the server', (yargs) => {
+    return (yargs.
+        positional('port', {
+            describe: 'port to bind on', 
+            default: 5000
+        }).
+        positional('host', {
+            describe: 'host address to bind on',
+            default: '0.0.0.0'
+        }));
+    }, (argv) => {
+        serve(argv.port, argv.host);
+    })
+    .command('load', 'load the service', (yargs) => {
+        return yargs;
+    }, (argv) => {
+        launcher.enable();
+    })
+    .command('unload', 'unload the service', (yargs) => {
+        return yargs
+    }, (argv) => {
+        launcher.disable();
+    })
+    .help()
+    .parse();
