@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 var deviceManager = new DeviceManager();
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 
 async function serve(port=5000, host='0.0.0.0') {
@@ -17,6 +17,8 @@ async function serve(port=5000, host='0.0.0.0') {
     let h264_cameras = await findDevices();
     await deviceManager.initStorage(); // storage must be initialized before enumeration
     await deviceManager.enumerateCameras(h264_cameras);
+
+    console.log(h264_cameras);
 
     // server
     server.listen(port, host, () => {

@@ -15,7 +15,7 @@
     "build": "cd client && npm run build",
     "prepack": "npm run build",
     "install": "cd camera_controls && make",
-    "start": "node index.js",
+    "start": "node bin/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "DeepWater Exploration Inc.",
