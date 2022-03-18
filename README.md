@@ -36,11 +36,20 @@ Next, install the dwe-controls application from npmjs with:
 ### Usage
 
 #### **Running**
-To run once (will not persist on restart), run:
+To run the application:
 
-`dwe-controls start`
+- Run: `dwe-controls start`
 
 #### **Installation**
-To enable auto-launch (will run automatically when restarted), run:
+To enable auto-launch (recommended for raspberry pi):
 
-`dwe-controls load`
+- Install [pm2](https://www.npmjs.com/package/pm2):
+`sudo npm install -g pm2`
+
+- Start dwe-controls from pm2:
+`pm2 start dwe-controls`
+
+- Save the process list:
+`pm2 save`
+
+- Enable startup for pm2 (this command is specific to raspberry pi): `sudo pm2 startup systemd -u pi --hp /home/pi/`

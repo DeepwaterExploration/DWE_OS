@@ -3,13 +3,6 @@
 const { hideBin } = require('yargs/helpers');
 const yargs = require('yargs/yargs');
 const controls = require('../lib/index');
-const path = require('path');
-const AutoLaunch = require('auto-launch');
-
-var launcher = new AutoLaunch({
-    name: 'dwe-controls', 
-    path: path.join(__dirname, './index.js')
-});
 
 yargs(hideBin(process.argv))
     .command('*', 'default command', () => { }, () => controls.serve())
@@ -25,16 +18,6 @@ yargs(hideBin(process.argv))
             }));
     }, (argv) => {
         controls.serve(argv.port, argv.host);
-    })
-    .command('load', 'load the service', (yargs) => {
-        return yargs;
-    }, () => {
-        launcher.enable();
-    })
-    .command('unload', 'unload the service', (yargs) => {
-        return yargs
-    }, () => {
-        launcher.disable();
     })
     .help()
     .parse();

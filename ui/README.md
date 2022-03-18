@@ -18,9 +18,7 @@ On linux devices:
 
 Start the server: `dwe-controls start [port=5000] [host=0.0.0.0]`
 
-Loading auto-launch: `dwe-controls load`
-
-Unloading auto-launch: `dwe-controls unload`
+*[pm2](https://www.npmjs.com/package/pm2) is recommended for auto-start*
 
 **JavaScript Example**
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
+const usbDetect = require('usb-detection');
 
 const { findDevices, DeviceManager } = require('./devices');
 
@@ -12,11 +13,21 @@ var deviceManager = new DeviceManager();
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 
-async function serve(port=5000, host='0.0.0.0') {
-    // initial camera enumeration
+async function enumerate() {
     let h264_cameras = await findDevices();
-    await deviceManager.initStorage(); // storage must be initialized before enumeration
     await deviceManager.enumerateCameras(h264_cameras);
+}
+
+async function serve(port=5000, host='0.0.0.0') {
+    // usb detection
+    usbDetect.startMonitoring();
+    usbDetect.on('change', () => {
+        setTimeout(() => enumerate(), 250); // wait for the device to be initialized
+    })
+
+    // initial camera enumeration
+    await deviceManager.initStorage(); // storage must be initialized before enumeration
+    await enumerate();
 
     // server
     server.listen(port, host, () => {
