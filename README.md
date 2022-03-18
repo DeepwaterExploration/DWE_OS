@@ -37,11 +37,6 @@ Next, install the dwe-controls application from npmjs with:
 
 ### Usage
 
-#### **Running**
-To run the application:
-
-- Run: `dwe-controls start`
-
 #### **Installation**
 To enable auto-launch (recommended for raspberry pi):
 
@@ -55,3 +50,9 @@ To enable auto-launch (recommended for raspberry pi):
 `pm2 save`
 
 - Enable startup for pm2 (this command is specific to raspberry pi): `sudo pm2 startup systemd -u pi --hp /home/pi/`
+
+#### **Running**
+To run the application temporarily (this is only if you do **not want to install** with auto-launch):
+
+- Run: `dwe-controls start`
+
