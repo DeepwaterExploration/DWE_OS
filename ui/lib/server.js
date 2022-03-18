@@ -48,7 +48,7 @@ app.post('/option', (req, res) => {
 
 // send a friendly page instead of 404
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 module.exports = serve;
