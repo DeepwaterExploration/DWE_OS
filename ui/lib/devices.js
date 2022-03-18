@@ -7,7 +7,7 @@ const homedir = require('os').homedir();
 
 function getUdevOptions(device) {
     return new Promise((resolve, reject) => {
-        exec(`udevadm info ${device}`, (error, stdout, stderr) => {
+        execFile('udevadm', ['info', device], (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
                 reject(error);
