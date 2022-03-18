@@ -10,6 +10,8 @@ Control system for the DeepWater Exploration exploreHD and HDCam. Additional com
 
 On linux devices:
 
+`sudo apt install libudev-dev`
+
 `npm install -g @deepwaterexploration/dwe-controls`
 
 ## Usage
