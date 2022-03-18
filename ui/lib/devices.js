@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 const v4l2camera = require("v4l2camera-pr48");
 const { getOption, setOption } = require('./driver');
 const storage = require('node-persist');

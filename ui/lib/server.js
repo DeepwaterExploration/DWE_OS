@@ -18,8 +18,6 @@ async function serve(port=5000, host='0.0.0.0') {
     await deviceManager.initStorage(); // storage must be initialized before enumeration
     await deviceManager.enumerateCameras(h264_cameras);
 
-    console.log(h264_cameras);
-
     // server
     server.listen(port, host, () => {
         console.log(`App listening on port: ${port}`);
