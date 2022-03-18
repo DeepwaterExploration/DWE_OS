@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 var deviceManager = new DeviceManager();
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 
 async function serve(port=5000, host='0.0.0.0') {

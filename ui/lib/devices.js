@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 const v4l2camera = require("v4l2camera-pr48");
 const { getOption, setOption } = require('./driver');
 const storage = require('node-persist');
@@ -7,7 +7,7 @@ const homedir = require('os').homedir();
 
 function getUdevOptions(device) {
     return new Promise((resolve, reject) => {
-        exec(`udevadm info ${device}`, (error, stdout, stderr) => {
+        execFile('udevadm', ['info', device], (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
                 reject(error);

@@ -1,8 +1,10 @@
+<a href="https://exploredeepwater.com/">
+    <img src="https://docs.exploredeepwater.com/_static/dwe_transparent.png" alt="DWE Logo" title="DeepWater Exploration" align="right" height="60" />
+</a>
+
 # exploreHD Controls
 
-**This project is in development.**
-
-**NOTE: exploreHD settings can only be adjusted on the lower bandwidth / configurable firmware. See how to upgrade [here](https://docs.exploredeepwater.com/software/firmware.html)**
+**NOTE: exploreHD settings can only be adjusted on the lower bandwidth / configurable firmware. Learn how to upgrade [here](https://docs.exploredeepwater.com/software/firmware.html)**.
 
 ## Documentation
 
@@ -30,3 +32,15 @@ curl -L https://npmjs.org/install.sh | sudo sh
 Next, install the dwe-controls application from npmjs with:
 
 `sudo npm install -g @deepwaterexploration/dwe-controls`
+
+### Usage
+
+#### **Running**
+To run once (will not persist on restart), run:
+
+`dwe-controls start`
+
+#### **Installation**
+To enable auto-launch (will run automatically when restarted), run:
+
+`dwe-controls load`

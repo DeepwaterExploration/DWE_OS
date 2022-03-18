@@ -2,8 +2,11 @@
   "name": "@deepwaterexploration/dwe-controls",
   "version": "0.0.5",
   "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
-  "main": "index.js",
-  "bin": "index.js",
+  "main": "lib/index.js",
+  "bin": "bin/index.js",
+  "keywords": [
+    "linux", "explorehd", "v4l2", "deepwaterexploration"
+  ],
   "repository": {
     "url": "https://github.com/DeepwaterExploration/exploreHD_Controls"
   },
@@ -12,16 +15,22 @@
     "build": "cd client && npm run build",
     "prepack": "npm run build",
     "install": "cd camera_controls && make",
-    "start": "node index.js",
+    "start": "node bin/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "DeepWater Exploration Inc.",
   "license": "GPL-3.0",
+  "os": [
+    "linux"
+  ], 
   "dependencies": {
     "auto-launch": "^5.0.5",
     "express": "^4.17.2",
     "node-persist": "^3.1.0",
     "v4l2camera-pr48": "^1.2.1",
     "yargs": "^17.3.1"
-  }
+  }, 
+  "contributors": [
+    "Brandon Stevens <brandon@exploredeepwater.com> (https://github.com/brandonhs)"
+  ]
 }
