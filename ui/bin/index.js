@@ -19,5 +19,17 @@ yargs(hideBin(process.argv))
     }, (argv) => {
         controls.serve(argv.port, argv.host);
     })
+    .command('stream', 'stream all connected H.264 devices with gstreamer', () => { }, async () => {
+        let deviceManager = new controls.DeviceManager();
+        let streamManager = new controls.StreamManager();
+
+        let h264_cameras = await controls.findDevices();
+        await deviceManager.initStorage(); // storage must be initialized before enumeration
+        await deviceManager.enumerateCameras(h264_cameras);
+        for (let device of deviceManager.devices) {
+            streamManager.startStream(device.cam.device);
+        }
+        setInterval(function() { }, 2 << 30);
+    })
     .help()
     .parse();

@@ -3,6 +3,7 @@ const v4l2camera = require("v4l2camera-pr48");
 const { getOption, setOption } = require('./driver');
 const storage = require('node-persist');
 const path = require('path');
+const StreamManager = require('./streams');
 const homedir = require('os').homedir();
 
 function getUdevOptions(device) {
@@ -209,6 +210,7 @@ class DeviceManager {
     }
 
     async enumerateCameras(h264_cameras) {
+        let oldDevices = this.devices.slice();
         this.devices = [];
         let deviceIndex = 0;
         for (let cam of h264_cameras) {
@@ -225,6 +227,11 @@ class DeviceManager {
         }
         storage.setItem('settings', this.settings);
         this.loadSettings(this.settings);
+
+        let removedDevices = oldDevices.filter(x => this.devices.find(val => val.cam.device == x.cam.device) == undefined);
+        let addedDevices = this.devices.filter(x => oldDevices.find(val => val.cam.device == x.cam.device) == undefined);
+        // console.log('removed devices: ', removedDevices);
+        // console.log('added devices: ', addedDevices);
     }
 }
 
