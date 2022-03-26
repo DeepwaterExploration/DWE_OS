@@ -4,6 +4,7 @@ const http = require('http');
 const usbDetect = require('usb-detection');
 
 const { findDevices, DeviceManager } = require('./devices');
+const StreamManager = require('./streams');
 
 const app = express();
 const server = http.createServer(app);

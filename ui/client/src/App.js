@@ -25,7 +25,7 @@ export default class App extends React.Component {
             this.setState({
                 exploreHD_cards: this.state.exploreHD_cards.concat(
                     <DeviceCard key={ this.state.exploreHD_cards.length } device={ device } >
-                        { this.state.exploreHD_cards.length == 0 ? <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button> : undefined }
+                        {/* { this.state.exploreHD_cards.length == 0 ? <Button color="grey" variant="contained" style={{ marginTop: '10px' }}>Set as Default</Button> : undefined } */}
                     </DeviceCard>
                 )
             });

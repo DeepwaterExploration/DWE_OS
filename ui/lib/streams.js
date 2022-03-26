@@ -7,14 +7,14 @@ function buildPipeline(device, host, port) {
 }
 
 class Stream {
-    constructor(device, port) {
+    constructor(device, port, host) {
         this.port = port;
         this.device = device;
-        this.pipeline = buildPipeline(device, '127.0.0.1', port);
+        this.pipeline = buildPipeline(device, host, port);
     }
 
     rebuildPipeline() {
-        this.pipeline = buildPipeline(device, '127.0.0.1', port);
+        this.pipeline = buildPipeline(device, host, port);
     }
 
     start() {
@@ -42,18 +42,18 @@ class StreamManager {
         return this.nextPort;
     }
 
-    addStream(device) {
-        let stream = new Stream(device, this.getNextPort());
+    addStream(device, host) {
+        let stream = new Stream(device, this.getNextPort(), host);
         console.log(`Created stream for ${device} on port ${stream.port}`);
         this.streams.push(stream);
         return stream;
     }
 
-    startStream(device) {
+    startStream(device, host) {
         let streamIndex = this.streams.findIndex(stream => stream.device === device);
         let stream = null;
         if (streamIndex === -1) {
-            stream = this.addStream(device);
+            stream = this.addStream(device, host);
         } else {
             stream = this.streams[streamIndex];
         }

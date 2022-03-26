@@ -110,7 +110,7 @@ async function findDevices() {
 
 async function getOptions(device) {
     let optionNames = ['gop', 'cvm', 'bitrate'];
-    let options = { };
+    let options = { streaming: false, hostAddress: '192.168.2.1' };
     for (let name of optionNames) {
         let value = await getOption(device, name);
         options[name] = value.output.value;
@@ -122,6 +122,8 @@ class DeviceManager {
     constructor() {
         this.devices = [];
         this.settings = [];
+        this.streamManager = new StreamManager();
+        this.streams = [];
     }
 
     loadSettings(settings) {
@@ -181,7 +183,35 @@ class DeviceManager {
         let index = result.deviceIndex;
         for (let name of optionNames) {
             let value = options[name];
+            if (this.devices[result.index].options[name] === value) continue;
             await this.setOption(index, name, value);
+        }
+
+        if ('hostAddress' in options) {
+            let hostAddress = options['hostAddress'];
+            if (hostAddress !== this.devices[result.index].options['hostAddress']) {
+                this.updateSetting(index, result.index, 'hostAddress', hostAddress);
+            }
+        }
+
+        if ('restartStream' in options) {
+            let restartStream = options['restartStream'];
+            if (restartStream) {
+                this.streamManager.stopStream(device);
+                this.streamManager.startStream(device, this.devices[result.index].options['hostAddress']);
+            }
+        }
+
+        if ('streaming' in options) {
+            let streaming = options['streaming'];
+            if (streaming !== this.devices[result.index].options['streaming']) {
+                this.updateSetting(index, result.index, 'streaming', options['streaming']);
+                if (streaming) {
+                    this.streamManager.startStream(device, this.devices[result.index].options['hostAddress']);
+                } else {
+                    this.streamManager.stopStream(device);
+                }
+            }
         }
     }
 
@@ -232,6 +262,18 @@ class DeviceManager {
         let addedDevices = this.devices.filter(x => oldDevices.find(val => val.cam.device == x.cam.device) == undefined);
         // console.log('removed devices: ', removedDevices);
         // console.log('added devices: ', addedDevices);
+
+        for (let device of addedDevices) {
+            let result = this.getDeviceFromPath(device.cam.device);
+            if (!result) continue;
+            if (this.settings[result.deviceIndex].streaming) {
+                this.streamManager.startStream(device.cam.device, );
+            }
+        }
+        for (let device of removedDevices) {
+            this.streamManager.stopStream(device.cam.device)
+        }
+        return { removedDevices, addedDevices };
     }
 }
 

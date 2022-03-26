@@ -1,4 +1,6 @@
 import Warning from "@mui/icons-material/Warning";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField'
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -24,7 +26,7 @@ function DeviceSwitch(props) {
     return (
         <FormControlLabel onChange={ props.onChange } sx={{mt: '-10px'}} control={ <Switch name={ props.name } checked={props.checked} /> } label={ 
             <Typography color="text.secondary">{ props.text }</Typography>
-        } />
+        } >{ props.children }</FormControlLabel>
     )
 }
 
@@ -37,7 +39,10 @@ class DeviceOptions extends React.Component {
         this.state = {
             bitrate: this.props.bitrate / 1000000,
             h264Switch: this.props.gop > 0,
-            vbrSwitch: this.props.mode == 2
+            vbrSwitch: this.props.mode == 2, 
+            streamSwitch: this.props.streaming, 
+            hostAddress: this.props.hostAddress, 
+            hostAddressInput: null
         };
 
         this.timeout = null;
@@ -70,13 +75,16 @@ class DeviceOptions extends React.Component {
         }, 200);
     }
 
-    updateDeviceState() {
+    updateDeviceState(restartStream=false) {
         var deviceState = {
             device: this.device, 
             options: {
                 gop: this.state.h264Switch ? 29 : 0, 
                 cvm: this.state.vbrSwitch ? 2 : 1, 
-                bitrate: this.state.bitrate * 1000000
+                bitrate: this.state.bitrate * 1000000, 
+                streaming: this.state.streamSwitch, 
+                hostAddress: this.state.hostAddress,
+                restartStream
             }
         };
         console.log(deviceState);
@@ -93,6 +101,13 @@ class DeviceOptions extends React.Component {
                 <FormGroup>
                     <DeviceSwitch checked={ this.state.h264Switch } name="h264Switch" onChange={ this.handleInputChange } text="H.264" />
                     <DeviceSwitch checked={ this.state.vbrSwitch } name="vbrSwitch" onChange={ this.handleInputChange } text="VBR (Variable Bitrate)" />
+                    <div>
+                        <DeviceSwitch checked={ this.state.streamSwitch } name="streamSwitch" onChange={ this.handleInputChange } text="Streaming" />
+                        <br></br>
+                        <TextField onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
+                        <br></br>
+                        <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={ this.updateDeviceState.bind(this, true) }>Restart Stream</Button>
+                    </div>
                 </FormGroup>
             </>
         );
@@ -121,6 +136,8 @@ export default class DeviceCard extends React.Component {
                                            bitrate={ this.props.device.options.bitrate } 
                                            gop={ this.props.device.options.gop } 
                                            mode={ this.props.device.options.cvm } 
+                                           streaming={ this.props.device.options.streaming }
+                                           hostAddress={ this.props.device.options.hostAddress }
                                            onUpdate={ this.handleStateChange } />;
             deviceWarning = null;
         } else {
