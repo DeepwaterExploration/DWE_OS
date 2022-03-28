@@ -1,40 +1,18 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
-const usbDetect = require('usb-detection');
 
-const { findDevices, DeviceManager } = require('./devices');
-const StreamManager = require('./streams');
+const DeviceManager = require('./deviceManager');
+const StreamManager = require('./streamManager');
 
 const app = express();
 const server = http.createServer(app);
 
-var deviceManager = new DeviceManager();
-
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 
-async function enumerate() {
-    let h264_cameras = await findDevices();
-    await deviceManager.enumerateCameras(h264_cameras);
-}
-
-async function serve(port=5000, host='0.0.0.0') {
-    // usb detection
-    usbDetect.startMonitoring();
-    usbDetect.on('change', () => {
-        setTimeout(() => enumerate(), 250); // wait for the device to be initialized
-    })
-
-    // initial camera enumeration
-    await deviceManager.initStorage(); // storage must be initialized before enumeration
-    await enumerate();
-
-    // server
-    server.listen(port, host, () => {
-        console.log(`App listening on port: ${port}`);
-    });
-}
+var deviceManager = new DeviceManager();
+var streamManager = new StreamManager();
 
 // API endpoints
 app.get('/devices', (req, res) => {
@@ -42,7 +20,7 @@ app.get('/devices', (req, res) => {
 });
 
 app.post('/option', (req, res) => {
-    deviceManager.setState(req.body.device, req.body.options).then(() => {
+    deviceManager.setDeviceOptions(req.body.device.devicePath, req.body.options).then(() => {
         res.send();
     });
 })
@@ -51,5 +29,41 @@ app.post('/option', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
+
+// server
+function serve(port=5000, host='0.0.0.0') {
+    // device manager events
+    deviceManager.on('added', (addedDevices) => {
+        addedDevices.forEach(device => {
+            if (device.options.streaming.udp) {
+                streamManager.startStream(device.devicePath, device.options.streaming.host);
+            }
+        });
+    });
+    deviceManager.on('removed', (removedDevices) => {
+        removedDevices.forEach(device => {
+            try { streamManager.stopStream(device.devicePath); }
+            catch { } // no stream exists for device
+        });
+    });
+    deviceManager.on('streamChange', (device) => {
+        if (device.options.streaming.udp) {
+            streamManager.startStream(device.devicePath, device.options.streaming.host);
+        } else {
+            streamManager.stopStream(device.devicePath);
+        }
+    });
+    deviceManager.on('restartStream', (device) => {
+        try { streamManager.stopStream(device.devicePath); }
+        catch { return; } // no stream exists for device
+        streamManager.startStream(device.devicePath, device.options.streaming.host);
+    })
+    deviceManager.startMonitoring();
+
+    // server
+    server.listen(port, host, () => {
+        console.log(`App listening on port: ${port}`);
+    });
+}
 
 module.exports = serve;

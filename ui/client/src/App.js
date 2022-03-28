@@ -43,7 +43,6 @@ export default class App extends React.Component {
             .then((response) => response.json())
             .then((devices) => {
                 for (let device of devices) {
-                    console.log(device);
                     this.addCard(device);
                 }
             })

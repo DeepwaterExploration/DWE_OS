@@ -1,6 +1,6 @@
-const { findDevices, DeviceManager } = require('./devices');
-const { setOption, getOption } = require('./driver');
-const StreamManager = require('./streams');
-const serve = require('../lib/server');
+const DeviceManager = require('./deviceManager');
+const StreamManager = require('./streamManager');
+const { setOption, getOption } = require('./utils/driver');
+const serve = require('./server');
 
-module.exports = { findDevices, DeviceManager, serve, setOption, getOption, StreamManager };
+module.exports = { DeviceManager, serve, setOption, getOption, StreamManager };

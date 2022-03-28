@@ -35,13 +35,14 @@ class DeviceOptions extends React.Component {
         super(props);
 
         this.device = props.device;
+        this.options = this.device.options;
 
         this.state = {
-            bitrate: this.props.bitrate / 1000000,
-            h264Switch: this.props.gop > 0,
-            vbrSwitch: this.props.mode == 2, 
-            streamSwitch: this.props.streaming, 
-            hostAddress: this.props.hostAddress, 
+            bitrate: this.options.driver.bitrate / 1000000,
+            h264Switch: this.options.driver.gop > 0,
+            vbrSwitch: this.options.driver.cvm == 2,
+            streamSwitch: this.options.streaming.udp,
+            hostAddress: this.options.streaming.host,
             hostAddressInput: null
         };
 
@@ -87,7 +88,6 @@ class DeviceOptions extends React.Component {
                 restartStream
             }
         };
-        console.log(deviceState);
         this.props.onUpdate(deviceState);
     }
 
@@ -102,7 +102,7 @@ class DeviceOptions extends React.Component {
                     <DeviceSwitch checked={ this.state.h264Switch } name="h264Switch" onChange={ this.handleInputChange } text="H.264" />
                     <DeviceSwitch checked={ this.state.vbrSwitch } name="vbrSwitch" onChange={ this.handleInputChange } text="VBR (Variable Bitrate)" />
                     <div>
-                        <DeviceSwitch checked={ this.state.streamSwitch } name="streamSwitch" onChange={ this.handleInputChange } text="Streaming" />
+                        <DeviceSwitch checked={ this.state.streamSwitch } name="streamSwitch" onChange={ this.handleInputChange } text="UDP Stream" />
                         <br></br>
                         <TextField onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
                         <br></br>
@@ -131,13 +131,8 @@ export default class DeviceCard extends React.Component {
     render() {
         let deviceOptions;
         let deviceWarning;
-        if (this.props.device.driverCompatible) {
-            deviceOptions = <DeviceOptions device={ this.props.device.cam.device } 
-                                           bitrate={ this.props.device.options.bitrate } 
-                                           gop={ this.props.device.options.gop } 
-                                           mode={ this.props.device.options.cvm } 
-                                           streaming={ this.props.device.options.streaming }
-                                           hostAddress={ this.props.device.options.hostAddress }
+        if (this.props.device.caps.driver) {
+            deviceOptions = <DeviceOptions device={ this.props.device }
                                            onUpdate={ this.handleStateChange } />;
             deviceWarning = null;
         } else {
@@ -156,18 +151,18 @@ export default class DeviceCard extends React.Component {
                 <Card sx={{ minWidth: 512, boxShadow: 3 }}>
                     <CardHeader 
                         action={ deviceWarning } 
-                        title={ this.props.device.cam.info.name } subheader={
+                        title={ this.props.device.info.name } subheader={
                             <>
                                 <div>
-                                    { this.props.device.cam.info.manufacturer ? `Manufacturer: ${ this.props.device.cam.info.manufacturer }` : undefined }
+                                    { this.props.device.info.manufacturer ? `Manufacturer: ${ this.props.device.info.manufacturer }` : undefined }
                                 </div>
                                 <div>
-                                    { this.props.device.cam.info.model ? `Model: ${ this.props.device.cam.info.model }` : undefined }
+                                    { this.props.device.info.model ? `Model: ${ this.props.device.info.model }` : undefined }
                                 </div>
                             </>
                         } />
                     <CardContent>
-                        <SupportingText>Device: { this.props.device.cam.device }</SupportingText>
+                        <SupportingText>Device: { this.props.device.devicePath }</SupportingText>
                         { deviceOptions }
                         { this.props.children }
                     </CardContent>

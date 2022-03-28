@@ -2,6 +2,8 @@ const path = require('path');
 const config = require('./config.json');
 const { execFile } = require('child_process');
 
+const OPTION_NAMES = ['gop', 'bitrate', 'cvm'];
+
 // invoke the driver executable directly with args
 function invokeDriver(args) {
     return new Promise((resolve, reject) => {
@@ -43,5 +45,25 @@ function getOption(device, option) {
     return invokeDriver(['-d', device, '-g', option]);
 }
 
-module.exports.setOption = setOption;
-module.exports.getOption = getOption;
+async function getDriverOptions(device) {
+    let options = { };
+    for (let optionName of OPTION_NAMES) {
+        let { output } = await getOption(device, optionName);
+        options[optionName] = output.value;
+    }
+    return options;
+}
+
+async function setDriverOptions(device, newOptions) {
+    let options = await getDriverOptions(device);
+    for (let optionName of OPTION_NAMES) {
+        // check if new option is different from current
+        if (newOptions[optionName] != options[optionName]) {
+            await setOption(device, optionName, newOptions[optionName]);
+        }
+    }
+}
+
+module.exports = {
+    getOption, setOption, getDriverOptions, setDriverOptions
+}
