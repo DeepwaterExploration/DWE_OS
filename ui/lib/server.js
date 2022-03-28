@@ -1,55 +1,68 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
-const usbDetect = require('usb-detection');
 
-const { findDevices, DeviceManager } = require('./devices');
-const StreamManager = require('./streams');
+const DeviceManager = require('./deviceManager');
+const StreamManager = require('./streamManager');
 
 const app = express();
 const server = http.createServer(app);
 
-var deviceManager = new DeviceManager();
-
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 
-async function enumerate() {
-    let h264_cameras = await findDevices();
-    await deviceManager.enumerateCameras(h264_cameras);
-}
+var deviceManager = new DeviceManager();
+var streamManager = new StreamManager();
 
+// API endpoints
+app.get('/devices', (req, res) => {
+    res.send(deviceManager.getSerializableDevices());
+});
+
+app.post('/option', (req, res) => {
+    deviceManager.setDeviceOptions(req.body.device.devicePath, req.body.options).then(() => {
+        res.send();
+    });
+});
+
+// send a friendly page instead of 404
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
+// server
 async function serve(port=5000, host='0.0.0.0') {
-    // usb detection
-    usbDetect.startMonitoring();
-    usbDetect.on('change', () => {
-        setTimeout(() => enumerate(), 250); // wait for the device to be initialized
+    // device manager events
+    deviceManager.on('added', (addedDevices) => {
+        addedDevices.forEach(device => {
+            if (device.options.streaming.udp) {
+                streamManager.startStream(device.devicePath, device.options.streaming.hostAddress);
+            }
+        });
+    });
+    deviceManager.on('removed', (removedDevices) => {
+        removedDevices.forEach(device => {
+            try { streamManager.stopStream(device.devicePath); }
+            catch { } // no stream exists for device
+        });
+    });
+    deviceManager.on('streamChange', (device) => {
+        if (device.options.streaming.udp) {
+            streamManager.startStream(device.devicePath, device.options.streaming.hostAddress);
+        } else {
+            streamManager.stopStream(device.devicePath);
+        }
+    });
+    deviceManager.on('restartStream', (device) => {
+        try { streamManager.restartStream(device.devicePath, device.options.streaming.hostAddress); }
+        catch { } // do not restart if there is no stream
     })
-
-    // initial camera enumeration
-    await deviceManager.initStorage(); // storage must be initialized before enumeration
-    await enumerate();
+    await deviceManager.startMonitoring();
 
     // server
     server.listen(port, host, () => {
         console.log(`App listening on port: ${port}`);
     });
 }
-
-// API endpoints
-app.get('/devices', (req, res) => {
-    res.send(deviceManager.devices);
-});
-
-app.post('/option', (req, res) => {
-    deviceManager.setState(req.body.device, req.body.options).then(() => {
-        res.send();
-    });
-})
-
-// send a friendly page instead of 404
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
 
 module.exports = serve;

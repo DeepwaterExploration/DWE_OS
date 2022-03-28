@@ -21,7 +21,7 @@ export default class App extends React.Component {
     }
 
     addCard(device) {
-        if (device.driverCompatible) {
+        if (device.caps.driver) {
             this.setState({
                 exploreHD_cards: this.state.exploreHD_cards.concat(
                     <DeviceCard key={ this.state.exploreHD_cards.length } device={ device } >
@@ -43,7 +43,6 @@ export default class App extends React.Component {
             .then((response) => response.json())
             .then((devices) => {
                 for (let device of devices) {
-                    console.log(device);
                     this.addCard(device);
                 }
             })
