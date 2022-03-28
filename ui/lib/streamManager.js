@@ -48,6 +48,11 @@ class StreamManager {
         return this.nextPort;
     }
 
+    restartStream(device, host) {
+        this.stopStream(device);
+        this.startStream(device, host);
+    }
+
     addStream(device, host) {
         // create stream using the specified host and device while computing the port
         let stream = new Stream(device, this.getNextPort(), host);

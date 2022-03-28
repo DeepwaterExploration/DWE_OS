@@ -21,7 +21,7 @@ export default class App extends React.Component {
     }
 
     addCard(device) {
-        if (device.driverCompatible) {
+        if (device.caps.driver) {
             this.setState({
                 exploreHD_cards: this.state.exploreHD_cards.concat(
                     <DeviceCard key={ this.state.exploreHD_cards.length } device={ device } >

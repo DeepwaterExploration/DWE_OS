@@ -42,7 +42,7 @@ class DeviceOptions extends React.Component {
             h264Switch: this.options.driver.gop > 0,
             vbrSwitch: this.options.driver.cvm == 2,
             streamSwitch: this.options.streaming.udp,
-            hostAddress: this.options.streaming.host,
+            hostAddress: this.options.streaming.hostAddress,
             hostAddressInput: null
         };
 
@@ -83,7 +83,7 @@ class DeviceOptions extends React.Component {
                 gop: this.state.h264Switch ? 29 : 0, 
                 cvm: this.state.vbrSwitch ? 2 : 1, 
                 bitrate: this.state.bitrate * 1000000, 
-                streaming: this.state.streamSwitch, 
+                udp: this.state.streamSwitch, 
                 hostAddress: this.state.hostAddress,
                 restartStream
             }
