@@ -32,7 +32,8 @@ class Stream {
 
 class StreamManager {
     constructor() {
-        this.nextPort = 5600;
+        this.startingPort = 5600;
+        this.nextPort = this.startingPort;
         this.streams = [];
         this.freePorts = [];
     }
@@ -43,12 +44,14 @@ class StreamManager {
         if (this.freePorts.length !== 0) {
             this.nextPort = this.freePorts.pop();
         } else {
-            this.nextPort = 5600 + this.streams.length;
+            this.nextPort = this.startingPort + this.streams.length;
+            console.log(this.startingPort);
         }
         return this.nextPort;
     }
 
     restartStream(device, host) {
+        console.log(`Restarting stream for device ${device} streaming to ${host}`)
         this.stopStream(device);
         this.startStream(device, host);
     }

@@ -20,7 +20,7 @@ app.get('/devices', (req, res) => {
 });
 
 app.post('/option', (req, res) => {
-    deviceManager.setDeviceOptions(req.body.device.devicePath, req.body.options).then(() => {
+    deviceManager.setDeviceOptions(req.body.devicePath, req.body.options).then(() => {
         res.send();
     });
 });

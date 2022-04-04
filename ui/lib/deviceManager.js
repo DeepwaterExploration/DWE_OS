@@ -57,7 +57,7 @@ class Device {
 
     async setDriverOptions(options, flushChanges=true) {
         this.options.driver = options;
-        setDriverOptions(this.devicePath, options);
+        await setDriverOptions(this.devicePath, options);
 
         if (flushChanges) await this.deviceManager.settingsManager.updateDevice(this);
     }

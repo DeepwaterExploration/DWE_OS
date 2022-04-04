@@ -38,7 +38,7 @@ class DeviceOptions extends React.Component {
         this.options = this.device.options;
 
         this.state = {
-            bitrate: this.options.driver.bitrate / 1000000,
+            bitrate: this.options.driver.bitrate,
             h264Switch: this.options.driver.gop > 0,
             vbrSwitch: this.options.driver.cvm == 2,
             streamSwitch: this.options.streaming.udp,
@@ -78,11 +78,11 @@ class DeviceOptions extends React.Component {
 
     updateDeviceState(restartStream=false) {
         var deviceState = {
-            device: this.device, 
+            devicePath: this.device.devicePath, 
             options: {
                 gop: this.state.h264Switch ? 29 : 0, 
                 cvm: this.state.vbrSwitch ? 2 : 1, 
-                bitrate: this.state.bitrate * 1000000, 
+                bitrate: this.state.bitrate, 
                 udp: this.state.streamSwitch, 
                 hostAddress: this.state.hostAddress,
                 restartStream
@@ -104,7 +104,15 @@ class DeviceOptions extends React.Component {
                     <div>
                         <DeviceSwitch checked={ this.state.streamSwitch } name="streamSwitch" onChange={ this.handleInputChange } text="UDP Stream" />
                         <br></br>
-                        <TextField onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
+                        {
+                            this.state.streamSwitch ? 
+                            <>
+                                    <TextField label="address" onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
+                                {/* <br></br> */}
+                                <TextField label="port" variant="standard" type="number" defaultValue={ 5600 } />
+                            </>
+                            : undefined
+                        }
                         <br></br>
                         <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={ this.updateDeviceState.bind(this, true) }>Restart Stream</Button>
                     </div>

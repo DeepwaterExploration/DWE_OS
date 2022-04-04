@@ -51,11 +51,15 @@ async function getDriverOptions(device) {
         let { output } = await getOption(device, optionName);
         options[optionName] = output.value;
     }
+    options.bitrate /= 1000000; // convert to Mbps
     return options;
 }
 
 async function setDriverOptions(device, newOptions) {
     let options = await getDriverOptions(device);
+    newOptions = {...newOptions}; // make a copy of the original object
+    newOptions.bitrate *= 1000000;
+    options.bitrate *= 1000000;
     for (let optionName of OPTION_NAMES) {
         // check if new option is different from current
         if (newOptions[optionName] != options[optionName]) {
