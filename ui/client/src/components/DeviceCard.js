@@ -34,9 +34,9 @@ function DeviceSwitch(props) {
 const DeviceOptions = (props) => {
     const device = props.device.devicePath;
 
-    const [bitrate, setBitrate] = useState(10);
-    const [h264, setH264] = useState(true);
-    const [vbr, setVBR] = useState(false);
+    const [bitrate, setBitrate] = useState(props.device.options.bitrate);
+    const [h264, setH264] = useState(props.device.options.h264);
+    const [vbr, setVBR] = useState(props.device.options.vbr);
 
     useDidMountEffect(() => {
         const body = {
@@ -76,9 +76,9 @@ const LineBreak = () => {
 const StreamOptions = (props) => {
     const device = props.device.devicePath;
 
-    const [udp, setUDP] = useState(false);
-    const [hostAddress, setHostAddress] = useState('192.168.2.1');
-    const [port, setPort] = useState(5600);
+    const [udp, setUDP] = useState(props.device.stream.isStreaming);
+    const [hostAddress, setHostAddress] = useState(props.device.stream.host);
+    const [port, setPort] = useState(props.device.stream.port);
 
     const restartStream = () => {
         makePostRequest('/restartStream', {
@@ -86,6 +86,9 @@ const StreamOptions = (props) => {
             stream: {
                 hostAddress, port
             }
+        }, (xhr) => {
+            let response = JSON.parse(xhr.response);
+            setPort(response.port);
         });
     }
 
@@ -96,6 +99,9 @@ const StreamOptions = (props) => {
                 stream: {
                     hostAddress, port
                 }
+            }, (xhr) => {
+                let response = JSON.parse(xhr.response);
+                setPort(response.port);
             });
         } else {
             makePostRequest('/removeStream', {
@@ -111,8 +117,8 @@ const StreamOptions = (props) => {
             {
                 udp ? 
                 <>
-                    <TextField label="address" onChange={(e) => { setHostAddress(e.target.value) }} variant="standard" defaultValue={ hostAddress } />
-                    <TextField label="port" onChange={(e) => { setPort(e.target.value) }} variant="standard" type="number" defaultValue={ port } />
+                    <TextField label="address" onChange={(e) => { setHostAddress(e.target.value) }} variant="standard" value={ hostAddress } />
+                    <TextField label="port" onChange={(e) => { setPort(e.target.value) }} variant="standard" type="number" value={ port } />
                     <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={ restartStream }>Restart Stream</Button>
                 </>
                 : undefined
