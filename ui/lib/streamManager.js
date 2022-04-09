@@ -45,7 +45,6 @@ class StreamManager {
             this.nextPort = this.freePorts.pop();
         } else {
             this.nextPort = this.startingPort + this.streams.length;
-            console.log(this.startingPort);
         }
         return this.nextPort;
     }

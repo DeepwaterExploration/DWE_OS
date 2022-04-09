@@ -19,6 +19,10 @@ app.get('/devices', (req, res) => {
     res.send(deviceManager.getSerializableDevices());
 });
 
+app.get('/streams', (req, res) => {
+    res.send({ streams: streamManager.streams });
+});
+
 app.post('/option', (req, res) => {
     deviceManager.setDeviceOptions(req.body.devicePath, req.body.options).then(() => {
         res.send();

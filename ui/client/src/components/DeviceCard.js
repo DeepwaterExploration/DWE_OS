@@ -43,14 +43,29 @@ class DeviceOptions extends React.Component {
             vbrSwitch: this.options.driver.cvm == 2,
             streamSwitch: this.options.streaming.udp,
             hostAddress: this.options.streaming.hostAddress,
+            port: '',
             hostAddressInput: null
         };
+
+        this.updatePort();
 
         this.timeout = null;
         
         this.bitrateText = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateDeviceState = this.updateDeviceState.bind(this);
+    }
+
+    updatePort() {
+        fetch('/streams')
+        .then((response) => response.json())
+        .then((result) => {
+            let stream = result.streams.find((stream) => (stream.device == this.device.devicePath));
+            console.log(stream);
+            if (stream) {
+                this.setState({ port: stream.port })
+            }
+        });
     }
 
     handleInputChange(event) {
@@ -60,7 +75,10 @@ class DeviceOptions extends React.Component {
         this.setState({
             [name]: value
         });
-        if (name === 'h264Switch') {
+        if (name === 'streamSwitch') {
+            setTimeout(() => this.updatePort(), 500);
+        }
+        else if (name === 'h264Switch') {
             if (value) {
                 this.setState({ vbrSwitch: !value });
             }
@@ -103,13 +121,13 @@ class DeviceOptions extends React.Component {
                     <DeviceSwitch checked={ this.state.vbrSwitch } name="vbrSwitch" onChange={ this.handleInputChange } text="VBR (Variable Bitrate)" />
                     <div>
                         <DeviceSwitch checked={ this.state.streamSwitch } name="streamSwitch" onChange={ this.handleInputChange } text="UDP Stream" />
-                        <br></br>
                         {
                             this.state.streamSwitch ? 
                             <>
-                                    <TextField label="address" onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
+                                <br></br>
+                                <TextField label="address" onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
                                 {/* <br></br> */}
-                                <TextField label="port" variant="standard" type="number" defaultValue={ 5600 } />
+                                <TextField label="port" variant="standard" type="number" value={ this.state.port } />
                             </>
                             : undefined
                         }
