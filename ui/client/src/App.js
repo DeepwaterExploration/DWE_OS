@@ -2,11 +2,9 @@ import * as React from 'react';
 
 import './main.css'
 import Header from './components/Header';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import DeviceCard from './components/DeviceCard';
 import DevicesContainer from './components/DevicesContainer';
-
 
 export default class App extends React.Component {
     constructor(props) {
