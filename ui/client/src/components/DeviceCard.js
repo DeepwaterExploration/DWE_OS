@@ -12,7 +12,8 @@ import Slider from "@mui/material/Slider";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import React, { createRef } from "react";
+import React, { useEffect, useState } from "react";
+import { makePostRequest, useDidMountEffect } from "../utils/utils";
 
 function SupportingText(props) {
     return (
@@ -30,152 +31,134 @@ function DeviceSwitch(props) {
     )
 }
 
-class DeviceOptions extends React.Component {
-    constructor(props) {
-        super(props);
+const DeviceOptions = (props) => {
+    const device = props.device.devicePath;
 
-        this.device = props.device;
-        this.options = this.device.options;
+    const [bitrate, setBitrate] = useState(10);
+    const [h264, setH264] = useState(true);
+    const [vbr, setVBR] = useState(false);
 
-        this.state = {
-            bitrate: this.options.driver.bitrate,
-            h264Switch: this.options.driver.gop > 0,
-            vbrSwitch: this.options.driver.cvm == 2,
-            streamSwitch: this.options.streaming.udp,
-            hostAddress: this.options.streaming.hostAddress,
-            hostAddressInput: null
-        };
-
-        this.timeout = null;
-        
-        this.bitrateText = createRef();
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.updateDeviceState = this.updateDeviceState.bind(this);
-    }
-
-    handleInputChange(event) {
-        const target = event.target;
-        const value = (target.type === 'checkbox') ? target.checked : target.value;
-        const name = target.name;
-        this.setState({
-            [name]: value
-        });
-        if (name === 'h264Switch') {
-            if (value) {
-                this.setState({ vbrSwitch: !value });
-            }
-        } else if (name === 'vbrSwitch') {
-            if (value) {
-                this.setState({ h264Switch: !value });
-            }
-        }
-        this.timeout && clearTimeout(this.timeout);
-        // Note: This delay results in the proper value being sent
-        this.timeout = setTimeout(() => {
-            this.updateDeviceState();
-        }, 200);
-    }
-
-    updateDeviceState(restartStream=false) {
-        var deviceState = {
-            devicePath: this.device.devicePath, 
+    useDidMountEffect(() => {
+        const body = {
+            devicePath: device,
             options: {
-                gop: this.state.h264Switch ? 29 : 0, 
-                cvm: this.state.vbrSwitch ? 2 : 1, 
-                bitrate: this.state.bitrate, 
-                udp: this.state.streamSwitch, 
-                hostAddress: this.state.hostAddress,
-                restartStream
+                bitrate, h264, vbr
             }
         };
-        this.props.onUpdate(deviceState);
-    }
+        makePostRequest('/options', body);
+    }, [bitrate, h264, vbr]);
 
-    render() {
-        return (
-            <>
-                <SupportingText>
-                    <span>Bitrate: { this.state.bitrate } Mbps</span>
-                    <Slider defaultValue={ this.state.bitrate } disabled={ this.state.vbrSwitch } onChange={ this.handleInputChange } name="bitrate" style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small"  max={15} step={0.1} />
-                </SupportingText>
-                <FormGroup>
-                    <DeviceSwitch checked={ this.state.h264Switch } name="h264Switch" onChange={ this.handleInputChange } text="H.264" />
-                    <DeviceSwitch checked={ this.state.vbrSwitch } name="vbrSwitch" onChange={ this.handleInputChange } text="VBR (Variable Bitrate)" />
-                    <div>
-                        <DeviceSwitch checked={ this.state.streamSwitch } name="streamSwitch" onChange={ this.handleInputChange } text="UDP Stream" />
-                        <br></br>
-                        {
-                            this.state.streamSwitch ? 
-                            <>
-                                    <TextField label="address" onChange={(event) => { this.setState({ 'hostAddress': event.target.value }) }} variant="standard" defaultValue={ this.state.hostAddress } />
-                                {/* <br></br> */}
-                                <TextField label="port" variant="standard" type="number" defaultValue={ 5600 } />
-                            </>
-                            : undefined
-                        }
-                        <br></br>
-                        <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={ this.updateDeviceState.bind(this, true) }>Restart Stream</Button>
-                    </div>
-                </FormGroup>
-            </>
-        );
-    }
+    return (
+        <>
+            <SupportingText>
+                <span>Bitrate: { bitrate } Mbps</span>
+                <Slider defaultValue={ bitrate } disabled={ vbr } onChange={(e) => { setBitrate(e.target.value) }} name="bitrate" 
+                        style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small" max={15} min={0.1} step={0.1} />
+            </SupportingText>
+            <FormGroup>
+                <DeviceSwitch checked={ h264 } name="h264Switch" onChange={(e) => {
+                    setH264(e.target.checked);
+                    setVBR(e.target.checked ? false : vbr);
+                }} text="H.264" />
+                <DeviceSwitch checked={ vbr } name="vbrSwitch" onChange={(e) => {
+                    setVBR(e.target.checked);
+                    setH264(e.target.checked ? false : h264);
+                }} text="VBR (Variable Bitrate)" />
+            </FormGroup>
+        </>
+    )
 }
 
-export default class DeviceCard extends React.Component {
-    constructor(props) {
-        super(props);
+const LineBreak = () => {
+    return <br></br>;
+}
 
-        this.handleStateChange = this.handleStateChange.bind(this);
-    }
-    
-    handleStateChange(deviceState) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/option', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(deviceState));
+const StreamOptions = (props) => {
+    const device = props.device.devicePath;
+
+    const [udp, setUDP] = useState(false);
+    const [hostAddress, setHostAddress] = useState('192.168.2.1');
+    const [port, setPort] = useState(5600);
+
+    const restartStream = () => {
+        makePostRequest('/restartStream', {
+            devicePath: device,
+            stream: {
+                hostAddress, port
+            }
+        });
     }
 
-    render() {
-        let deviceOptions;
-        let deviceWarning;
-        if (this.props.device.caps.driver) {
-            deviceOptions = <DeviceOptions device={ this.props.device }
-                                           onUpdate={ this.handleStateChange } />;
-            deviceWarning = null;
+    useDidMountEffect(() => {
+        if (udp) {
+            makePostRequest('/addStream', {
+                devicePath: device,
+                stream: {
+                    hostAddress, port
+                }
+            });
         } else {
-            deviceOptions = null;
-            deviceWarning = (
-                <Tooltip title="This device is incompatible with the DWE Driver UI">
-                    <Icon>
-                        <Warning />
-                    </Icon>
-                </Tooltip>
-            )
+            makePostRequest('/removeStream', {
+                devicePath: device
+            });
         }
+    }, [udp]);
 
-        return (
-            <Grid item xs={3} style={{ paddingTop: '30px' }}>
-                <Card sx={{ minWidth: 512, boxShadow: 3 }}>
-                    <CardHeader 
-                        action={ deviceWarning } 
-                        title={ this.props.device.info.name } subheader={
-                            <>
-                                <div>
-                                    { this.props.device.info.manufacturer ? `Manufacturer: ${ this.props.device.info.manufacturer }` : undefined }
-                                </div>
-                                <div>
-                                    { this.props.device.info.model ? `Model: ${ this.props.device.info.model }` : undefined }
-                                </div>
-                            </>
-                        } />
-                    <CardContent>
-                        <SupportingText>Device: { this.props.device.devicePath }</SupportingText>
-                        { deviceOptions }
-                        { this.props.children }
-                    </CardContent>
-                </Card>
-            </Grid>
+    return (
+        <FormGroup>
+            <DeviceSwitch onChange={(e) => { setUDP(e.target.checked) }} checked={ udp } name="streamSwitch" text="UDP Stream" />
+            <LineBreak />
+            {
+                udp ? 
+                <>
+                    <TextField label="address" onChange={(e) => { setHostAddress(e.target.value) }} variant="standard" defaultValue={ hostAddress } />
+                    <TextField label="port" onChange={(e) => { setPort(e.target.value) }} variant="standard" type="number" defaultValue={ port } />
+                    <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={ restartStream }>Restart Stream</Button>
+                </>
+                : undefined
+            }
+        </FormGroup>
+    )
+}
+
+const DeviceCard = (props) => {
+    let deviceOptions;
+    let deviceWarning;
+    if (props.device.caps.driver) {
+        deviceOptions = <DeviceOptions device={ props.device } />;
+        deviceWarning = null;
+    } else {
+        deviceOptions = null;
+        deviceWarning = (
+            <Tooltip title="This device is incompatible with the DWE Driver UI">
+                <Icon>
+                    <Warning />
+                </Icon>
+            </Tooltip>
         )
     }
+
+    return (
+        <Grid item xs={3} style={{ paddingTop: '30px' }}>
+            <Card sx={{ minWidth: 512, boxShadow: 3 }}>
+                <CardHeader 
+                    action={ deviceWarning } 
+                    title={ props.device.info.name } subheader={
+                        <>
+                            { props.device.info.manufacturer ? `Manufacturer: ${ props.device.info.manufacturer }` : undefined }
+                            <LineBreak />
+                            { props.device.info.model ? `Model: ${ props.device.info.model }` : undefined }
+                        </>
+                    } />
+                <CardContent>
+                    <SupportingText>Device: { props.device.devicePath }</SupportingText>
+                    { deviceOptions }
+                    <StreamOptions device={ props.device } />
+                    { props.children }
+                </CardContent>
+            </Card>
+        </Grid>
+    )
 }
+
+export default DeviceCard;
