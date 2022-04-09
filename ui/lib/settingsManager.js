@@ -1,11 +1,12 @@
 const storage = require('node-persist');
 const path = require('path');
+const StreamManager = require('./streamManager');
 const homedir = require('os').homedir();
 
 class SettingsManager {
     constructor() {
-        this.streams = null;
-        this.driver = null;
+        this.streams = [];
+        this.driver = [];
         this.initialized = false;
     }
 
@@ -23,21 +24,14 @@ class SettingsManager {
         this.initialized = true;
     }
 
-    async updateDevice(device) {
+    async updateDeviceOptions(device) {
         if (!this.initialized) await this._initialize();
 
         // update the stored driver settings
         if (device.deviceIndex >= this.driver.length) {
-            this.driver.push(device.options.driver);
+            this.driver.push(device.options);
         } else {
-            this.driver[device.deviceIndex] = device.options.driver;
-        }
-
-        // update the stored stream settings
-        if (device.deviceIndex >= this.streams.length) {
-            this.streams.push(device.options.streaming);
-        } else {
-            this.streams[device.deviceIndex] = device.options.streaming;
+            this.driver[device.deviceIndex] = device.options;
         }
 
         await this.flushSettings();
@@ -47,21 +41,30 @@ class SettingsManager {
         await storage.setItem('settings', { driver: this.driver, streams: this.streams });
     }
 
-    async loadDevice(device) {
+    async loadDeviceOptions(device) {
         if (!this.initialized) await this._initialize();
 
         if (device.deviceIndex >= this.driver.length) {
-            this.driver.push(device.options.driver);
+            this.driver.push(device.options);
         } else {
             await device.setDriverOptions(this.driver[device.deviceIndex], false);
         }
 
-        if (device.deviceIndex >= this.streams.length) {
-            this.streams.push(device.options.streaming);
-        } else {
-            await device.setStreamingOptions(this.streams[device.deviceIndex], false);
-        }
+        await this.flushSettings();
+    }
 
+    async loadStreamOptions(device) {
+        if (!this.initialized) await this._initialize();
+
+        if (device.managerIndex < this.streams.length) {
+            let { host, port } = this.streams[device.managerIndex];
+            await device.addStream(host, port, false);
+        }
+    }
+
+    async updateStreams() {
+        if (!this.initialized) await this._initialize();
+        this.streams = StreamManager.serializeStreams();
         await this.flushSettings();
     }
 }

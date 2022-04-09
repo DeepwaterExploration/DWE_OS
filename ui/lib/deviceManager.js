@@ -2,22 +2,19 @@ const EventEmitter = require('events');
 const usbDetect = require('usb-detection');
 const v4l2camera = require("v4l2camera-pr48");
 const SettingsManager = require('./settingsManager');
+const StreamManager = require('./streamManager');
 const { getDriverOptions, setDriverOptions } = require('./utils/driver');
 const getUdevInfo = require('./utils/udev');
 
 class Device {
     constructor(deviceManager) {
         this.deviceIndex = -1;
+        this.managerIndex = -1;
         this.devicePath = null;
         this.cam = null;
         this.info = { };
-        this.options = {
-            driver: null,
-            streaming: {
-                udp: false,
-                hostAddress: '192.168.2.1'
-            }
-        };
+        this.options = null;
+        this.stream = null;
         this.caps = {
             h264: false,
             driver: false
@@ -26,13 +23,19 @@ class Device {
     }
 
     getSerializable() {
+        let stream = {
+            isStreaming: this.stream != null, 
+            host: this.stream ? this.stream.host : '192.168.2.1',
+            port: this.stream ? this.stream.port : 5600
+        };
         return {
             devicePath: this.devicePath,
             cam: this.cam,
             info: this.info,
             options: this.options,
             caps: this.caps,
-            deviceIndex: this.deviceIndex
+            deviceIndex: this.deviceIndex,
+            stream
         };
     }
 
@@ -50,30 +53,35 @@ class Device {
             // check if device is compatible with the exploreHD driver
             if (this.info.vid === '0c45' && this.info.pid === '6366') {
                 this.caps.driver = true;
-                this.options.driver = await getDriverOptions(this.devicePath);
+                this.options = await getDriverOptions(this.devicePath);
             }
         }
     }
 
-    async setDriverOptions(options, flushChanges=true) {
-        this.options.driver = options;
-        await setDriverOptions(this.devicePath, options);
+    async addStream(host, port=null, flushChanges=true) {
+        this.stream = StreamManager.startStream(this.devicePath, host, port);
 
-        if (flushChanges) await this.deviceManager.settingsManager.updateDevice(this);
+        if (flushChanges) this.deviceManager.settingsManager.updateStreams();
     }
 
-    async setStreamingOptions(options, flushChanges=true) {
-        let { udp, hostAddress, restartStream } = options;
-        this.options.streaming.hostAddress = hostAddress;
-        if (udp !== this.options.streaming.udp) {
-            this.options.streaming.udp = udp;
-            this.deviceManager.emit('streamChange', this);
-        }
-        if (restartStream) {
-            this.deviceManager.emit('restartStream', this);
-        }
+    async removeStream(flushChanges=true) {
+        StreamManager.stopStream(this.devicePath);
+        this.stream = null;
 
-        if (flushChanges) await this.deviceManager.settingsManager.updateDevice(this);
+        if (flushChanges) this.deviceManager.settingsManager.updateStreams();
+    }
+
+    async restartStream(host, port=null, flushChanges=true) {
+        this.stream = StreamManager.restartStream(this.devicePath, host, port);
+
+        if (flushChanges) this.deviceManager.settingsManager.updateStreams();
+    }
+
+    async setDriverOptions(options, flushChanges=true) {
+        this.options = options;
+        await setDriverOptions(this.devicePath, options);
+
+        if (flushChanges) await this.deviceManager.settingsManager.updateStreams();
     }
 }
 
@@ -99,21 +107,6 @@ class DeviceManager extends EventEmitter {
         usbDetect.on('change', () => setTimeout(() => this.enumerate(), 250)); // the timeout is to ensure Linux can initialize the device properly
     }
 
-    async setDeviceOptions(devicePath, options) {
-        let device = this.getDeviceFromPath(devicePath);
-        if (!device) return;
-
-        // driver options
-        if (device.caps.driver) {
-            let { gop, cvm, bitrate } = options;
-            await device.setDriverOptions({ gop, cvm, bitrate });
-        }
-
-        // streaming options
-        let { udp, hostAddress, restartStream } = options;
-        await device.setStreamingOptions({ udp, hostAddress, restartStream });
-    }
-
     // construct a serializable array of devices
     getSerializableDevices() {
         let devices = [];
@@ -133,11 +126,24 @@ class DeviceManager extends EventEmitter {
             try { await device.setDevicePath('/dev/video' + i); }
             catch (err) { continue; }
             if (device.caps.h264) {
-                devices.push(device);
                 if (device.caps.driver) {
                     device.deviceIndex = deviceIndex++;
-                    await this.settingsManager.loadDevice(device);
+                    await this.settingsManager.loadDeviceOptions(device);
                 }
+                devices.push(device);
+            }
+        }
+
+        devices.sort((a, b) => a.deviceIndex - (b.deviceIndex >= 0 ? b.deviceIndex : Infinity));
+        for (let managerIndex in devices) {
+            let device = devices[managerIndex];
+            device.managerIndex = managerIndex;
+
+            let stream = StreamManager.getStream(device.devicePath);
+            if (stream) {
+                device.stream = stream;
+            } else {
+                this.settingsManager.loadStreamOptions(device);
             }
         }
 
@@ -149,8 +155,16 @@ class DeviceManager extends EventEmitter {
         this.devices = devices;
 
         // emit the added and removed events
-        if (removedDevices.length !== 0 && emitChanges) this.emit('removed', removedDevices);
-        if (addedDevices.length !== 0 && emitChanges) this.emit('added', addedDevices);
+        if (removedDevices.length !== 0 && emitChanges) {
+            this.emit('removed', removedDevices);
+            for (let device of removedDevices) {
+                console.log(device.devicePath)
+                StreamManager.stopStream(device.devicePath);
+            }
+        }
+        if (addedDevices.length !== 0 && emitChanges) {
+            this.emit('added', addedDevices);
+        }
     }
 }
 

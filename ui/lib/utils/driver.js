@@ -46,20 +46,32 @@ function getOption(device, option) {
 }
 
 async function getDriverOptions(device) {
-    let options = { };
+    let rawOptions = { };
     for (let optionName of OPTION_NAMES) {
         let { output } = await getOption(device, optionName);
-        options[optionName] = output.value;
+        rawOptions[optionName] = output.value;
     }
-    options.bitrate /= 1000000; // convert to Mbps
+    let options = {
+        bitrate: rawOptions.bitrate / 1000000, // convert to Mbps
+        vbr: rawOptions.cvm == 2, // 1: cbr, 2: vbr
+        h264: rawOptions.gop == 29 // 29: h264
+    };
     return options;
 }
 
 async function setDriverOptions(device, newOptions) {
     let options = await getDriverOptions(device);
     newOptions = {...newOptions}; // make a copy of the original object
-    newOptions.bitrate *= 1000000;
-    options.bitrate *= 1000000;
+    newOptions = {
+        bitrate: newOptions.bitrate * 1000000,
+        gop: newOptions.h264 ? 29 : 0,
+        cvm: newOptions.vbr ? 2 : 1
+    }
+    options = {
+        bitrate: options.bitrate * 1000000,
+        gop: options.h264 ? 29 : 0,
+        cvm: options.vbr ? 2 : 1
+    }
     for (let optionName of OPTION_NAMES) {
         // check if new option is different from current
         if (newOptions[optionName] != options[optionName]) {
