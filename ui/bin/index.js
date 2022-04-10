@@ -24,7 +24,7 @@ yargs(hideBin(process.argv))
         const path = require('path');
         const homedir = require('os').homedir();
         await storage.init({
-            dir: path.join(homedir, '/.dwe/driver')
+            dir: path.join(homedir, '/.dwe/controls')
         });
         await storage.clear();
     })
