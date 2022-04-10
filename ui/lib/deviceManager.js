@@ -93,6 +93,10 @@ class DeviceManager extends EventEmitter {
         this.settingsManager = new SettingsManager();
     }
 
+    getExploreHD(deviceIndex=0) {
+        return this.devices.find(device => device.deviceIndex === deviceIndex);
+    }
+
     getDeviceFromPath(devicePath) {
         return this.devices.find(device => device.devicePath === devicePath);
     }
@@ -105,6 +109,10 @@ class DeviceManager extends EventEmitter {
         // start monitoring for usb device changes
         usbDetect.startMonitoring();
         usbDetect.on('change', () => setTimeout(() => this.enumerate(), 250)); // the timeout is to ensure Linux can initialize the device properly
+    }
+
+    stopMonitoring() {
+        usbDetect.stopMonitoring();
     }
 
     // construct a serializable array of devices

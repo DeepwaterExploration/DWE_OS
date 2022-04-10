@@ -4,15 +4,15 @@
 
 # dwe-controls
 
-Control system for the DeepWater Exploration exploreHD and HDCam. Additional compatibility is available for other UVC compatible H264 devices.
+Control system for the DeepWater Exploration exploreHD and HDCam. Additional streaming functionality is available for all UVC compatible H264 devices.
 
 ## Install
 
 On linux devices:
 
-`sudo apt install libudev-dev`
+`sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev`
 
-`npm install -g @deepwaterexploration/dwe-controls`
+`sudo npm install -g @deepwaterexploration/dwe-controls`
 
 ## Usage
 
@@ -24,17 +24,32 @@ Start the server: `dwe-controls start [port=5000] [host=0.0.0.0]`
 
 **JavaScript Example**
 
-Setting a control:
+Using an exploreHD:
 ```js
-const { findDevices, DeviceManager } = require('dwe-controls');
+const { DeviceManager } = require('./index');
 
 var deviceManager = new DeviceManager();
+var exploreHD;
 
 async function init() {
-    let h264_cameras = await findDevices();
-    await deviceManager.initStorage();
-    await deviceManager.enumerateCameras(h264_cameras);
-    deviceManager.setOption(0, 'gop', 0); // set the gop of the 0th indexed camera to 0
+    // device manager events
+    await deviceManager.startMonitoring();
+
+    exploreHD = deviceManager.getExploreHD(0);
+    if (!exploreHD) {
+        console.log('No exploreHD found!');
+        deviceManager.stopMonitoring();
+        return;
+    }
+
+    console.log(`Found exploreHD at ${exploreHD.devicePath}, ${exploreHD.info.name}: ${exploreHD.info.manufacturer}`);
+
+    await exploreHD.setDriverOptions({
+        h264: true,
+        vbr: false,
+        bitrate: 5 // 5 Mbps
+    });
+    await exploreHD.addStream('127.0.0.1'); // start a local stream
 }
 
 init();
