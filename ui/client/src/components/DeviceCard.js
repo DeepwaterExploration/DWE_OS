@@ -35,6 +35,7 @@ const DeviceOptions = (props) => {
     const device = props.device.devicePath;
 
     const [bitrate, setBitrate] = useState(props.device.options.bitrate);
+    const [bitrateSlider, setBitrateSlider] = useState(props.device.options.bitrate);
     const [h264, setH264] = useState(props.device.options.h264);
     const [vbr, setVBR] = useState(props.device.options.vbr);
 
@@ -51,8 +52,9 @@ const DeviceOptions = (props) => {
     return (
         <>
             <SupportingText>
-                <span>Bitrate: { bitrate } Mbps</span>
-                <Slider defaultValue={ bitrate } disabled={ vbr } onChange={(e) => { setBitrate(e.target.value) }} name="bitrate" 
+                <span>Bitrate: { bitrateSlider } Mbps</span>
+                <Slider name="bitrate" defaultValue={ props.device.options.bitrate } disabled={ vbr } 
+                        onChangeCommitted={(_, newValue) => { setBitrate(newValue) }} onChange={ (_, newValue) => { setBitrateSlider(newValue) } }
                         style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small" max={15} min={0.1} step={0.1} />
             </SupportingText>
             <FormGroup>
