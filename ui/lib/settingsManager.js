@@ -12,7 +12,7 @@ class SettingsManager {
 
     async _initialize() {
         await storage.init({
-            dir: path.join(homedir, '/.dwe/driver')
+            dir: path.join(homedir, '/.dwe/controls')
         });
         let settings = await storage.getItem('settings');
         if (!settings) {
