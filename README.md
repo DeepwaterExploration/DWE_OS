@@ -22,9 +22,15 @@ To connect to the pi, we suggest using ssh with Putty. You can read our document
 
 ### Installing
 
+#### Script
+
+To install without manually entering the commands, you can use the script found in the scripts/ directory.
+
+#### Commands
+
 In order to run, first install nodejs with:
 ```sh
-curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt install nodejs
 curl -L https://npmjs.org/install.sh | sudo sh
 ```
