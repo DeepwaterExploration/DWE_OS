@@ -47,12 +47,14 @@ function hexDecode(str_enc) {
 const NAME_LUT = {
     '0c45/6366': 'DeepWater Exploration Inc.', 
     '32e4/9422': 'Shenzhen Ailipu Technology Co., Ltd', 
+    '05a3/9422': 'Shenzhen Ailipu Technology Co., Ltd', 
     '0c45/ae11': 'ArduCam'
 };
 
 const MODEL_LUT = {
     '0c45/6366': 'DWE-EHDUSBR2', 
     '32e4/9422': 'ELP-USBFHD06H', 
+    '05a3/9422': 'ELP-USBFHD06H', 
     '0c45/ae11': 'UB0212'
 }
 
