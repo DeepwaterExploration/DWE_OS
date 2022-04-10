@@ -81,7 +81,7 @@ class Device {
         this.options = options;
         await setDriverOptions(this.devicePath, options);
 
-        if (flushChanges) await this.deviceManager.settingsManager.updateStreams();
+        if (flushChanges) await this.deviceManager.settingsManager.updateDeviceOptions(this);
     }
 }
 
