@@ -24,7 +24,19 @@ To connect to the pi, we suggest using ssh with Putty. You can read our document
 
 #### Script
 
-To install without manually entering the commands, you can use the script found in the scripts/ directory.
+To install on a **raspberry pi** without manually entering the commands, you can use the script found in the scripts/ directory.
+
+**This script will install the application globally with autostart enabled by default, ensure you know what you are doing before proceeding.**
+
+The script can be executed with this command:
+```
+curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install-rpi.sh | sudo -E sh
+```
+
+Once it is installed, the script should exit with the following message:
+`Installation of exploreHD_Controls was successful. Please navigate to http://192.168.2.2:5000 to access the interface.`
+
+You can now jump to [Interface](#Interface) to finish the setup.
 
 #### Commands
 

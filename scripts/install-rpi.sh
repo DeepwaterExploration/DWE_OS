@@ -1,3 +1,5 @@
+#!bin/sh
+
 # This file will install the dwe-controls application
 # install-rpi.sh
 
