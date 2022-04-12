@@ -70,12 +70,12 @@ To enable auto-launch (recommended for raspberry pi):
 
 - Enable startup for pm2: `sudo pm2 startup systemd -u $LOGNAME --hp $HOME`
 
-#### **Running**
+##### Running
 To run the application temporarily (this is only if you do **not want to install** with auto-launch):
 
 - Run: `dwe-controls start`
 
-#### **Interface**
+### **Interface**
 To use the interface, navigate to <http://192.168.2.2:5000> (or <http://companion.local:5000> if running the ArduSub companion software).
 
 ![driverui](https://docs.exploredeepwater.com/_images/driverui.png)
