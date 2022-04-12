@@ -40,6 +40,8 @@ You can now jump to [Interface](#Interface) to finish the setup.
 
 #### Commands
 
+Alternatively, you can install manually with the following commands:
+
 In order to run, first install nodejs with:
 ```sh
 curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
@@ -53,9 +55,8 @@ Next, install the dwe-controls application from npmjs with:
 
 `sudo npm install -g @deepwaterexploration/dwe-controls`
 
-### Usage
+##### Auto Launch
 
-#### **Installation**
 To enable auto-launch (recommended for raspberry pi):
 
 - Install [pm2](https://www.npmjs.com/package/pm2):
@@ -67,7 +68,7 @@ To enable auto-launch (recommended for raspberry pi):
 - Save the process list:
 `pm2 save`
 
-- Enable startup for pm2 (this command is specific to raspberry pi): `sudo pm2 startup systemd -u pi --hp /home/pi/`
+- Enable startup for pm2: `sudo pm2 startup systemd -u $LOGNAME --hp $HOME`
 
 #### **Running**
 To run the application temporarily (this is only if you do **not want to install** with auto-launch):
