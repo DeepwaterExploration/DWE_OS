@@ -53,6 +53,16 @@ class StreamManager {
         return this.nextPort;
     }
 
+    static resetAll() {
+        this.nextPort = 5600;
+        // stop all streams
+        for (let stream of this.streams) {
+            stream.stop();
+        }
+        this.streams = [];
+        this.freePorts = [];
+    }
+
     static restartStream(device, host, port) {
         this.stopStream(device);
         

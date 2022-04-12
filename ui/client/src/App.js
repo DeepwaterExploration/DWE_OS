@@ -1,17 +1,20 @@
 import * as React from 'react';
 
-import './main.css'
-import Header from './components/Header';
+import './main.css';
+
 import CssBaseline from '@mui/material/CssBaseline';
-import DeviceCard from './components/DeviceCard';
-import DevicesContainer from './components/DevicesContainer';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ListItem from '@mui/material/ListItem';
 import Switch from '@mui/material/Switch';
 import ThemeProvider from '@mui/system/ThemeProvider';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 import { lightTheme, darkTheme } from './themes';
+import { makePostRequest } from './utils/utils';
+import DevicesContainer from './components/DevicesContainer';
+import DeviceCard from './components/DeviceCard';
+import Header from './components/Header';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -25,6 +28,7 @@ export default class App extends React.Component {
 
         this.addCard = this.addCard.bind(this);
         this.updateTheme = this.updateTheme.bind(this);
+        this.resetSettings = this.resetSettings.bind(this);
     }
 
     addCard(device) {
@@ -58,20 +62,29 @@ export default class App extends React.Component {
         this.setState({theme: e.target.checked ? darkTheme : lightTheme});
     }
 
+    resetSettings() {
+        makePostRequest('/resetSettings', {}, () => window.location.reload());
+    }
+
     render() {
         return (
             <ThemeProvider theme={this.state.theme}>
                 <CssBaseline />
                 <Header drawerItems={
-                    <ListItem>
-                        <FormControlLabel onChange={ this.updateTheme }
-                            control={
-                                <Switch checked={ this.state.theme == darkTheme } name="Theme" />
-                            } label={ 
-                                <Typography color="text.secondary">{ this.state.theme == darkTheme ? 'Dark Theme' : 'Light Theme' }</Typography>
-                            }
-                        />
-                    </ListItem>
+                    <>
+                        <ListItem>
+                            <FormControlLabel onChange={ this.updateTheme }
+                                control={
+                                    <Switch checked={ this.state.theme == darkTheme } name="Theme" />
+                                } label={ 
+                                    <Typography color="text.secondary">{ this.state.theme == darkTheme ? 'Dark Theme' : 'Light Theme' }</Typography>
+                                }
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <Button color="primary" variant="contained" onClick={ this.resetSettings }>Reset Settings</Button>
+                        </ListItem>
+                    </>
                 }>
                 </Header>
                 <div style={{ minHeight: '64px' }} />

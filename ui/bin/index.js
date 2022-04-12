@@ -3,6 +3,7 @@
 const { hideBin } = require('yargs/helpers');
 const yargs = require('yargs/yargs');
 const controls = require('../lib/index');
+const reset = require('../lib/utils/reset');
 
 yargs(hideBin(process.argv))
     .command('*', 'default command', () => { }, () => controls.serve())
@@ -20,13 +21,7 @@ yargs(hideBin(process.argv))
         controls.serve(argv.port, argv.host);
     })
     .command('reset', 'reset the settings file', () => { }, async () => {
-        const storage = require('node-persist');
-        const path = require('path');
-        const homedir = require('os').homedir();
-        await storage.init({
-            dir: path.join(homedir, '/.dwe/controls')
-        });
-        await storage.clear();
+        await reset();
     })
     .help()
     .parse();

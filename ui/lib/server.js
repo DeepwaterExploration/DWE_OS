@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 
 const DeviceManager = require('./deviceManager');
+const StreamManager = require('./streamManager');
 
 const app = express();
 const server = http.createServer(app);
@@ -43,6 +44,13 @@ app.post('/restartStream', async (req, res) => {
     res.send({
         port: device.stream.port
     });
+});
+
+app.post('/resetSettings', async (req, res) => {
+    console.log('Resetting settings');
+    StreamManager.resetAll();
+    await deviceManager.resetSettings();
+    res.send();
 });
 
 // send a friendly page instead of 404

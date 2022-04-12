@@ -4,6 +4,7 @@ const v4l2camera = require("v4l2camera-pr48");
 const SettingsManager = require('./settingsManager');
 const StreamManager = require('./streamManager');
 const { getDriverOptions, setDriverOptions } = require('./utils/driver');
+const reset = require('./utils/reset');
 const getUdevInfo = require('./utils/udev');
 
 class Device {
@@ -91,6 +92,13 @@ class DeviceManager extends EventEmitter {
 
         this.devices = [];
         this.settingsManager = new SettingsManager();
+    }
+
+    async resetSettings() {
+        await reset();
+        await this.settingsManager._initialize();
+        this.devices = [];
+        await this.enumerate(false);
     }
 
     getExploreHD(deviceIndex=0) {
