@@ -42,16 +42,18 @@ You can now jump to [Interface](#Interface) to finish the setup.
 
 Alternatively, you can install manually with the following commands:
 
-In order to run, first install nodejs with:
+First, install nodejs with:
 ```sh
 curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt install nodejs
 curl -L https://npmjs.org/install.sh | sudo sh
 ```
 
-Next, install the dwe-controls application from npmjs with:
+Next, install the required dependencies:
 
 `sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev`
+
+Finally, install the dwe-controls application from npmjs with:
 
 `sudo npm install -g @deepwaterexploration/dwe-controls`
 
