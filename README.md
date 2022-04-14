@@ -70,7 +70,7 @@ To enable auto-launch (recommended for raspberry pi):
 - Save the process list:
 `pm2 save`
 
-- Enable startup for pm2: `sudo pm2 startup systemd -u $LOGNAME --hp $HOME`
+- Enable startup for pm2: `sudo pm2 startup systemd -u $SUDO_USER --hp /home/$SUDO_USER`
 
 ##### Running
 To run the application temporarily (this is only if you do **not want to install** with auto-launch):
