@@ -24,19 +24,19 @@ To connect to the pi, we suggest using ssh with Putty. You can read our document
 
 #### Script
 
-To install on a **raspberry pi** without manually entering the commands, you can use the script found in the scripts/ directory.
+To install without manually entering the commands, you can use the script found in the scripts/ directory.
 
 **This script will install the application globally with autostart enabled by default, ensure you know what you are doing before proceeding.**
 
-The script can be executed with this command:
+The script can be executed with the following command:
 ```
-curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install-rpi.sh | sudo -E bash -
+curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install.sh | sudo -E bash -
 ```
 
-Once it is installed, the script should exit with the following message:
+Once installed, the script should exit with the following message:
 `Installation of exploreHD_Controls was successful. Please navigate to http://192.168.2.2:5000 to access the interface.`
 
-You can now jump to [Interface](#Interface) to finish the setup.
+You can now jump to [Interface](#Interface) to access the functionality.
 
 #### Commands
 
@@ -70,7 +70,8 @@ To enable auto-launch (recommended for raspberry pi):
 - Save the process list:
 `pm2 save`
 
-- Enable startup for pm2: `sudo pm2 startup systemd -u $SUDO_USER --hp /home/$SUDO_USER`
+- Enable startup for pm2: `sudo pm2 startup systemd -u <your username> --hp /home/<your username>`
+    - Raspberry Pi: `sudo pm2 startup systemd -u pi --hp /home/pi`
 
 ##### Running
 To run the application temporarily (this is only if you do **not want to install** with auto-launch):
