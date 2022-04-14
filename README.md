@@ -30,7 +30,7 @@ To install on a **raspberry pi** without manually entering the commands, you can
 
 The script can be executed with this command:
 ```
-curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install-rpi.sh | sudo -E sh
+curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install-rpi.sh | sudo -E bash -
 ```
 
 Once it is installed, the script should exit with the following message:
