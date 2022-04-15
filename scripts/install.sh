@@ -26,7 +26,7 @@ fi
 apt-get install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev -y
 
 # Globally install dwe-controls
-npm install -g @deepwaterexploration/dwe-controls
+npm install -g @deepwaterexploration/dwe-controls --unsafe
 
 # Install pm2
 npm install -g pm2
