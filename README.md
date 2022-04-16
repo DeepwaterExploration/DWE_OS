@@ -53,6 +53,8 @@ Next, install the required dependencies:
 
 `sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev`
 
+`sudo apt install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad`
+
 Finally, install the dwe-controls application from npmjs with:
 
 `sudo npm install -g @deepwaterexploration/dwe-controls`
@@ -81,5 +83,5 @@ To run the application temporarily (this is only if you do **not want to install
 ### **Interface**
 To use the interface, navigate to <http://192.168.2.2:5000> (or <http://companion.local:5000> if running the ArduSub companion software).
 
-![driverui](https://docs.exploredeepwater.com/_images/driverui.png#gh-light-mode-only)
-![driverui](https://docs.exploredeepwater.com/_images/driverui-dark.png#gh-dark-mode-only)
+![driverui](./images/driverui.png#gh-light-mode-only)
+![driverui](./images/driverui-dark.png#gh-dark-mode-only)
