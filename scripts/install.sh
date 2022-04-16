@@ -25,6 +25,9 @@ fi
 # Install development libraries
 apt-get install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev -y
 
+# Install gstreamer plugins
+apt-get install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad -y
+
 # Globally install dwe-controls
 npm install -g @deepwaterexploration/dwe-controls --unsafe
 
