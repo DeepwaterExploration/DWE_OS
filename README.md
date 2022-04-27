@@ -10,6 +10,7 @@
     - [Basic Setup Guides](#basic-setup-guides)
 - [Getting Started](#getting-started)
     - [Connecting](#connecting)
+    - [Installing with Docker](#installing-with-docker)
     - [Installing On Raspberry Pi](#installing-on-raspberry-pi)
     - [Installing Manually](#installing-manually)
         - [Auto Launch](#auto-launch)
@@ -30,7 +31,7 @@ The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [document
 
 To connect to the pi, we suggest using ssh with Putty. You can read our documentation on that on [Step 8: SSH into the Pi](https://docs.exploredeepwater.com/guides/pi_setup.html#step-8-ssh-into-the-pi) of our pi setup docs.
 
-### Docker Installation
+### Installing with Docker
 
 Recommended for Raspberry Pi instead of [Installing On Raspberry Pi](#installing-on-raspberry-pi) or [Installing Manually](#installing-manually).
 
