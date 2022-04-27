@@ -25,6 +25,7 @@ docker create \
     --privileged brandondwe/dwe-controls
 
 echo "Installing service"
+rm /usr/lib/systemd/system/dwe-controls.service
 curl $REPO/docker/dwe-controls.service -o /usr/lib/systemd/system/dwe-controls.service
 
 systemctl daemon-reload
