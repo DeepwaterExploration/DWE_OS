@@ -15,13 +15,13 @@ docker pull brandondwe/dwe-controls
 
 # Create docker image
 echo "Creating docker image"
-if [ ! "$(docker ps -q -f name=dwe-controls)" ]; then
-    docker rm --force dwe-controls
+if [ "$(docker ps -q -f name=dwe-controls)" ]; then
+    docker rm dwe-controls --force
 fi
 docker create \
-    -p 0.0.0.0:5000:5000 \
     --name dwe-controls \
-    -v /dev:/dev -v /home/pi/.dwe:/root/.dwe -v /run/udev:/run/udev \
+    --net=host \
+    -v /dev:/dev -v /dwe/.dwe:/root/.dwe -v /run/udev:/run/udev \
     --privileged brandondwe/dwe-controls
 
 echo "Installing service"
