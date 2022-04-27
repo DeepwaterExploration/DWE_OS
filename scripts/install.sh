@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # This file will install the dwe-controls application
 # install.sh
