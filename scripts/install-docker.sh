@@ -31,3 +31,5 @@ curl $REPO/docker/dwe-controls.service -o /usr/lib/systemd/system/dwe-controls.s
 systemctl daemon-reload
 systemctl enable dwe-controls
 systemctl start dwe-controls
+
+echo "Installation of dwe-controls with docker was successful. Please navigate to http://192.168.2.2:5000 to access the interface."

@@ -6,11 +6,21 @@
 
 **NOTE: exploreHD settings can only be adjusted on the lower bandwidth / configurable firmware. Learn how to upgrade [here](https://docs.exploredeepwater.com/software/firmware.html)**.
 
+- [Documentation](#documentation)
+    - [Basic Setup Guides](#basic-setup-guides)
+- [Getting Started](#getting-started)
+    - [Connecting](#connecting)
+    - [Installing On Raspberry Pi](#installing-on-raspberry-pi)
+    - [Installing Manually](#installing-manually)
+        - [Auto Launch](#auto-launch)
+        - [Running Manually](#running-manually)
+- [Interface](#interface)
+
 ## Documentation
 
 The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [documentation site](https://docs.exploredeepwater.com/).
 
-### Follow our guides on streaming an exploreHD from a raspberry pi:
+### Basic Setup Guides
 - [Pi Setup](https://docs.exploredeepwater.com/guides/pi_setup.html)
 - [ArduSub Companion Setup](https://docs.exploredeepwater.com/guides/ardusub_companion.html)
 
@@ -20,15 +30,23 @@ The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [document
 
 To connect to the pi, we suggest using ssh with Putty. You can read our documentation on that on [Step 8: SSH into the Pi](https://docs.exploredeepwater.com/guides/pi_setup.html#step-8-ssh-into-the-pi) of our pi setup docs.
 
-### Installing
+### Docker Installation
 
-#### Script
+Recommended for Raspberry Pi instead of [Installing On Raspberry Pi](#installing-on-raspberry-pi) or [Installing Manually](#installing-manually).
 
-To install without manually entering the commands, you can use the script found in the scripts/ directory.
+To install with docker, you can use the installation script provided with the following command:
+```
+curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install-docker.sh | sudo -E bash -
+```
 
-**This script will install the application globally with autostart enabled by default, ensure you know what you are doing before proceeding.**
+Once installed, the script should exit with the following message:
+`Installation of dwe-controls with docker was successful. Please navigate to http://192.168.2.2:5000 to access the interface.`
 
-The script can be executed with the following command:
+You can now jump to [Interface](#interface) to access the functionality.
+
+### Installing On Raspberry Pi
+
+To install for the raspberry pi, you can use the installation script by executing the following command:
 ```
 curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main/scripts/install.sh | sudo -E bash -
 ```
@@ -36,11 +54,11 @@ curl -fsSL https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Cont
 Once installed, the script should exit with the following message:
 `Installation of exploreHD_Controls was successful. Please navigate to http://192.168.2.2:5000 to access the interface.`
 
-You can now jump to [Interface](#Interface) to access the functionality.
+You can now jump to [Interface](#interface) to access the functionality.
 
-#### Commands
+### Installing Manually
 
-Alternatively, you can install manually with the following commands:
+You can install manually (for raspberry pi or other systems) with the following commands:
 
 First, install nodejs with:
 ```sh
@@ -59,7 +77,7 @@ Finally, install the dwe-controls application from npmjs with:
 
 `sudo npm install -g @deepwaterexploration/dwe-controls`
 
-##### Auto Launch
+#### Auto Launch
 
 To enable auto-launch (recommended for raspberry pi):
 
@@ -75,8 +93,8 @@ To enable auto-launch (recommended for raspberry pi):
 - Enable startup for pm2: `sudo pm2 startup systemd -u <your username> --hp /home/<your username>`
     - Raspberry Pi: `sudo pm2 startup systemd -u pi --hp /home/pi`
 
-##### Running
-To run the application temporarily (this is only if you do **not want to install** with auto-launch):
+#### Running Manually
+To run the application **temporarily** (this is only if you do **not want to install** with auto-launch):
 
 - Run: `dwe-controls start`
 
