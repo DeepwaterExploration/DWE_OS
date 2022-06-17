@@ -1,6 +1,6 @@
 {
   "name": "@deepwaterexploration/dwe-controls",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
   "main": "lib/index.js",
   "bin": "bin/index.js",
