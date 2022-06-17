@@ -16,6 +16,8 @@ import DevicesContainer from './components/DevicesContainer';
 import DeviceCard from './components/DeviceCard';
 import Header from './components/Header';
 
+import { io } from 'socket.io-client';
+
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +31,7 @@ export default class App extends React.Component {
         this.addCard = this.addCard.bind(this);
         this.updateTheme = this.updateTheme.bind(this);
         this.resetSettings = this.resetSettings.bind(this);
+        this.socket = io();
     }
 
     addCard(device) {
@@ -47,14 +50,37 @@ export default class App extends React.Component {
         }
     }
 
+    addDevices(devices) {
+        for (let device of devices) {
+            this.addCard(device);
+        }
+    }
+
+    removeDevice(device) {
+        let devicePath = device.devicePath;
+        if (device.caps.driver) {
+            this.setState({
+                exploreHD_cards: this.state.exploreHD_cards.filter((ehd) => ehd.props.device.devicePath != devicePath)
+            });
+        } else {
+            this.setState({
+                other_cards: this.state.other_cards.filter((dev) => dev.props.device.devicePath != devicePath)
+            });
+        }
+    }
+
     componentDidMount() {
         fetch('/devices')
             .then((response) => response.json())
-            .then((devices) => {
-                for (let device of devices) {
-                    this.addCard(device);
-                }
-            })
+            .then((devices) => this.addDevices(devices));
+        this.socket.on('added', (addedDevices) => {
+            this.addDevices(addedDevices);
+        });
+        this.socket.on('removed', (removedDevices) => {
+            for (let device of removedDevices) {
+                this.removeDevice(device);
+            }
+        });
     }
 
     updateTheme(e) {
