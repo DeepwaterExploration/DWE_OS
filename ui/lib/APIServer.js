@@ -37,7 +37,7 @@ class APIServer {
         
         // restart a stream
         this.app.post('/restartStream', async (req, res) => {
-            let device = deviceManager.getDeviceFromPath(req.body.devicePath);
+            let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);
             await device.restartStream(req.body.stream.hostAddress, req.body.stream.port);
             res.send({
                 port: device.stream.port
