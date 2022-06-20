@@ -29,7 +29,7 @@ The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [document
 
 ### Connecting
 
-To connect to the pi, we suggest using ssh with Putty. You can read our documentation on that on [Step 8: SSH into the Pi](https://docs.exploredeepwater.com/guides/pi_setup.html#step-8-ssh-into-the-pi) of our pi setup docs.
+To connect to the pi, we suggest using ssh with Putty. You can read our documentation on that on [SSH Into a Raspberry Pi](https://docs.exploredeepwater.com/guides/ssh_into_pi.html) of our pi setup docs.
 
 ### Installing with Docker
 
