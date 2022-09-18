@@ -62,6 +62,9 @@ class Device {
     async addStream(host, port=null, flushChanges=true) {
         this.stream = StreamManager.startStream(this.devicePath, host, port);
 
+        // emit the stream added event
+        this.deviceManager.emit('stream added', this);
+
         if (flushChanges) this.deviceManager.settingsManager.updateStreams();
     }
 
@@ -69,11 +72,17 @@ class Device {
         StreamManager.stopStream(this.devicePath);
         this.stream = null;
 
+        // emit the stream removed event
+        this.deviceManager.emit('stream removed', this);
+
         if (flushChanges) this.deviceManager.settingsManager.updateStreams();
     }
 
     async restartStream(host, port=null, flushChanges=true) {
         this.stream = StreamManager.restartStream(this.devicePath, host, port);
+
+        // emit the stream restart event
+        this.deviceManager.emit('stream restarted', this);
 
         if (flushChanges) this.deviceManager.settingsManager.updateStreams();
     }
@@ -174,7 +183,6 @@ class DeviceManager extends EventEmitter {
         if (removedDevices.length !== 0 && emitChanges) {
             this.emit('removed', removedDevices);
             for (let device of removedDevices) {
-                console.log(device.devicePath)
                 StreamManager.stopStream(device.devicePath);
             }
         }

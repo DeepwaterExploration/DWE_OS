@@ -18,6 +18,8 @@ import Header from './components/Header';
 
 import { io } from 'socket.io-client';
 
+import packageBackend from './package.backend.json'
+
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -109,6 +111,9 @@ export default class App extends React.Component {
                         </ListItem>
                         <ListItem>
                             <Button color="primary" variant="contained" onClick={ this.resetSettings }>Reset Settings</Button>
+                        </ListItem>
+                        <ListItem>
+                            <span>Backend Revision: { packageBackend.version }</span>
                         </ListItem>
                     </>
                 }>

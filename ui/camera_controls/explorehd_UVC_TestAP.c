@@ -368,7 +368,6 @@ int main(int argc, char *argv[])
 			break;
 	}
 
-
 	close(dev);
 	return 0;
 }

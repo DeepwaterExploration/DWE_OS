@@ -1,4 +1,5 @@
 const StreamManager = require('./streamManager');
+const { version } = require('../package.json');
 
 class APIServer {
     constructor(app, deviceManager) {
@@ -10,6 +11,12 @@ class APIServer {
         // get the device list
         this.app.get('/devices', (req, res) => {
             res.send(this.deviceManager.getSerializableDevices());
+        });
+
+        this.app.get('/app', (req, res) => {
+            res.send({
+                version
+            });
         });
 
         // update options
@@ -38,7 +45,7 @@ class APIServer {
         // restart a stream
         this.app.post('/restartStream', async (req, res) => {
             let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);
-            await device.restartStream(req.body.stream.hostAddress, req.body.stream.port);
+            await device.restartStream(req.body.stream.hostAddress, parseInt(req.body.stream.port));
             res.send({
                 port: device.stream.port
             });

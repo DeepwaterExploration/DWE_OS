@@ -1,5 +1,4 @@
 const { Server } = require('socket.io');
-const StreamManager = require('./streamManager');
 
 class SocketServer {
     constructor(server, deviceManager) {
@@ -26,36 +25,19 @@ class SocketServer {
             this.io.sockets.emit('removed', serializableRemovedDevices);
         });
 
-        // update options
-        this.io.on('set options', (devicePath, options) => {
-            let device = this.deviceManager.getDeviceFromPath(devicePath);
-            device.setDriverOptions(device, options);
+        // emitted when a stream is added
+        this.deviceManager.on('stream added', (device) => {
+            this.io.sockets.emit('stream added', device.getSerializable());
         });
 
-        // create a stream
-        this.io.on('add stream', async (devicePath, hostAddress, callback) => {
-            let device = this.deviceManager.getDeviceFromPath(devicePath);
-            await device.addStream(hostAddress);
-            callback(device.stream.port);
+        // emitted when a stream is removed
+        this.deviceManager.on('stream removed', (device) => {
+            this.io.sockets.emit('stream removed', device.getSerializable());
         });
 
-        // remove a stream
-        this.io.on('remove stream', async (devicePath) => {
-            let device = this.deviceManager.getDeviceFromPath(devicePath);
-            await device.removeStream();
-        });
-
-        // restart a stream
-        this.io.on('restart stream', async (devicePath, hostAddress, port, callback) => {
-            let device = this.deviceManager.getDeviceFromPath(devicePath);
-            await device.restartStream(hostAddress, port);
-            callback(port);
-        });
-        
-        // reset the settings
-        this.io.on('reset settings', async () => {
-            StreamManager.resetAll();
-            await this.deviceManager.resetSettings();
+        // emitted when a stream is restarted
+        this.deviceManager.on('stream restarted', (device) => {
+            this.io.sockets.emit('stream restarted', device.getSerializable());
         });
     }
 }
