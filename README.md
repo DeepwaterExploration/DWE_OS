@@ -45,6 +45,15 @@ Once installed, the script should exit with the following message:
 
 You can now jump to [Interface](#interface) to access the functionality.
 
+### Uninstalling with Docker
+
+If you have installed with docker, you can uninstall dwe-controls with the following commands:
+
+```
+docker rm dwe-controls --force
+rm /usr/lib/systemd/system/dwe-controls.service
+```
+
 ### Installing On Raspberry Pi
 
 To install for the raspberry pi, you can use the installation script by executing the following command:
