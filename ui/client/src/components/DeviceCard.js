@@ -12,22 +12,32 @@ import Slider from "@mui/material/Slider";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Collapse from '@mui/material/Collapse';
+
+import IconButton from '@mui/material/IconButton';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+
 import React, { useEffect, useState } from "react";
 import { makePostRequest, useDidMountEffect } from "../utils/utils";
+import { Divider } from "@mui/material";
 
 function SupportingText(props) {
     return (
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom marginBottom='14px'>
-            { props.children }
+            {props.children}
         </Typography>
     )
 }
 
 function DeviceSwitch(props) {
     return (
-        <FormControlLabel onChange={ props.onChange } sx={{mt: '-10px'}} control={ <Switch name={ props.name } checked={props.checked} /> } label={ 
-            <Typography color="text.secondary">{ props.text }</Typography>
-        } >{ props.children }</FormControlLabel>
+        <FormControlLabel onChange={props.onChange} sx={{ mt: '-10px' }} control={<Switch name={props.name} checked={props.checked} />} label={
+            <Typography color="text.secondary">{props.text}</Typography>
+        } >{props.children}</FormControlLabel>
     )
 }
 
@@ -52,17 +62,17 @@ const DeviceOptions = (props) => {
     return (
         <>
             <SupportingText>
-                <span>Bitrate: { bitrateSlider } Mbps</span>
-                <Slider name="bitrate" defaultValue={ props.device.options.bitrate } disabled={ vbr } 
-                        onChangeCommitted={(_, newValue) => { setBitrate(newValue) }} onChange={ (_, newValue) => { setBitrateSlider(newValue) } }
-                        style={{marginLeft: '20px', width: 'calc(100% - 25px)'}} size="small" max={15} min={0.1} step={0.1} />
+                <span>Bitrate: {bitrateSlider} Mbps</span>
+                <Slider name="bitrate" defaultValue={props.device.options.bitrate} disabled={vbr}
+                    onChangeCommitted={(_, newValue) => { setBitrate(newValue) }} onChange={(_, newValue) => { setBitrateSlider(newValue) }}
+                    style={{ marginLeft: '20px', width: 'calc(100% - 25px)' }} size="small" max={15} min={0.1} step={0.1} />
             </SupportingText>
             <FormGroup>
-                <DeviceSwitch checked={ h264 } name="h264Switch" onChange={(e) => {
+                <DeviceSwitch checked={h264} name="h264Switch" onChange={(e) => {
                     setH264(e.target.checked);
                     setVBR(e.target.checked ? false : vbr);
                 }} text="H.264" />
-                <DeviceSwitch checked={ vbr } name="vbrSwitch" onChange={(e) => {
+                <DeviceSwitch checked={vbr} name="vbrSwitch" onChange={(e) => {
                     setVBR(e.target.checked);
                     setH264(e.target.checked ? false : h264);
                 }} text="VBR (Variable Bitrate)" />
@@ -114,26 +124,99 @@ const StreamOptions = (props) => {
 
     return (
         <FormGroup>
-            <DeviceSwitch onChange={(e) => { setUDP(e.target.checked) }} checked={ udp } name="streamSwitch" text="UDP Stream" />
+            <DeviceSwitch onChange={(e) => { setUDP(e.target.checked) }} checked={udp} name="streamSwitch" text="UDP Stream" />
             <LineBreak />
             {
-                udp ? 
-                <>
-                    <TextField label="address" onChange={(e) => { setHostAddress(e.target.value) }} variant="standard" value={ hostAddress } />
-                    <TextField label="port" onChange={(e) => { setPort(e.target.value) }} variant="standard" type="number" value={ port } />
-                    <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={ restartStream }>Restart Stream</Button>
-                </>
-                : undefined
+                udp ?
+                    <>
+                        <TextField label="address" onChange={(e) => { setHostAddress(e.target.value) }} variant="standard" value={hostAddress} />
+                        <TextField label="port" onChange={(e) => { setPort(e.target.value) }} variant="standard" type="number" value={port} />
+                        <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={restartStream}>Restart Stream</Button>
+                    </>
+                    : undefined
             }
         </FormGroup>
     )
 }
 
+const CameraControls = (props) => {
+    const controls = props.controls;
+    const [controlsCollapsed, setControlsCollapsed] = useState(true);
+
+    return <>
+        <div style={{ marginTop: '25px' }}>
+            <span>V4L2 Controls</span>
+            <IconButton onClick={() => setControlsCollapsed(!controlsCollapsed)} >
+                {controlsCollapsed ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+            </IconButton>
+            <Divider />
+            <Collapse in={!controlsCollapsed}>
+                <FormGroup style={{ marginTop: '25px' }}>
+                    {
+                        controls.map((control, _) => {
+                            switch (control.type) {
+                                case 'int': {
+                                    let { min, max, step, name, id } = control;
+                                    let defaultValue = control.default;
+                                    return <>
+                                        <span>{name}</span>
+                                        <Slider name={`control-${id}`} min={min} max={max} step={step} defaultValue={defaultValue} style={{ marginLeft: '20px', width: 'calc(100% - 25px)' }} />
+                                    </>
+                                }
+                                case 'bool': {
+                                    let { name, id } = control;
+                                    let defaultValue = control.default;
+                                    return <>
+                                        <span>{name}</span>
+                                        <Switch name={`control-${id}`} defaultChecked={defaultValue == 1} />
+                                    </>
+                                }
+                                case 'menu': {
+                                    let { menu, name, id } = control;
+                                    let defaultValue = menu[control.default];
+                                    let [currentValue, setCurrentValue] = useState(defaultValue);
+                                    return <>
+                                        <PopupState variant="popover" popupId={id}>
+                                            {(popupState) => (
+                                                <>
+                                                    <div>
+                                                        <span>{name}: {currentValue}</span>
+                                                        <IconButton variant="text" {...bindTrigger(popupState)}>
+                                                            <ArrowDropDownIcon />
+                                                        </IconButton>
+                                                    </div>
+                                                    <Menu {...bindMenu(popupState)}>
+                                                        {
+                                                            menu.map((item, _) => {
+                                                                return <MenuItem onClick={() => {
+                                                                    setCurrentValue(item);
+                                                                    popupState.close();
+                                                                }}>{item}</MenuItem>
+                                                            })
+                                                        }
+                                                    </Menu>
+                                                </>
+                                            )}
+                                        </PopupState>
+                                    </>
+                                }
+                            }
+                        })
+                    }
+                </FormGroup>
+            </Collapse>
+        </div>
+    </>
+}
+
 const DeviceCard = (props) => {
+    const controls = props.device.cam.controls;
+    console.log(controls);
+
     let deviceOptions;
     let deviceWarning;
     if (props.device.caps.driver) {
-        deviceOptions = <DeviceOptions device={ props.device } />;
+        deviceOptions = <DeviceOptions device={props.device} />;
         deviceWarning = null;
     } else {
         deviceOptions = null;
@@ -149,20 +232,21 @@ const DeviceCard = (props) => {
     return (
         <Grid item xs={3} style={{ paddingTop: '30px' }}>
             <Card sx={{ minWidth: 512, boxShadow: 3 }}>
-                <CardHeader 
-                    action={ deviceWarning } 
-                    title={ props.device.info.name } subheader={
+                <CardHeader
+                    action={deviceWarning}
+                    title={props.device.info.name} subheader={
                         <>
-                            { props.device.info.manufacturer ? `Manufacturer: ${ props.device.info.manufacturer }` : undefined }
+                            {props.device.info.manufacturer ? `Manufacturer: ${props.device.info.manufacturer}` : undefined}
                             <LineBreak />
-                            { props.device.info.model ? `Model: ${ props.device.info.model }` : undefined }
+                            {props.device.info.model ? `Model: ${props.device.info.model}` : undefined}
                         </>
                     } />
                 <CardContent>
-                    <SupportingText>Device: { props.device.devicePath }</SupportingText>
-                    { deviceOptions }
-                    <StreamOptions device={ props.device } />
-                    { props.children }
+                    <SupportingText>Device: {props.device.devicePath}</SupportingText>
+                    {deviceOptions}
+                    <StreamOptions device={props.device} />
+                    <CameraControls controls={controls} />
+                    {props.children}
                 </CardContent>
             </Card>
         </Grid>
