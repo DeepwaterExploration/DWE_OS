@@ -25,6 +25,11 @@ class Stream {
         this.pipeline = buildPipeline(this.device, this.host, parseInt(this.port), this.width, this.height);
     }
 
+    setResolution(resolution) {
+        let [width, height] = resolution.split('x');
+        console.log(width, height);
+    }
+
     start() {
         this.pipeline.play();
     }
@@ -66,10 +71,10 @@ class StreamManager {
         this.freePorts = [];
     }
 
-    static restartStream(device, host, port) {
+    static restartStream(device, host, port, width=undefined, height=undefined) {
         this.stopStream(device);
         
-        return this.startStream(device, host, port);
+        return this.startStream(device, host, port, width, height);
     }
 
     static serializeStreams() {
@@ -84,10 +89,11 @@ class StreamManager {
         return result;
     }
 
-    static addStream(device, host) {
+    static addStream(device, host, width=undefined, height=undefined) {
         // create stream using the specified host and device while computing the port
-        let stream = new Stream(device, host, this.getNextPort());
+        let stream = new Stream(device, host, this.getNextPort(), width, height);
         console.log(`Created stream for ${device} on port ${stream.port} to ${host}`);
+        console.log(width, height)
         this.streams.push(stream);
         return stream;
     }
@@ -100,7 +106,7 @@ class StreamManager {
         return this.streams.find(stream => stream.device === device);
     }
 
-    static startStream(device, host, port=null) {
+    static startStream(device, host, port=null, width=undefined, height=undefined) {
         // find the index of the stream with the specified device
         let streamIndex = this.findStreamIndex(device);
         let stream = null;
@@ -117,7 +123,7 @@ class StreamManager {
 
         // if the stream cannot be found, create one
         if (streamIndex === -1) {
-            stream = this.addStream(device, host);
+            stream = this.addStream(device, host, width, height);
         } else {
             stream = this.streams[streamIndex];
         }

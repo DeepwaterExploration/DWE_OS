@@ -16,6 +16,7 @@ class Device {
         this.info = { };
         this.options = null;
         this.stream = null;
+        this.resolutions = null;
         this.caps = {
             h264: false,
             driver: false
@@ -27,11 +28,13 @@ class Device {
         let stream = {
             isStreaming: this.stream != null, 
             host: this.stream ? this.stream.host : '192.168.2.1',
-            port: this.stream ? this.stream.port : 5600
+            port: this.stream ? this.stream.port : 5600,
+            resolution: this.resolutions[0]
         };
         return {
             devicePath: this.devicePath,
             cam: this.cam,
+            resolutions: this.resolutions,
             info: this.info,
             options: this.options,
             caps: this.caps,
@@ -44,9 +47,12 @@ class Device {
         this.devicePath = devicePath;
         this.cam = new v4l2camera.Camera(devicePath);
         // iterate through the formats
+        this.resolutions = [];
         this.cam.formats.forEach(format => {
             if (format.formatName == 'H264') {
                 this.caps.h264 = true;
+                let resolution = `${format.width}x${format.height}`;
+                if (!this.resolutions.includes(resolution)) this.resolutions.push(resolution);
             }
         });
         if (this.caps.h264) {
@@ -59,8 +65,8 @@ class Device {
         }
     }
 
-    async addStream(host, port=null, flushChanges=true) {
-        this.stream = StreamManager.startStream(this.devicePath, host, port);
+    async addStream(host, port=null, flushChanges=true, width=undefined, height=undefined) {
+        this.stream = StreamManager.startStream(this.devicePath, host, port, width, height);
 
         // emit the stream added event
         this.deviceManager.emit('stream added', this);
@@ -78,8 +84,8 @@ class Device {
         if (flushChanges) this.deviceManager.settingsManager.updateStreams();
     }
 
-    async restartStream(host, port=null, flushChanges=true) {
-        this.stream = StreamManager.restartStream(this.devicePath, host, port);
+    async restartStream(host, port=null, flushChanges=true, width=undefined, height=undefined) {
+        this.stream = StreamManager.restartStream(this.devicePath, host, port, width, height);
 
         // emit the stream restart event
         this.deviceManager.emit('stream restarted', this);

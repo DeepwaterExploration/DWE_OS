@@ -45,7 +45,11 @@ class APIServer {
         // restart a stream
         this.app.post('/restartStream', async (req, res) => {
             let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);
-            await device.restartStream(req.body.stream.hostAddress, parseInt(req.body.stream.port));
+            let width, height;
+            if (req.body.stream.resolution) {
+                [width, height] = req.body.stream.resolution.split('x');
+            }
+            await device.restartStream(req.body.stream.hostAddress, parseInt(req.body.stream.port), true, parseInt(width), parseInt(height));
             res.send({
                 port: device.stream.port
             });
@@ -57,6 +61,11 @@ class APIServer {
             await this.deviceManager.resetSettings();
             res.send();
         });
+
+        // this.app.post('/setResolution', async (req, res) => {
+        //     let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);
+        //     device.stream.setResolution(req.body.resolution);
+        // })
     }
 }
 

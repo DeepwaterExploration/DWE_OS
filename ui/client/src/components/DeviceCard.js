@@ -41,6 +41,51 @@ function DeviceSwitch(props) {
     )
 }
 
+const ResolutionMenu = (props) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    let [currentResolution, setCurrentResolution] = useState(props.defaultResolution);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    useDidMountEffect(() => {
+        props.onResolutionChange(currentResolution);
+    }, [currentResolution]);
+
+    return (
+        <div>
+            <Button color="grey" variant="contained"
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+            >
+                Resolution: {currentResolution}
+            </Button>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                {
+                    props.resolutions.map((item) => {
+                        return <MenuItem onClick={function() { setCurrentResolution(item); handleClose(); }}>{item}</MenuItem>
+                    })
+                }
+            </Menu>
+        </div>
+    );
+}
+
 const DeviceOptions = (props) => {
     const device = props.device.devicePath;
 
@@ -91,18 +136,23 @@ const StreamOptions = (props) => {
     const [udp, setUDP] = useState(props.device.stream.isStreaming);
     const [hostAddress, setHostAddress] = useState(props.device.stream.host);
     const [port, setPort] = useState(props.device.stream.port);
+    const [resolution, setResolution] = useState(props.device.stream.resolution);
 
     const restartStream = () => {
         makePostRequest('/restartStream', {
             devicePath: device,
             stream: {
-                hostAddress, port
+                hostAddress, port, resolution
             }
         }, (xhr) => {
             let response = JSON.parse(xhr.response);
             setPort(response.port);
         });
     }
+
+    useDidMountEffect(() => {
+        restartStream();
+    }, [resolution]);
 
     useDidMountEffect(() => {
         if (udp) {
@@ -131,6 +181,11 @@ const StreamOptions = (props) => {
                     <>
                         <TextField label="address" onChange={(e) => { setHostAddress(e.target.value) }} variant="standard" value={hostAddress} />
                         <TextField label="port" onChange={(e) => { setPort(e.target.value) }} variant="standard" type="number" value={port} />
+                        <div style={{ marginTop: '20px' }}>
+                            <ResolutionMenu onResolutionChange={(res) => {
+                                setResolution(res);
+                            }} defaultResolution={resolution} resolutions={props.device.resolutions} />
+                        </div>
                         <Button color="grey" variant="contained" style={{ marginTop: '20px' }} onClick={restartStream}>Restart Stream</Button>
                     </>
                     : undefined
