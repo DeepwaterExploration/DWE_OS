@@ -57,8 +57,8 @@ class SettingsManager {
         if (!this.initialized) await this._initialize();
 
         if (device.managerIndex < this.streams.length) {
-            let { host, port } = this.streams[device.managerIndex];
-            await device.addStream(host, port, false);
+            let { host, port, width, height } = this.streams[device.managerIndex];
+            await device.addStream(host, port, false, width, height);
         }
     }
 

@@ -25,11 +25,15 @@ class Device {
     }
 
     getSerializable() {
+        let resolution = this.resolutions[0];
+        if (this.stream && this.stream.width) {
+            resolution = this.stream.width + 'x' + this.stream.height;
+        }
         let stream = {
             isStreaming: this.stream != null, 
             host: this.stream ? this.stream.host : '192.168.2.1',
             port: this.stream ? this.stream.port : 5600,
-            resolution: this.resolutions[0]
+            resolution: resolution
         };
         return {
             devicePath: this.devicePath,

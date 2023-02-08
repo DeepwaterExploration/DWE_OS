@@ -266,7 +266,6 @@ const CameraControls = (props) => {
 
 const DeviceCard = (props) => {
     const controls = props.device.cam.controls;
-    console.log(controls);
 
     let deviceOptions;
     let deviceWarning;

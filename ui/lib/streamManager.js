@@ -25,10 +25,10 @@ class Stream {
         this.pipeline = buildPipeline(this.device, this.host, parseInt(this.port), this.width, this.height);
     }
 
-    setResolution(resolution) {
-        let [width, height] = resolution.split('x');
-        console.log(width, height);
-    }
+    // setResolution(resolution) {
+    //     let [width, height] = resolution.split('x');
+    //     console.log(width, height);
+    // }
 
     start() {
         this.pipeline.play();
@@ -81,7 +81,9 @@ class StreamManager {
         let result = [];
         for (let stream of this.streams) {
             let serialized = {
-                host: stream.host
+                host: stream.host,
+                width: stream.width,
+                height: stream.height
             };
             if (stream.usingPortSuggestion) serialized.port = stream.port;
             result.push(serialized);
@@ -93,7 +95,6 @@ class StreamManager {
         // create stream using the specified host and device while computing the port
         let stream = new Stream(device, host, this.getNextPort(), width, height);
         console.log(`Created stream for ${device} on port ${stream.port} to ${host}`);
-        console.log(width, height)
         this.streams.push(stream);
         return stream;
     }
