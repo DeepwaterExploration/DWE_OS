@@ -17,6 +17,7 @@ class Device {
         this.options = null;
         this.stream = null;
         this.resolutions = null;
+        this.controls = [ ];
         this.caps = {
             h264: false,
             driver: false
@@ -24,11 +25,34 @@ class Device {
         this.deviceManager = deviceManager;
     }
 
+    updateControls() {
+        this.controls = [];
+        try {
+            for (let control of this.cam.controls) {
+                let id = control.id;
+                this.controls.push({
+                    name: control.name,
+                    value: this.cam.controlGet(id),
+                    type: control.type,
+                    menu: control.menu,
+                    min: control.min,
+                    max: control.max,
+                    default: control.default,
+                    id
+                });
+            }
+        } catch (e) { }
+        // TODO: Fix
+    }
+
     getSerializable() {
         let resolution = this.resolutions[0];
         if (this.stream && this.stream.width) {
             resolution = this.stream.width + 'x' + this.stream.height;
         }
+        
+        this.updateControls();
+
         let stream = {
             isStreaming: this.stream != null, 
             host: this.stream ? this.stream.host : '192.168.2.1',
@@ -43,7 +67,8 @@ class Device {
             options: this.options,
             caps: this.caps,
             deviceIndex: this.deviceIndex,
-            stream
+            stream,
+            controls: this.controls
         };
     }
 
@@ -66,7 +91,23 @@ class Device {
                 this.caps.driver = true;
                 this.options = await getDriverOptions(this.devicePath);
             }
+
+            this.controls = [];
+            for (let control of this.cam.controls) {
+                let id = control.id;
+                this.controls.push({
+                    name: control.name,
+                    value: this.cam.controlGet(id),
+                    type: control.type,
+                    menu: control.menu,
+                    min: control.min,
+                    max: control.max,
+                    default: control.default,
+                    id
+                });
+            }
         }
+
     }
 
     async addStream(host, port=null, flushChanges=true, width=undefined, height=undefined) {
@@ -102,6 +143,14 @@ class Device {
         await setDriverOptions(this.devicePath, options);
 
         if (flushChanges) await this.deviceManager.settingsManager.updateDeviceOptions(this);
+    }
+
+    async setControl(controlID, controlValue, flushChanges=true) {
+        try {
+            this.cam.controlSet(controlID, controlValue);
+            this.updateControls();
+        } catch (e) { }
+        if (flushChanges) this.deviceManager.settingsManager.updateUVCControls(this);
     }
 }
 
@@ -173,6 +222,7 @@ class DeviceManager extends EventEmitter {
         for (let managerIndex in devices) {
             let device = devices[managerIndex];
             device.managerIndex = managerIndex;
+            await this.settingsManager.loadUVCControls(device);
 
             let stream = StreamManager.getStream(device.devicePath);
             if (stream) {

@@ -22,7 +22,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 import React, { useEffect, useState } from "react";
-import { makePostRequest, useDidMountEffect } from "../utils/utils";
+import { makeAsyncPostRequest, makePostRequest, useDidMountEffect } from "../utils/utils";
 import { Divider } from "@mui/material";
 
 function SupportingText(props) {
@@ -205,6 +205,19 @@ const CameraControls = (props) => {
                 {controlsCollapsed ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
             </IconButton>
             <Divider />
+            <Button color="grey" variant="contained"
+                onClick={async () => {
+                    for (let control of controls) {
+                        let id = control.id;
+                        let defaultValue = control.default;
+                        await makeAsyncPostRequest('/setControl', {
+                            devicePath: props.devicePath, 
+                            id, 
+                            value: defaultValue
+                        });
+                    }
+                    location.reload();
+                }}>Reset Settings</Button>
             <Collapse in={!controlsCollapsed}>
                 <FormGroup style={{ marginTop: '25px' }}>
                     {
@@ -212,30 +225,57 @@ const CameraControls = (props) => {
                             switch (control.type) {
                                 case 'int': {
                                     let { min, max, step, name, id } = control;
-                                    let defaultValue = control.default;
+                                    let defaultValue = control.value;
+                                    let [controlValue, setControlValue] = useState(defaultValue);
+                                    useDidMountEffect(() => {
+                                        makePostRequest('/setControl', {
+                                            devicePath: props.devicePath, 
+                                            id, 
+                                            value: controlValue
+                                        });
+                                    }, [controlValue]);
                                     return <>
                                         <span>{name}</span>
-                                        <Slider name={`control-${id}`} min={min} max={max} step={step} defaultValue={defaultValue} style={{ marginLeft: '20px', width: 'calc(100% - 25px)' }} />
+                                        <Slider onChangeCommitted={(_, newValue) => {
+                                            setControlValue(newValue);
+                                        }} name={`control-${id}`} min={min} max={max} step={step} defaultValue={defaultValue} style={{ marginLeft: '20px', width: 'calc(100% - 25px)' }} />
                                     </>
                                 }
                                 case 'bool': {
                                     let { name, id } = control;
-                                    let defaultValue = control.default;
+                                    let defaultValue = control.value;
+                                    let [controlValue, setControlValue] = useState(defaultValue);
+                                    useDidMountEffect(() => {
+                                        makePostRequest('/setControl', {
+                                            devicePath: props.devicePath, 
+                                            id, 
+                                            value: controlValue
+                                        });
+                                    }, [controlValue]);
                                     return <>
                                         <span>{name}</span>
-                                        <Switch name={`control-${id}`} defaultChecked={defaultValue == 1} />
+                                        <Switch onChange={(_, checked) => {
+                                            setControlValue(checked);
+                                        }} name={`control-${id}`} defaultChecked={defaultValue == 1} />
                                     </>
                                 }
                                 case 'menu': {
                                     let { menu, name, id } = control;
-                                    let defaultValue = menu[control.default];
-                                    let [currentValue, setCurrentValue] = useState(defaultValue);
+                                    let defaultValue = menu[control.value];
+                                    let [controlValue, setControlValue] = useState(defaultValue);
+                                    useDidMountEffect(() => {
+                                        makePostRequest('/setControl', {
+                                            devicePath: props.devicePath, 
+                                            id, 
+                                            value: controlValue
+                                        });
+                                    }, [setControlValue]);
                                     return <>
                                         <PopupState variant="popover" popupId={id}>
                                             {(popupState) => (
                                                 <>
                                                     <div>
-                                                        <span>{name}: {currentValue}</span>
+                                                        <span>{name}: {controlValue}</span>
                                                         <IconButton variant="text" {...bindTrigger(popupState)}>
                                                             <ArrowDropDownIcon />
                                                         </IconButton>
@@ -244,7 +284,7 @@ const CameraControls = (props) => {
                                                         {
                                                             menu.map((item, _) => {
                                                                 return <MenuItem onClick={() => {
-                                                                    setCurrentValue(item);
+                                                                    setControlValue(item);
                                                                     popupState.close();
                                                                 }}>{item}</MenuItem>
                                                             })
@@ -265,7 +305,8 @@ const CameraControls = (props) => {
 }
 
 const DeviceCard = (props) => {
-    const controls = props.device.cam.controls;
+    const controls = props.device.controls;
+    console.log(controls);
 
     let deviceOptions;
     let deviceWarning;
@@ -299,7 +340,7 @@ const DeviceCard = (props) => {
                     <SupportingText>Device: {props.device.devicePath}</SupportingText>
                     {deviceOptions}
                     <StreamOptions device={props.device} />
-                    <CameraControls controls={controls} />
+                    <CameraControls controls={controls} devicePath={props.device.devicePath} />
                     {props.children}
                 </CardContent>
             </Card>
