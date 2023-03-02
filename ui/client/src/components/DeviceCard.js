@@ -175,7 +175,6 @@ const StreamOptions = (props) => {
     return (
         <FormGroup>
             <DeviceSwitch onChange={(e) => { setUDP(e.target.checked) }} checked={udp} name="streamSwitch" text="UDP Stream" />
-            <LineBreak />
             {
                 udp ?
                     <>
@@ -200,25 +199,26 @@ const CameraControls = (props) => {
 
     return <>
         <div style={{ marginTop: '25px' }}>
-            <span>V4L2 Controls</span>
+            <span>Camera Controls</span>
             <IconButton onClick={() => setControlsCollapsed(!controlsCollapsed)} >
                 {controlsCollapsed ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
             </IconButton>
             <Divider />
-            <Button color="grey" variant="contained"
-                onClick={async () => {
-                    for (let control of controls) {
-                        let id = control.id;
-                        let defaultValue = control.default;
-                        await makeAsyncPostRequest('/setControl', {
-                            devicePath: props.devicePath, 
-                            id, 
-                            value: defaultValue
-                        });
-                    }
-                    location.reload();
-                }}>Reset Settings</Button>
             <Collapse in={!controlsCollapsed}>
+                <LineBreak />
+                <Button color="grey" variant="contained"
+                    onClick={async () => {
+                        for (let control of controls) {
+                            let id = control.id;
+                            let defaultValue = control.default;
+                            await makeAsyncPostRequest('/setControl', {
+                                devicePath: props.devicePath, 
+                                id, 
+                                value: defaultValue
+                            });
+                        }
+                        location.reload();
+                    }}>Set to Default</Button>
                 <FormGroup style={{ marginTop: '25px' }}>
                     {
                         controls.map((control, _) => {
@@ -244,6 +244,9 @@ const CameraControls = (props) => {
                                 case 'bool': {
                                     let { name, id } = control;
                                     let defaultValue = control.value;
+                                    if(name.includes("White Balance")) {
+                                        name = "AI TrueColor Technology™"
+                                    }
                                     let [controlValue, setControlValue] = useState(defaultValue);
                                     useDidMountEffect(() => {
                                         makePostRequest('/setControl', {
@@ -325,8 +328,8 @@ const DeviceCard = (props) => {
     }
 
     return (
-        <Grid item xs={12} md={6} xl={4} style={{ display:"flex", justifyContent:"center", padding: '20px' }}>
-            <Card textAlign="left" sx={{ minWidth: 512, boxShadow: 3 }}>
+        <Grid item xs={12} lg={6} xl={4} style={{ display:"flex", justifyContent:"center", padding: '20px' }}>
+            <Card textAlign="left" sx={{ minWidth: 500, boxShadow: 3 }}>
                 <CardHeader
                     action={deviceWarning}
                     title={props.device.info.name} subheader={
