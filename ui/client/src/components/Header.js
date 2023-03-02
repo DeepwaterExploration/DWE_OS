@@ -11,6 +11,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Box from "@mui/system/Box";
 
+import DWELogo_white from '../images/DWELogo_white.svg'
+
 export default function Header(props) {
     const [drawer, setDrawer] = useState(false);
 
@@ -36,9 +38,7 @@ export default function Header(props) {
                         </List>
                     </Box>
                 </Drawer>
-                <Typography variant="h6" color="inherit" component="div">
-                    exploreHD Driver Config
-                </Typography>
+                <img src={DWELogo_white} style={{ height: 30 }} alt="React Logo"/>
                 { props.children }
             </Toolbar>
         </AppBar>

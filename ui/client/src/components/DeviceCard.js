@@ -325,8 +325,8 @@ const DeviceCard = (props) => {
     }
 
     return (
-        <Grid item xs={3} style={{ paddingTop: '30px' }}>
-            <Card sx={{ minWidth: 512, boxShadow: 3 }}>
+        <Grid item xs={12} md={6} xl={4} style={{ display:"flex", justifyContent:"center", padding: '20px' }}>
+            <Card textAlign="left" sx={{ minWidth: 512, boxShadow: 3 }}>
                 <CardHeader
                     action={deviceWarning}
                     title={props.device.info.name} subheader={
