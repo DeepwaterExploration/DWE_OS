@@ -7,6 +7,7 @@ class SettingsManager {
     constructor() {
         this.streams = [];
         this.driver = [];
+        this.deviceNames = [];
         this.uvcControls = [];
         this.initialized = false;
     }
@@ -23,6 +24,7 @@ class SettingsManager {
         this.streams = settings.streams || [];
         this.driver = settings.driver || [];
         this.uvcControls = settings.uvcControls || [];
+        this.deviceNames = settings.deviceNames || [];
         this.initialized = true;
     }
 
@@ -43,7 +45,7 @@ class SettingsManager {
         if (!this.initialized) await this._initialize();
 
         // update the stored driver settings
-        if (device.managerIndex >= this.driver.length) {
+        if (device.managerIndex >= this.uvcControls.length) {
             this.uvcControls.push(device.controls);
         } else {
             this.uvcControls[device.managerIndex] = device.controls;
@@ -52,8 +54,21 @@ class SettingsManager {
         await this.flushSettings();
     }
 
+    async updateDeviceNames(device) {
+        if (!this.initialized) await this._initialize();
+
+        // update the stored driver settings
+        if (device.managerIndex >= this.deviceNames.length) {
+            this.deviceNames.push(device.name);
+        } else {
+            this.deviceNames[device.managerIndex] = device.name;
+        }
+
+        await this.flushSettings();
+    }
+
     async flushSettings() {
-        await storage.setItem('settings', { driver: this.driver, streams: this.streams, uvcControls: this.uvcControls });
+        await storage.setItem('settings', { driver: this.driver, streams: this.streams, uvcControls: this.uvcControls, deviceNames: this.deviceNames });
     }
 
     async loadDeviceOptions(device) {
@@ -84,6 +99,14 @@ class SettingsManager {
         if (device.managerIndex < this.streams.length) {
             let { host, port, width, height } = this.streams[device.managerIndex];
             await device.addStream(host, port, false, width, height);
+        }
+    }
+
+    async loadDeviceName(device) {
+        if (!this.initialized) await this._initialize();
+
+        if (device.managerIndex < this.deviceNames.length) {
+            device.name = this.deviceNames[device.managerIndex];
         }
     }
 

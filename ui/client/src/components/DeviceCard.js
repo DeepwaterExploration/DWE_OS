@@ -334,6 +334,8 @@ const DeviceCard = (props) => {
                             {props.device.info.manufacturer ? `Manufacturer: ${props.device.info.manufacturer}` : undefined}
                             <LineBreak />
                             {props.device.info.model ? `Model: ${props.device.info.model}` : undefined}
+                            <LineBreak />
+                            <TextField onChange={(e) => { makePostRequest('/setDeviceName', {devicePath: props.device.devicePath, name: e.target.value}) }} helperText="Device Nickname" placeholder="Device Nickname" variant="standard" defaultValue={props.device.name}></TextField>
                         </>
                     } />
                 <CardContent>

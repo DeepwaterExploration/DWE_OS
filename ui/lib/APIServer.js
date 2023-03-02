@@ -68,6 +68,12 @@ class APIServer {
             res.send();
         });
 
+        this.app.post('/setDeviceName', async (req, res) => {
+            let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);
+            await device.setName(req.body.name);
+            res.send();
+        });
+
         // this.app.post('/setResolution', async (req, res) => {
         //     let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);
         //     device.stream.setResolution(req.body.resolution);

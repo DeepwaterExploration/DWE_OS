@@ -23,6 +23,7 @@ class Device {
             driver: false
         };
         this.deviceManager = deviceManager;
+        this.name = '';
     }
 
     updateControls() {
@@ -68,8 +69,14 @@ class Device {
             caps: this.caps,
             deviceIndex: this.deviceIndex,
             stream,
-            controls: this.controls
+            controls: this.controls,
+            name: this.name
         };
+    }
+
+    async setName(name) {
+        this.name = name;
+        await this.deviceManager.settingsManager.updateDeviceNames(this);
     }
 
     async setDevicePath(devicePath) {
@@ -82,6 +89,7 @@ class Device {
                 this.caps.h264 = true;
                 let resolution = `${format.width}x${format.height}`;
                 if (!this.resolutions.includes(resolution)) this.resolutions.push(resolution);
+                this.name = this.info.name;
             }
         });
         if (this.caps.h264) {
@@ -223,6 +231,7 @@ class DeviceManager extends EventEmitter {
             let device = devices[managerIndex];
             device.managerIndex = managerIndex;
             await this.settingsManager.loadUVCControls(device);
+            await this.settingsManager.loadDeviceName(device);
 
             let stream = StreamManager.getStream(device.devicePath);
             if (stream) {
