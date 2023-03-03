@@ -30,7 +30,7 @@ export default function Header(props) {
                         <List>
                             <ListItem>
                                 <Typography variant="h6" color="inherit">
-                                    DeepWater Exploration
+                                    DWE OS Pre-Alpha
                                 </Typography>
                             </ListItem>
                             <Divider />
@@ -38,7 +38,7 @@ export default function Header(props) {
                         </List>
                     </Box>
                 </Drawer>
-                <img src={DWELogo_white} style={{ height: 30 }} alt="React Logo"/>
+                <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo"/>
                 { props.children }
             </Toolbar>
         </AppBar>
