@@ -119,7 +119,7 @@ export default class App extends React.Component {
                 }>
                 </Header>
                 <div style={{ minHeight: '64px' }} />
-                <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
+                <div component="main" sx={{ flexGrow: 1, p: 3 }} style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                     <DevicesContainer>
                         { this.state.exploreHD_cards }
                         { this.state.other_cards }
