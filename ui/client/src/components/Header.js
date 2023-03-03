@@ -13,7 +13,19 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 
-import DWELogo_white from '../images/DWELogo_white.svg'
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+// Icons for Drawer Items
+import CameraIcon from '@mui/icons-material/Videocam';
+import SensorsIcon from '@mui/icons-material/Sensors';
+import SettingsIcon from '@mui/icons-material/Settings';
+
+
+import DWE_OS_Logo from '../images/DWE_OS_Logo.svg'
 
 const drawerWidth = 240;
 
@@ -108,7 +120,7 @@ export default function Header(props) {
                 >
                 <MenuIcon />
                 </IconButton>
-                <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo"/>
+                <img src={DWE_OS_Logo} style={{ height: 45 }} alt="DWE Logo"/>
             </Toolbar>
         </AppBar>
 
@@ -122,7 +134,34 @@ export default function Header(props) {
             </IconButton>
           </DrawerHeader>
           <Divider />
-          { props.drawerItems }
+          {/* { props.drawerItems } */}
+            {/* <Typography variant="h6" color="inherit">
+                Devices
+            </Typography> */}
+          <List>
+            {['Video', 'Sensor', 'Settings'].map((text, index) => (
+                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                    <ListItemButton
+                        sx={{
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                        }}
+                        >
+                        <ListItemIcon
+                        sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : 'auto',
+                            justifyContent: 'center',
+                        }}
+                        >
+                        {index === 0 ? <CameraIcon /> : (index === 1 ? <SensorsIcon/> : <SettingsIcon/>)}   
+                        </ListItemIcon>
+                        <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                </ListItem>
+            ))}
+            </List>
         </Drawer>
       </Box>
     );
