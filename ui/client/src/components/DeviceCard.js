@@ -313,11 +313,14 @@ const DeviceCard = (props) => {
 
     let deviceOptions;
     let deviceWarning;
+    let cameraControls;
     if (props.device.caps.driver) {
         deviceOptions = <DeviceOptions device={props.device} />;
+        cameraControls = <CameraControls controls={controls} devicePath={props.device.devicePath} />;
         deviceWarning = null;
     } else {
         deviceOptions = null;
+        cameraControls = null;
         deviceWarning = (
             <Tooltip title="This device is incompatible with the DWE Driver UI">
                 <Icon>
@@ -345,7 +348,7 @@ const DeviceCard = (props) => {
                     <SupportingText>Device: {props.device.devicePath}</SupportingText>
                     {deviceOptions}
                     <StreamOptions device={props.device} />
-                    <CameraControls controls={controls} devicePath={props.device.devicePath} />
+                    {cameraControls}
                     {props.children}
                 </CardContent>
             </Card>
