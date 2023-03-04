@@ -22,7 +22,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 import React, { useEffect, useState } from "react";
-import { makeAsyncPostRequest, makePostRequest, useDidMountEffect } from "../utils/utils";
+import { LineBreak, makeAsyncPostRequest, makePostRequest, useDidMountEffect } from "../utils/utils";
 import { Divider } from "@mui/material";
 
 function SupportingText(props) {
@@ -124,10 +124,6 @@ const DeviceOptions = (props) => {
             </FormGroup>
         </>
     )
-}
-
-const LineBreak = () => {
-    return <br></br>;
 }
 
 const StreamOptions = (props) => {

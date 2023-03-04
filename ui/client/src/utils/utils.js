@@ -29,3 +29,7 @@ export function useDidMountEffect(func, deps) {
         else didMount.current = true;
     }, deps);
 }
+
+export const LineBreak = () => {
+    return <br></br>;
+}
