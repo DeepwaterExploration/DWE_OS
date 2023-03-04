@@ -205,20 +205,7 @@ const CameraControls = (props) => {
             </IconButton>
             <Divider />
             <Collapse in={!controlsCollapsed}>
-                <LineBreak />
-                <Button color="grey" variant="contained"
-                    onClick={async () => {
-                        for (let control of controls) {
-                            let id = control.id;
-                            let defaultValue = control.default;
-                            await makeAsyncPostRequest('/setControl', {
-                                devicePath: props.devicePath, 
-                                id, 
-                                value: defaultValue
-                            });
-                        }
-                        location.reload();
-                    }}>Set to Default</Button>
+          
                 <FormGroup style={{ marginTop: '25px' }}>
                     {
                         controls.map((control, _) => {
@@ -301,6 +288,20 @@ const CameraControls = (props) => {
                             }
                         })
                     }
+                          <LineBreak />
+                <Button color="grey" variant="contained"
+                    onClick={async () => {
+                        for (let control of controls) {
+                            let id = control.id;
+                            let defaultValue = control.default;
+                            await makeAsyncPostRequest('/setControl', {
+                                devicePath: props.devicePath, 
+                                id, 
+                                value: defaultValue
+                            });
+                        }
+                        location.reload();
+                    }}>Set to Default</Button>
                 </FormGroup>
             </Collapse>
         </div>

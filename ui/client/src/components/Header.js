@@ -116,7 +116,7 @@ export default function Header(props) {
                     aria-label="open drawer"
                     onClick={handleDrawerOpen}
                     edge="start"
-                    sx={{marginRight: 5, ...(open && { display: 'none' })}}
+                    sx={{marginRight: 2, ...(open && { display: 'none' })}}
                 >
                 <MenuIcon />
                 </IconButton>
@@ -126,9 +126,7 @@ export default function Header(props) {
 
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
-            <Typography variant="h6" color="inherit">
-                DWE OS Pre-Alpha
-            </Typography>
+
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
@@ -138,7 +136,10 @@ export default function Header(props) {
             {/* <Typography variant="h6" color="inherit">
                 Devices
             </Typography> */}
+
+
           <List>
+
             {['Video', 'Sensor', 'Settings'].map((text, index) => (
                 <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                     <ListItemButton
