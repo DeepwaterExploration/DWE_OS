@@ -4,31 +4,67 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
 import VideoCameraBackOutlinedIcon from '@mui/icons-material/VideoCameraBackOutlined'
-import BiotechOutlinedIcon from '@mui/icons-material/BiotechOutlined'
+import LightbulbIcon from '@mui/icons-material/Lightbulb'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import SignalWifi0BarOutlinedIcon from '@mui/icons-material/SignalWifi0BarOutlined'
 import StorageOutlinedIcon from '@mui/icons-material/StorageOutlined'
 
 export const mainListItems = (
   <React.Fragment>
-    <ListSubheader component="div" inset>
+    <ListSubheader fontWeight="fontWeightBold" component="div" inset>
       Devices
     </ListSubheader>
     <ListItemButton>
-      <ListItemIcon>
-        <VideoCameraBackOutlinedIcon />
+      <ListItemIcon
+        paddingY="auto"
+        paddingX="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <VideoCameraBackOutlinedIcon
+          paddingY="auto"
+          paddingX="auto"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       </ListItemIcon>
-      <ListItemText primary="Video" />
+      <ListItemText primary="Cameras" />
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <BiotechOutlinedIcon />
+      <ListItemIcon
+        paddingY="auto"
+        paddingX="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <LightbulbIcon
+          paddingY="auto"
+          paddingX="auto"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       </ListItemIcon>
-      <ListItemText primary="Sensor" />
+      <ListItemText primary="Light" />
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <SettingsOutlinedIcon />
+      <ListItemIcon
+        paddingY="auto"
+        paddingX="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <SettingsOutlinedIcon
+          paddingY="auto"
+          paddingX="auto"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       </ListItemIcon>
       <ListItemText primary="Misc" />
     </ListItemButton>
@@ -37,24 +73,60 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <React.Fragment>
-    <ListSubheader component="div" inset>
+    <ListSubheader fontWeight="fontWeightBold" component="div" inset>
       Communications
     </ListSubheader>
     <ListItemButton>
-      <ListItemIcon>
-        <SignalWifi0BarOutlinedIcon />
+      <ListItemIcon
+        paddingY="auto"
+        paddingX="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <SignalWifi0BarOutlinedIcon
+          paddingY="auto"
+          paddingX="auto"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       </ListItemIcon>
       <ListItemText primary="Wi-Fi" />
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <StorageOutlinedIcon />
+      <ListItemIcon
+        paddingY="auto"
+        paddingX="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <StorageOutlinedIcon
+          paddingY="auto"
+          paddingX="auto"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       </ListItemIcon>
       <ListItemText primary="Wired" />
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <StorageOutlinedIcon />
+      <ListItemIcon
+        paddingY="auto"
+        paddingX="auto"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <StorageOutlinedIcon
+          paddingY="auto"
+          paddingX="auto"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        />
       </ListItemIcon>
       <ListItemText primary="Interface" />
     </ListItemButton>
