@@ -10,6 +10,7 @@ class SettingsManager {
         this.deviceNames = [];
         this.uvcControls = [];
         this.initialized = false;
+        this.isFlushing = false;
     }
 
     async _initialize() {
@@ -68,7 +69,15 @@ class SettingsManager {
     }
 
     async flushSettings() {
-        await storage.setItem('settings', { driver: this.driver, streams: this.streams, uvcControls: this.uvcControls, deviceNames: this.deviceNames });
+        if (!this.isFlushing) {
+            this.isFlushing = true;
+            await storage.setItem('settings', { driver: this.driver, streams: this.streams, uvcControls: this.uvcControls, deviceNames: this.deviceNames });
+            this.isFlushing = false;
+        } else {
+            setTimeout(async () => {
+                await this.flushSettings();
+            }, 25);
+        }
     }
 
     async loadDeviceOptions(device) {

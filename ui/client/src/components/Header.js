@@ -11,7 +11,11 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Box from "@mui/system/Box";
 
-import DWELogo_white from '../images/DWELogo_white.svg'
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+
+import DWELogo_white from '../images/DWELogo_white.svg';
+import { Grid } from "@mui/material";
+import WifiMenu from "./WifiMenu";
 
 export default function Header(props) {
     const [drawer, setDrawer] = useState(false);
@@ -39,6 +43,9 @@ export default function Header(props) {
                     </Box>
                 </Drawer>
                 <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo"/>
+                <Grid container justifyContent="flex-end">
+                    <WifiMenu />
+                </Grid>
                 { props.children }
             </Toolbar>
         </AppBar>
