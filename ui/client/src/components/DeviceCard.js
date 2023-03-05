@@ -22,7 +22,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 import React, { useEffect, useState } from "react";
-import { makeAsyncPostRequest, makePostRequest, useDidMountEffect } from "../utils/utils";
+import { LineBreak, makeAsyncPostRequest, makePostRequest, useDidMountEffect } from "../utils/utils";
 import { Divider } from "@mui/material";
 
 function SupportingText(props) {
@@ -126,10 +126,6 @@ const DeviceOptions = (props) => {
     )
 }
 
-const LineBreak = () => {
-    return <br></br>;
-}
-
 const StreamOptions = (props) => {
     const device = props.device.devicePath;
 
@@ -205,20 +201,7 @@ const CameraControls = (props) => {
             </IconButton>
             <Divider />
             <Collapse in={!controlsCollapsed}>
-                <LineBreak />
-                <Button color="grey" variant="contained"
-                    onClick={async () => {
-                        for (let control of controls) {
-                            let id = control.id;
-                            let defaultValue = control.default;
-                            await makeAsyncPostRequest('/setControl', {
-                                devicePath: props.devicePath, 
-                                id, 
-                                value: defaultValue
-                            });
-                        }
-                        location.reload();
-                    }}>Set to Default</Button>
+   
                 <FormGroup style={{ marginTop: '25px' }}>
                     {
                         controls.map((control, _) => {
@@ -302,6 +285,20 @@ const CameraControls = (props) => {
                         })
                     }
                 </FormGroup>
+                <LineBreak />
+                <Button color="grey" variant="contained"
+                    onClick={async () => {
+                        for (let control of controls) {
+                            let id = control.id;
+                            let defaultValue = control.default;
+                            await makeAsyncPostRequest('/setControl', {
+                                devicePath: props.devicePath, 
+                                id, 
+                                value: defaultValue
+                            });
+                        }
+                        location.reload();
+                    }}>Set to Default</Button>
             </Collapse>
         </div>
     </>
@@ -322,7 +319,7 @@ const DeviceCard = (props) => {
         deviceOptions = null;
         cameraControls = null;
         deviceWarning = (
-            <Tooltip title="This device is incompatible with the DWE Driver UI">
+            <Tooltip title="Device not compatible by DWE OS. Features will be limited.">
                 <Icon>
                     <Warning />
                 </Icon>
