@@ -127,11 +127,11 @@ function DashboardContent() {
             >
               ML/AI
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Grid container justifyContent="flex-end">
+              <WifiMenu />
+            </Grid>
+            <PowerSettingsNewIcon />
+            {props.children}
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
