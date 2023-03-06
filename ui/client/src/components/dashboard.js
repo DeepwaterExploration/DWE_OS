@@ -17,11 +17,16 @@ import Box from '@mui/system/Box'
 import { mainListItems, secondaryListItems } from './listItems'
 import DWELogo_white from '../images/DWELogo_white.svg'
 import { Grid } from '@mui/material'
-import ListItem from '@mui/material/ListItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
-import Typography from '@mui/material/Typography'
 import WifiMenu from './WifiMenu'
+import CssBaseline from '@mui/material/CssBaseline'
+import ListSubheader from '@mui/material/ListSubheader'
+import Button from '@mui/material/Button'
+import { lightTheme, darkTheme } from '../themes'
+import DevicesContainer from './DevicesContainer'
+import packageBackend from '../package.backend.json'
+import Container from '@mui/material/Container'
 
 const drawerWidth = 240
 
@@ -71,14 +76,14 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme()
 
-function DashboardContent() {
+function DashboardContent(props, state, updateTheme, resetSettings) {
   const [open, setOpen] = React.useState(false)
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
   return (
-    <ThemeProvider theme={this.state.theme}>
+    <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -159,18 +164,13 @@ function DashboardContent() {
               </ListSubheader>
               <ListItem>
                 <FormControlLabel
-                  onChange={this.updateTheme}
+                  onChange={updateTheme}
                   control={
-                    <Switch
-                      checked={this.state.theme == darkTheme}
-                      name="Theme"
-                    />
+                    <Switch checked={state.theme == darkTheme} name="Theme" />
                   }
                   label={
                     <Typography color="text.secondary">
-                      {this.state.theme == darkTheme
-                        ? 'Dark Theme'
-                        : 'Light Theme'}
+                      {state.theme == darkTheme ? 'Dark Theme' : 'Light Theme'}
                     </Typography>
                   }
                 />
@@ -179,7 +179,7 @@ function DashboardContent() {
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={this.resetSettings}
+                  onClick={resetSettings}
                 >
                   Reset Settings
                 </Button>
@@ -197,15 +197,15 @@ function DashboardContent() {
         </Drawer>
         <Box
           component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
+          // sx={{
+          //   backgroundColor: (theme) =>
+          //     theme.palette.mode === 'light'
+          //       ? theme.palette.grey[100]
+          //       : theme.palette.grey[900],
+          //   flexGrow: 1,
+          //   height: '100vh',
+          //   overflow: 'auto',
+          // }}
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -214,8 +214,8 @@ function DashboardContent() {
               <div style={{ minHeight: '64px' }} />
               <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                 <DevicesContainer>
-                  {this.state.exploreHD_cards}
-                  {this.state.other_cards}
+                  {state.exploreHD_cards}
+                  {state.other_cards}
                 </DevicesContainer>
               </div>
             </Grid>
@@ -226,6 +226,13 @@ function DashboardContent() {
   )
 }
 
-export default function Dashboard() {
-  return <DashboardContent />
+export default function Dashboard(props, state, updateTheme, resetSettings) {
+  return (
+    <DashboardContent
+      {...props}
+      state={state}
+      updateTheme={updateTheme}
+      resetSettings={resetSettings}
+    />
+  )
 }

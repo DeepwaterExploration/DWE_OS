@@ -2,23 +2,13 @@ import * as React from 'react'
 
 import './main.css'
 
-import CssBaseline from '@mui/material/CssBaseline'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import ListItem from '@mui/material/ListItem'
-import Switch from '@mui/material/Switch'
-import ThemeProvider from '@mui/system/ThemeProvider'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-
 import { lightTheme, darkTheme } from './themes'
 import { makePostRequest } from './utils/utils'
-import DevicesContainer from './components/DevicesContainer'
 import DeviceCard from './components/DeviceCard'
-import Header from './components/Header'
 
 import { io } from 'socket.io-client'
 
-import packageBackend from './package.backend.json'
+import Dashboard from './components/dashboard'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -100,53 +90,11 @@ export default class App extends React.Component {
   }
 
   render() {
-    return (
-      <ThemeProvider theme={this.state.theme}>
-        <CssBaseline />
-        <Header
-          drawerItems={
-            <>
-              <ListItem>
-                <FormControlLabel
-                  onChange={this.updateTheme}
-                  control={
-                    <Switch
-                      checked={this.state.theme == darkTheme}
-                      name="Theme"
-                    />
-                  }
-                  label={
-                    <Typography color="text.secondary">
-                      {this.state.theme == darkTheme
-                        ? 'Dark Theme'
-                        : 'Light Theme'}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-              <ListItem>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={this.resetSettings}
-                >
-                  Reset Settings
-                </Button>
-              </ListItem>
-              <ListItem>
-                <span>Backend Revision: {packageBackend.version}</span>
-              </ListItem>
-            </>
-          }
-        ></Header>
-        <div style={{ minHeight: '64px' }} />
-        <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
-          <DevicesContainer>
-            {this.state.exploreHD_cards}
-            {this.state.other_cards}
-          </DevicesContainer>
-        </div>
-      </ThemeProvider>
-    )
+    return Dashboard({
+      props: this.props,
+      state: this.state,
+      updateTheme: this.updateTheme,
+      resetSettings: this.resetSettings,
+    })
   }
 }
