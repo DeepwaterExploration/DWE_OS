@@ -33,3 +33,9 @@ export function useDidMountEffect(func, deps) {
 export const LineBreak = () => {
     return <br></br>;
 }
+
+export const networkConnect = async (ssid, password=undefined) => {
+    await makeAsyncPostRequest('/network', {
+        ssid, password
+    });
+}

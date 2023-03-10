@@ -2,8 +2,9 @@ const StreamManager = require('./streamManager');
 const { version } = require('../package.json');
 
 class APIServer {
-    constructor(app, deviceManager) {
+    constructor(app, wifiManager, deviceManager) {
         this.app = app;
+        this.wifiManager = wifiManager;
         this.deviceManager = deviceManager;
     }
 
@@ -12,6 +13,16 @@ class APIServer {
         this.app.get('/devices', (req, res) => {
             res.send(this.deviceManager.getSerializableDevices());
         });
+
+        this.app.get('/networks', (req, res) => {
+            res.send(this.wifiManager.networks);
+        });
+
+        this.app.get('/connectedNetwork', (req, res) => {
+            res.send({
+                network: this.wifiManager.getConnectedNetwork()
+            });
+        })
 
         this.app.get('/app', (req, res) => {
             res.send({
@@ -73,6 +84,11 @@ class APIServer {
             await device.setName(req.body.name);
             res.send();
         });
+
+        this.app.post('/network', (req, res) => {
+            this.wifiManager.connect(req.body.ssid, req.body.password);
+            res.send();
+        })
 
         // this.app.post('/setResolution', async (req, res) => {
         //     let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);

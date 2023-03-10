@@ -7,7 +7,7 @@ import SignalWifi4Bar from '@mui/icons-material/SignalWifi4Bar';
 import { useState } from 'react';
 import { Button, Grid, Modal, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { LineBreak } from '../utils/utils';
+import { LineBreak, networkConnect } from '../utils/utils';
 
 const modalStyle = {
     position: 'absolute',
@@ -36,6 +36,17 @@ function WifiConnection(props) {
 export default function WifiMenu(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [wifiModalOpen, setWifiModalOpen] = useState(false);
+    const [selectedWifi, setSelectedWifi] = useState(null);
+    const [passwordField, setPasswordField] = useState(null);
+    const [requiresPassword, setRequiresPassword] = useState(false);
+    const [connectedNetwork, setConnectedNetwork] = useState(null);
+    
+    // fetch('/connectedNetwork')
+    //     .then((response) => response.json())
+    //     .then((network) => {
+    //         setConnectedNetwork(network.ssid);
+    //     })
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -44,8 +55,27 @@ export default function WifiMenu(props) {
         setAnchorEl(null);
     };
 
+    const [wifiNetworks, setWifiNetworks] = useState([]);
+    fetch('/networks')
+        .then((response) => response.json())
+        .then((networks) => {
+            setWifiNetworks(networks.map((network) => {
+                return <>
+                    <MenuItem onClick={function() {
+                            setSelectedWifi(network.ssid);
+                            setRequiresPassword(network.requiresPasskey);
+                            setWifiModalOpen(true);
+                            handleClose();
+                        }}>
+                        <WifiConnection ssid={network.ssid} locked={network.requiresPasskey} />
+                    </MenuItem>
+                </>
+            }));
+        });
+
     return (
         <div>
+            {/* <Typography>Connected Network: {connectedNetwork}</Typography> */}
             <IconButton id="wifi-menu-button" aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
@@ -60,15 +90,7 @@ export default function WifiMenu(props) {
                 MenuListProps={{
                     'aria-labelledby': 'wifi-menu-button',
                 }}>
-                <MenuItem onClick={function() { setWifiModalOpen(true); handleClose(); }}>
-                    <WifiConnection locked={true} ssid="Wifi 1" />
-                </MenuItem>
-                <MenuItem onClick={function() { setWifiModalOpen(true); handleClose(); }}>
-                    <WifiConnection locked={true} ssid="Wifi 2" />
-                </MenuItem>
-                <MenuItem onClick={function() { setWifiModalOpen(true); handleClose(); }}>
-                    <WifiConnection locked={false} ssid="Wifi 3" />
-                </MenuItem>
+                { wifiNetworks }
             </Menu>
             <Modal
                 open={wifiModalOpen}
@@ -76,13 +98,23 @@ export default function WifiMenu(props) {
             >
                 <Box sx={modalStyle}>
                     <Typography variant="h6" component="h2">
-                        Enter a password for the network: "Wifi 1"
+                        Enter a password for the network: "{selectedWifi}"
                     </Typography>
-                    <TextField type="password" label="Password" variant="standard" />
+                    {
+                        requiresPassword ? <TextField type="password" label="Password" variant="standard" onChange={function(e) {
+                            setPasswordField(e.target.value);
+                        }} /> : null
+                    }
                     <LineBreak />
                     <Grid sx={{marginTop: 1}} container alignItems="center" justifyContent="center">
-                        <Button sx={{width: '40%', margin: 1}} variant="contained">Cancel</Button>
-                        <Button sx={{width: '40%', margin: 1}} variant="contained">Connect</Button>
+                        <Button sx={{width: '40%', margin: 1}} variant="contained" onClick={function() {
+                            setWifiModalOpen(false);
+                        }}>Cancel</Button>
+                        <Button sx={{width: '40%', margin: 1}} variant="contained" onClick={function() {
+                            networkConnect(selectedWifi, passwordField);
+                            setPasswordField(null);
+                            setWifiModalOpen(false);
+                        }}>Connect</Button>
                     </Grid>
                 </Box>
             </Modal>
