@@ -9,6 +9,8 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
+import RestartAltIcon from '@mui/icons-material/RestartAlt'
+import InfoIcon from '@mui/icons-material/Info'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
@@ -307,8 +309,22 @@ export default function Dashboard(props) {
                 />
               </ListItemButton>
               <ListItemButton>
+                <ListItemIcon
+                  paddingY="auto"
+                  paddingX="auto"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <RestartAltIcon
+                    paddingY="auto"
+                    paddingX="auto"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  />
+                </ListItemIcon>
                 <ListItemText
-                  inset
                   primary=<Button
                     inset
                     color="primary"
@@ -319,13 +335,29 @@ export default function Dashboard(props) {
                   </Button>
                 />
               </ListItemButton>
+              <ListItemButton></ListItemButton>
               <ListItemButton>
+                <ListItemIcon
+                  paddingY="auto"
+                  paddingX="auto"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <InfoIcon
+                    paddingY="auto"
+                    paddingX="auto"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  />
+                </ListItemIcon>
                 <ListItemText
-                  inset
                   primary={'DWE OS Pre-Alpha'}
                   secondary={'Version: ' + packageBackend.version}
                 />
               </ListItemButton>
+              <ListItemButton></ListItemButton>
             </React.Fragment>
           </List>
         </Drawer>
