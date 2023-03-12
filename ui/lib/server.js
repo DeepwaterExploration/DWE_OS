@@ -3,6 +3,7 @@ const path = require('path')
 const http = require('http')
 
 const DeviceManager = require('./deviceManager')
+const WifiManager = require('./WifiManager')
 const APIServer = require('./APIServer')
 const SocketServer = require('./socketServer')
 
@@ -14,7 +15,8 @@ app.use(express.json())
 
 var deviceManager = new DeviceManager()
 
-var apiServer = new APIServer(app, deviceManager)
+var wifiManager = new WifiManager()
+var apiServer = new APIServer(app, wifiManager, deviceManager)
 apiServer.createEndpoints()
 
 var socketServer = new SocketServer(server, deviceManager)
@@ -29,6 +31,8 @@ app.get('*', (req, res) => {
 async function serve(port = 5000, host = '0.0.0.0') {
   // device manager events
   await deviceManager.startMonitoring()
+
+  await wifiManager.scan()
 
   // server
   server.listen(port, host, () => {

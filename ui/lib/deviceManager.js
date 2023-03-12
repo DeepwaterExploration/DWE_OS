@@ -85,7 +85,7 @@ class Device {
     // iterate through the formats
     this.resolutions = []
     this.cam.formats.forEach((format) => {
-      if (true) {
+      if (format.formatName == 'MJPG') {
         this.caps.h264 = true
         let resolution = `${format.width}x${format.height}`
         if (!this.resolutions.includes(resolution))
