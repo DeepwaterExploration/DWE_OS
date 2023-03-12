@@ -27,6 +27,10 @@ import { lightTheme, darkTheme } from '../themes'
 import DevicesContainer from './DevicesContainer'
 import packageBackend from '../package.backend.json'
 import Container from '@mui/material/Container'
+import { makePostRequest } from '../utils/utils'
+import DeviceCard from './DeviceCard'
+
+import { io } from 'socket.io-client'
 
 const drawerWidth = 240
 
@@ -76,14 +80,102 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme()
 
-function DashboardContent(props, state, updateTheme, resetSettings) {
+export default function Dashboard(props) {
   const [open, setOpen] = React.useState(false)
+  const [theme, setTheme] = React.useState(
+    localStorage.getItem('theme') == 'dark' ? darkTheme : lightTheme
+  )
+  const [exploreHD_cards, setExploreHD_cards] = React.useState([])
+  const [other_cards, setOther_cards] = React.useState([])
+  const [socket, setSocket] = React.useState(io())
+  console.log('socket', socket)
   const toggleDrawer = () => {
     setOpen(!open)
   }
+  const addCard = (device) => {
+    if (device.caps.driver) {
+      setExploreHD_cards(
+        exploreHD_cards.concat(
+          <DeviceCard key={exploreHD_cards.length} device={device} />
+        )
+      )
+    } else {
+      setOther_cards(
+        other_cards.concat(
+          <DeviceCard key={other_cards.length} device={device} />
+        )
+      )
+    }
+  }
+  const addDevices = (devices) => {
+    for (let device of devices) {
+      addCard(device)
+    }
+  }
+  const removeDevice = (device) => {
+    let devicePath = device.devicePath
+    if (device.caps.driver) {
+      setExploreHD_cards(
+        exploreHD_cards.filter((card) => {
+          return card.props.device.devicePath != devicePath
+        })
+      )
+    } else {
+      setOther_cards(
+        other_cards.filter((card) => {
+          return card.props.device.devicePath != devicePath
+        })
+      )
+    }
+  }
+
+  React.useEffect(() => {
+    // Add event listeners to handle device connection status updates
+    socket.on('connect', () => {
+      console.log('connect')
+      fetch('/devices')
+        .then((response) => response.json())
+        .then((devices) => addDevices(devices));
+    });
+    socket.on('added', (addedDevices) => {
+      console.log('connect', addedDevices)
+      for (let device of addedDevices) {
+        addCard(device);
+      }
+    });
+    socket.on('disconnect', () => {
+      console.log('disconnect')
+      fetch('/devices')
+        .then((response) => response.json())
+        .then((devices) => {
+          for (let device of devices) {
+            removeDevice(device);
+          }
+        });
+    });
+    socket.on('removed', (removedDevices) => {
+      console.log('connect', addedDevices)
+      for (let device of removedDevices) {
+        removeDevice(device);
+      }
+    });
+  }, []);
+
+  const updateTheme = (e) => {
+    localStorage.setItem('theme', e.target.checked ? 'dark' : 'light')
+    setTheme(e.target.checked ? darkTheme : lightTheme)
+    // this.setState({
+    //   theme: this.state.theme == lightTheme ? darkTheme : lightTheme,
+    // })
+  }
+  const resetSettings = () => {
+    makePostRequest('/resetSettings', {}, () => window.location.reload())
+    // makePostRequest('resetSettings', {})
+    // this.refreshCards()
+  }
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -166,11 +258,16 @@ function DashboardContent(props, state, updateTheme, resetSettings) {
                 <FormControlLabel
                   onChange={updateTheme}
                   control={
-                    <Switch checked={state.theme == darkTheme} name="Theme" />
+                    <Switch
+                      checked={theme == darkTheme}
+                      name="Theme"
+                    />
                   }
                   label={
                     <Typography color="text.secondary">
-                      {state.theme == darkTheme ? 'Dark Theme' : 'Light Theme'}
+                      {theme == darkTheme
+                        ? 'Dark Theme'
+                        : 'Light Theme'}
                     </Typography>
                   }
                 />
@@ -197,15 +294,15 @@ function DashboardContent(props, state, updateTheme, resetSettings) {
         </Drawer>
         <Box
           component="main"
-          // sx={{
-          //   backgroundColor: (theme) =>
-          //     theme.palette.mode === 'light'
-          //       ? theme.palette.grey[100]
-          //       : theme.palette.grey[900],
-          //   flexGrow: 1,
-          //   height: '100vh',
-          //   overflow: 'auto',
-          // }}
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+          }}
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -214,8 +311,8 @@ function DashboardContent(props, state, updateTheme, resetSettings) {
               <div style={{ minHeight: '64px' }} />
               <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
                 <DevicesContainer>
-                  {state.exploreHD_cards}
-                  {state.other_cards}
+                  {exploreHD_cards}
+                  {other_cards}
                 </DevicesContainer>
               </div>
             </Grid>
@@ -223,16 +320,5 @@ function DashboardContent(props, state, updateTheme, resetSettings) {
         </Box>
       </Box>
     </ThemeProvider>
-  )
-}
-
-export default function Dashboard(props, state, updateTheme, resetSettings) {
-  return (
-    <DashboardContent
-      {...props}
-      state={state}
-      updateTheme={updateTheme}
-      resetSettings={resetSettings}
-    />
   )
 }
