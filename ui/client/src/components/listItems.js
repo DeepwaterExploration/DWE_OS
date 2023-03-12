@@ -48,7 +48,7 @@ export const mainListItems = (
           alignItems="center"
         />
       </ListItemIcon>
-      <ListItemText primary="Light" />
+      <ListItemText primary="Lights" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon
