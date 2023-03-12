@@ -1,4 +1,4 @@
-# Using exploreHD Controls
+# Using DWE OS
 
 ## UVC Driver Settings
 
@@ -11,7 +11,7 @@ To setup the driver controls, run:
 cd camera_controls
 make
 ```
-This will compile the exploreHD controls application. (NOTE: this is being replaced by a user interface and custom driver system).
+This will compile the DWE OS application. (NOTE: this is being replaced by a user interface and custom driver system).
 
 **These settings must be adjusting each time. You can setup a startup script in Linux.**
 

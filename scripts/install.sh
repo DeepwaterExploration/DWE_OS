@@ -5,7 +5,7 @@
 
 set -e
 
-echo "Installing exploreHD_Controls..."
+echo "Installing DWE OS..."
 
 # Install version 14.x of nodejs
 if ! [ -x "$(command -v node)" ]; then
@@ -46,4 +46,4 @@ sudo -u "$SUDO_USER" pm2 save
 # Startup
 pm2 startup -u $SUDO_USER --hp /home/$SUDO_USER/
 
-echo "Installation of exploreHD_Controls was successful. Please navigate to http://192.168.2.2:5000 to access the interface."
+echo "Installation of DWE OS was successful. Please navigate to http://192.168.2.2:5000 to access the interface."

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO=https://raw.githubusercontent.com/DeepwaterExploration/exploreHD_Controls/main
+REPO=https://raw.githubusercontent.com/DeepwaterExploration/DWE_OS/main
 
 set -e
 

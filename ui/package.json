@@ -11,9 +11,9 @@
     "deepwaterexploration"
   ],
   "repository": {
-    "url": "https://github.com/DeepwaterExploration/exploreHD_Controls"
+    "url": "https://github.com/DeepwaterExploration/DWE_OS"
   },
-  "homepage": "https://github.com/DeepwaterExploration/exploreHD_Controls#readme",
+  "homepage": "https://github.com/DeepwaterExploration/DWE_OS#readme",
   "scripts": {
     "build": "cd client && npm run build",
     "prepack": "npm run build",
