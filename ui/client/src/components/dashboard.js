@@ -166,7 +166,7 @@ export default function Dashboard(props) {
         })
     })
     socket.on('removed', (removedDevices) => {
-      console.log('connect', addedDevices)
+      console.log('connect', removedDevices)
       for (let device of removedDevices) {
         removeDevice(device)
       }
