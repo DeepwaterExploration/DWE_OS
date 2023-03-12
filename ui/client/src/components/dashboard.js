@@ -29,6 +29,9 @@ import packageBackend from '../package.backend.json'
 import Container from '@mui/material/Container'
 import { makePostRequest } from '../utils/utils'
 import DeviceCard from './DeviceCard'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
 
 import { io } from 'socket.io-client'
 
@@ -85,6 +88,15 @@ export default function Dashboard(props) {
   const [theme, setTheme] = React.useState(
     localStorage.getItem('theme') == 'dark' ? darkTheme : lightTheme
   )
+  const toggleTheme = () => {
+    if (theme.palette.mode == 'dark') {
+      setTheme(lightTheme)
+      localStorage.setItem('theme', 'light')
+    } else {
+      setTheme(darkTheme)
+      localStorage.setItem('theme', 'dark')
+    }
+  }
   const [exploreHD_cards, setExploreHD_cards] = React.useState([])
   const [other_cards, setOther_cards] = React.useState([])
   const [socket, setSocket] = React.useState(io())
@@ -135,31 +147,51 @@ export default function Dashboard(props) {
       console.log('connect')
       fetch('/devices')
         .then((response) => response.json())
-        .then((devices) => addDevices(devices));
-    });
+        .then((devices) => addDevices(devices))
+    })
     socket.on('added', (addedDevices) => {
       console.log('connect', addedDevices)
       for (let device of addedDevices) {
-        addCard(device);
+        addCard(device)
       }
-    });
+    })
     socket.on('disconnect', () => {
       console.log('disconnect')
       fetch('/devices')
         .then((response) => response.json())
         .then((devices) => {
           for (let device of devices) {
-            removeDevice(device);
+            removeDevice(device)
           }
-        });
-    });
+        })
+    })
     socket.on('removed', (removedDevices) => {
       console.log('connect', addedDevices)
       for (let device of removedDevices) {
-        removeDevice(device);
+        removeDevice(device)
       }
-    });
-  }, []);
+    })
+    // socket.on('deviceConnected', (device) => {
+    //   console.log('deviceConnected', device)
+    //   addCard(device)
+    // })
+    // socket.on('deviceDisconnected', (device) => {
+    //   console.log('deviceDisconnected', device)
+    //   removeDevice(device)
+    // })
+    // socket.on('deviceReconnected', (device) => {
+    //   console.log('deviceReconnected', device)
+    //   removeDevice(device)
+    //   addCard(device)
+    // })
+    // // Get all devices
+    // socket.emit('getDevices', {}, (devices) => {
+    //   console.log('getDevices', devices)
+    //   addDevices(devices)
+    // })
+    // // Get current theme
+    // setTheme(localStorage.getItem('theme') == 'dark' ? darkTheme : lightTheme)
+  }, [])
 
   const updateTheme = (e) => {
     localStorage.setItem('theme', e.target.checked ? 'dark' : 'light')
@@ -197,7 +229,7 @@ export default function Dashboard(props) {
               <MenuIcon />
             </IconButton>
             <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo" />
-            <Typography
+            {/* <Typography
               component="h1"
               variant="h6"
               color="inherit"
@@ -223,7 +255,7 @@ export default function Dashboard(props) {
               sx={{ flexGrow: 1 }}
             >
               ML/AI
-            </Typography>
+            </Typography> */}
             <Grid container justifyContent="flex-end">
               <WifiMenu />
             </Grid>
@@ -254,41 +286,46 @@ export default function Dashboard(props) {
               <ListSubheader fontWeight="fontWeightBold" component="div" inset>
                 Options
               </ListSubheader>
-              <ListItem>
-                <FormControlLabel
-                  onChange={updateTheme}
-                  control={
-                    <Switch
-                      checked={theme == darkTheme}
-                      name="Theme"
-                    />
-                  }
-                  label={
-                    <Typography color="text.secondary">
-                      {theme == darkTheme
-                        ? 'Dark Theme'
-                        : 'Light Theme'}
-                    </Typography>
+              <ListItemButton onClick={toggleTheme} color="inherit">
+                <ListItemIcon
+                  paddingY="auto"
+                  paddingX="auto"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  {theme.palette.mode === 'dark' ? (
+                    <Brightness7Icon />
+                  ) : (
+                    <Brightness4Icon />
+                  )}
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    theme.palette.mode === 'dark' ? 'Light Theme' : 'Dark Theme'
                   }
                 />
-              </ListItem>
-              <ListItem>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={resetSettings}
-                >
-                  Reset Settings
-                </Button>
-              </ListItem>
-              <ListItem>
-                <span>Backend Revision: {packageBackend.version}</span>
-              </ListItem>
-              <ListItem>
-                <Typography variant="h6" color="inherit">
-                  DWE OS Pre-Alpha
-                </Typography>
-              </ListItem>
+              </ListItemButton>
+              <ListItemButton>
+                <ListItemText
+                  inset
+                  primary=<Button
+                    inset
+                    color="primary"
+                    variant="contained"
+                    onClick={resetSettings}
+                  >
+                    Reset Settings
+                  </Button>
+                />
+              </ListItemButton>
+              <ListItemButton>
+                <ListItemText
+                  inset
+                  primary={'DWE OS Pre-Alpha'}
+                  secondary={'Version: ' + packageBackend.version}
+                />
+              </ListItemButton>
             </React.Fragment>
           </List>
         </Drawer>
