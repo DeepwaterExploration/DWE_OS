@@ -270,6 +270,14 @@ export default function Dashboard(props) {
               px: [1],
             }}
           >
+            <ListItemText
+              style={{
+                textAlign: 'center',
+                padding: 'auto',
+              }}
+              primary={'DWE OS Pre-Alpha'}
+              secondary={'Version: ' + packageBackend.version}
+            />
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -284,7 +292,7 @@ export default function Dashboard(props) {
               <ListSubheader fontWeight="fontWeightBold" component="div" inset>
                 Options
               </ListSubheader>
-              <ListItemButton onClick={toggleTheme} color="inherit">
+              <ListItemButton onClick={toggleTheme}>
                 <ListItemIcon
                   paddingY="auto"
                   paddingX="auto"
@@ -304,7 +312,7 @@ export default function Dashboard(props) {
                   }
                 />
               </ListItemButton>
-              <ListItemButton>
+              <ListItemButton onClick={resetSettings}>
                 <ListItemIcon
                   paddingY="auto"
                   paddingX="auto"
@@ -320,39 +328,8 @@ export default function Dashboard(props) {
                     alignItems="center"
                   />
                 </ListItemIcon>
-                <ListItemText
-                  primary=<Button
-                    inset
-                    color="primary"
-                    variant="contained"
-                    onClick={resetSettings}
-                  >
-                    Reset Settings
-                  </Button>
-                />
+                <ListItemText primary="Reset Settings" />
               </ListItemButton>
-              <ListItemButton>
-                <ListItemIcon
-                  paddingY="auto"
-                  paddingX="auto"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <InfoIcon
-                    paddingY="auto"
-                    paddingX="auto"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={'DWE OS Pre-Alpha'}
-                  secondary={'Version: ' + packageBackend.version}
-                />
-              </ListItemButton>
-              <ListItemButton></ListItemButton>
             </React.Fragment>
           </List>
         </Drawer>
