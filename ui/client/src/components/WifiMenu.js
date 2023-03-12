@@ -17,7 +17,7 @@ const modalStyle = {
   width: 500,
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 4,
+  p: 4
 }
 
 function WifiConnection(props) {
@@ -48,7 +48,7 @@ export default function WifiMenu(props) {
   //     })
 
   const open = Boolean(anchorEl)
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
@@ -57,14 +57,14 @@ export default function WifiMenu(props) {
 
   const [wifiNetworks, setWifiNetworks] = useState([])
   fetch('/networks')
-    .then((response) => response.json())
-    .then((networks) => {
+    .then(response => response.json())
+    .then(networks => {
       setWifiNetworks(
-        networks.map((network) => {
+        networks.map(network => {
           return (
             <>
               <MenuItem
-                onClick={function () {
+                onClick={function() {
                   setSelectedWifi(network.ssid)
                   setRequiresPassword(network.requiresPasskey)
                   setWifiModalOpen(true)
@@ -100,7 +100,7 @@ export default function WifiMenu(props) {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'wifi-menu-button',
+          'aria-labelledby': 'wifi-menu-button'
         }}
       >
         {wifiNetworks}
@@ -120,7 +120,7 @@ export default function WifiMenu(props) {
               type="password"
               label="Password"
               variant="standard"
-              onChange={function (e) {
+              onChange={function(e) {
                 setPasswordField(e.target.value)
               }}
             />
@@ -135,7 +135,7 @@ export default function WifiMenu(props) {
             <Button
               sx={{ width: '40%', margin: 1 }}
               variant="contained"
-              onClick={function () {
+              onClick={function() {
                 setWifiModalOpen(false)
               }}
             >
@@ -144,7 +144,7 @@ export default function WifiMenu(props) {
             <Button
               sx={{ width: '40%', margin: 1 }}
               variant="contained"
-              onClick={function () {
+              onClick={function() {
                 networkConnect(selectedWifi, passwordField)
                 setPasswordField(null)
                 setWifiModalOpen(false)
