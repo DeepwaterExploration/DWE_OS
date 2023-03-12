@@ -2,7 +2,6 @@ import * as React from 'react'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
 import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew'
@@ -14,13 +13,10 @@ import InfoIcon from '@mui/icons-material/Info'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import Box from '@mui/system/Box'
 import { mainListItems, secondaryListItems } from './listItems'
 import DWELogo_white from '../images/DWELogo_white.svg'
 import { Grid } from '@mui/material'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Switch from '@mui/material/Switch'
 import WifiMenu from './WifiMenu'
 import CssBaseline from '@mui/material/CssBaseline'
 import ListSubheader from '@mui/material/ListSubheader'
@@ -167,12 +163,12 @@ export default function Dashboard(props) {
           }
         })
     })
-    socket.on('removed', (removedDevices) => {
-      console.log('connect', removedDevices)
-      for (let device of removedDevices) {
-        removeDevice(device)
-      }
-    })
+    // socket.on('removed', (removedDevices) => {
+    //   console.log('connect', removedDevices)
+    //   for (let device of removedDevices) {
+    //     removeDevice(device)
+    //   }
+    // })
     // socket.on('deviceConnected', (device) => {
     //   console.log('deviceConnected', device)
     //   addCard(device)
@@ -335,7 +331,6 @@ export default function Dashboard(props) {
                   </Button>
                 />
               </ListItemButton>
-              <ListItemButton></ListItemButton>
               <ListItemButton>
                 <ListItemIcon
                   paddingY="auto"
