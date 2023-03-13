@@ -5,7 +5,7 @@ import { grey } from '@mui/material/colors'
 
 export const lightTheme = createTheme({
   typography: {
-    fontFamily: 'HelveticaNeueLTPro, sans-serif',
+    fontFamily: 'HelveticaNeueLight, sans-serif',
     fontWeightRegular: 400,
     fontWeightItalic: 400
   },
@@ -23,7 +23,7 @@ export const lightTheme = createTheme({
 
 export const darkTheme = createTheme({
   typography: {
-    fontFamily: 'HelveticaNeueLTPro, sans-serif',
+    fontFamily: 'HelveticaNeueLight, sans-serif',
     fontWeightRegular: 400,
     fontWeightItalic: 400
   },
