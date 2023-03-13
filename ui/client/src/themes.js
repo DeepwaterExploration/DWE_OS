@@ -4,6 +4,11 @@ import { grey } from '@mui/material/colors'
 // import { red } from '@mui/material/colors';
 
 export const lightTheme = createTheme({
+  typography: {
+    fontFamily: 'HelveticaNeueLTPro, sans-serif',
+    fontWeightRegular: 400,
+    fontWeightItalic: 400
+  },
   palette: {
     grey: {
       main: grey[200],
@@ -17,6 +22,11 @@ export const lightTheme = createTheme({
 })
 
 export const darkTheme = createTheme({
+  typography: {
+    fontFamily: 'HelveticaNeueLTPro, sans-serif',
+    fontWeightRegular: 400,
+    fontWeightItalic: 400
+  },
   palette: {
     mode: 'dark'
   }

@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'HelveticaNeueLTPro';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  src: url(./fonts/HelveticaNeueLTPro-Text.otf) ('otf');
+}
+
+@font-face {
+  font-family: 'HelveticaNeueLTPro';
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+  src: url(./fonts/HelveticaNeueLTPro-Italic.otf) format('otf');
+}
