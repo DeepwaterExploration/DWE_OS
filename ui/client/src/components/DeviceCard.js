@@ -26,7 +26,7 @@ import {
   LineBreak,
   makeAsyncPostRequest,
   makePostRequest,
-  useDidMountEffect,
+  useDidMountEffect
 } from '../utils/utils'
 import { Divider } from '@mui/material'
 
@@ -56,13 +56,13 @@ function DeviceSwitch(props) {
   )
 }
 
-const ResolutionMenu = (props) => {
+const ResolutionMenu = props => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   let [currentResolution, setCurrentResolution] = useState(
     props.defaultResolution
   )
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
@@ -92,13 +92,13 @@ const ResolutionMenu = (props) => {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
+          'aria-labelledby': 'basic-button'
         }}
       >
-        {props.resolutions.map((item) => {
+        {props.resolutions.map(item => {
           return (
             <MenuItem
-              onClick={function () {
+              onClick={function() {
                 setCurrentResolution(item)
                 handleClose()
               }}
@@ -112,7 +112,7 @@ const ResolutionMenu = (props) => {
   )
 }
 
-const DeviceOptions = (props) => {
+const DeviceOptions = props => {
   const device = props.device.devicePath
 
   const [bitrate, setBitrate] = useState(props.device.options.bitrate)
@@ -128,8 +128,8 @@ const DeviceOptions = (props) => {
       options: {
         bitrate,
         h264,
-        vbr,
-      },
+        vbr
+      }
     }
     makePostRequest('/options', body)
   }, [bitrate, h264, vbr])
@@ -159,7 +159,7 @@ const DeviceOptions = (props) => {
         <DeviceSwitch
           checked={h264}
           name="h264Switch"
-          onChange={(e) => {
+          onChange={e => {
             setH264(e.target.checked)
             setVBR(e.target.checked ? false : vbr)
           }}
@@ -168,7 +168,7 @@ const DeviceOptions = (props) => {
         <DeviceSwitch
           checked={vbr}
           name="vbrSwitch"
-          onChange={(e) => {
+          onChange={e => {
             setVBR(e.target.checked)
             setH264(e.target.checked ? false : h264)
           }}
@@ -179,7 +179,7 @@ const DeviceOptions = (props) => {
   )
 }
 
-const StreamOptions = (props) => {
+const StreamOptions = props => {
   const device = props.device.devicePath
 
   const [udp, setUDP] = useState(props.device.stream.isStreaming)
@@ -195,10 +195,10 @@ const StreamOptions = (props) => {
         stream: {
           hostAddress,
           port,
-          resolution,
-        },
+          resolution
+        }
       },
-      (xhr) => {
+      xhr => {
         let response = JSON.parse(xhr.response)
         setPort(response.port)
       }
@@ -217,17 +217,17 @@ const StreamOptions = (props) => {
           devicePath: device,
           stream: {
             hostAddress,
-            port,
-          },
+            port
+          }
         },
-        (xhr) => {
+        xhr => {
           let response = JSON.parse(xhr.response)
           setPort(response.port)
         }
       )
     } else {
       makePostRequest('/removeStream', {
-        devicePath: device,
+        devicePath: device
       })
     }
   }, [udp])
@@ -235,7 +235,7 @@ const StreamOptions = (props) => {
   return (
     <FormGroup>
       <DeviceSwitch
-        onChange={(e) => {
+        onChange={e => {
           setUDP(e.target.checked)
         }}
         checked={udp}
@@ -246,7 +246,7 @@ const StreamOptions = (props) => {
         <>
           <TextField
             label="address"
-            onChange={(e) => {
+            onChange={e => {
               setHostAddress(e.target.value)
             }}
             variant="standard"
@@ -254,7 +254,7 @@ const StreamOptions = (props) => {
           />
           <TextField
             label="port"
-            onChange={(e) => {
+            onChange={e => {
               setPort(e.target.value)
             }}
             variant="standard"
@@ -263,7 +263,7 @@ const StreamOptions = (props) => {
           />
           <div style={{ marginTop: '20px' }}>
             <ResolutionMenu
-              onResolutionChange={(res) => {
+              onResolutionChange={res => {
                 setResolution(res)
               }}
               defaultResolution={resolution}
@@ -279,12 +279,14 @@ const StreamOptions = (props) => {
             Restart Stream
           </Button>
         </>
-      ) : undefined}
+      ) : (
+        undefined
+      )}
     </FormGroup>
   )
 }
 
-const CameraControls = (props) => {
+const CameraControls = props => {
   const controls = props.controls
   const [controlsCollapsed, setControlsCollapsed] = useState(true)
 
@@ -308,7 +310,7 @@ const CameraControls = (props) => {
                     makePostRequest('/setControl', {
                       devicePath: props.devicePath,
                       id,
-                      value: controlValue,
+                      value: controlValue
                     })
                   }, [controlValue])
                   return (
@@ -325,7 +327,7 @@ const CameraControls = (props) => {
                         defaultValue={defaultValue}
                         style={{
                           marginLeft: '20px',
-                          width: 'calc(100% - 25px)',
+                          width: 'calc(100% - 25px)'
                         }}
                       />
                     </>
@@ -342,7 +344,7 @@ const CameraControls = (props) => {
                     makePostRequest('/setControl', {
                       devicePath: props.devicePath,
                       id,
-                      value: controlValue,
+                      value: controlValue
                     })
                   }, [controlValue])
                   return (
@@ -366,13 +368,13 @@ const CameraControls = (props) => {
                     makePostRequest('/setControl', {
                       devicePath: props.devicePath,
                       id,
-                      value: controlValue,
+                      value: controlValue
                     })
                   }, [setControlValue])
                   return (
                     <>
                       <PopupState variant="popover" popupId={id}>
-                        {(popupState) => (
+                        {popupState => (
                           <>
                             <div>
                               <span>
@@ -419,7 +421,7 @@ const CameraControls = (props) => {
                 await makeAsyncPostRequest('/setControl', {
                   devicePath: props.devicePath,
                   id,
-                  value: defaultValue,
+                  value: defaultValue
                 })
               }
               location.reload()
@@ -433,7 +435,7 @@ const CameraControls = (props) => {
   )
 }
 
-const DeviceCard = (props) => {
+const DeviceCard = props => {
   const controls = props.device.controls
   console.log(controls)
 
@@ -484,10 +486,10 @@ const DeviceCard = (props) => {
                 : undefined}
               <LineBreak />
               <TextField
-                onChange={(e) => {
+                onChange={e => {
                   makePostRequest('/setDeviceName', {
                     devicePath: props.device.devicePath,
-                    name: e.target.value,
+                    name: e.target.value
                   })
                 }}
                 helperText="Device Nickname"

@@ -7,19 +7,19 @@ export const lightTheme = createTheme({
   palette: {
     grey: {
       main: grey[200],
-      dark: grey[300],
+      dark: grey[300]
     },
     primary: {
       dark: '#092037',
-      main: '#15314d',
-    },
-  },
+      main: '#15314d'
+    }
+  }
 })
 
 export const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
-  },
+    mode: 'dark'
+  }
 })
 
 // export const roboto = Roboto({
