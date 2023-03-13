@@ -349,8 +349,8 @@ export default function Dashboard(props) {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* DeviceCards */}
-              <div style={{ minHeight: '64px' }} />
-              <div style={{ overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
+              <div style={{ minHeight: '14px' }} />
+              <div style={{ height: 'calc(100vh - 14px)' }}>
                 <DevicesContainer>
                   {exploreHD_cards}
                   {other_cards}

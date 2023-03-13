@@ -469,7 +469,7 @@ const DeviceCard = props => {
       xs={12}
       lg={7}
       xl={6}
-      style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}
+      style={{ display: 'flex', flexwrap: 'wrap', justifyContent: 'center', padding: '20px' }}
     >
       <Card textAlign="left" sx={{ minWidth: 500, boxShadow: 3 }}>
         <CardHeader
