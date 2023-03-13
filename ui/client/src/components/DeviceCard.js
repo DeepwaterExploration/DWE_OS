@@ -465,8 +465,8 @@ const DeviceCard = (props) => {
     <Grid
       item
       xs={12}
-      lg={6}
-      xl={4}
+      lg={7}
+      xl={6}
       style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}
     >
       <Card textAlign="left" sx={{ minWidth: 500, boxShadow: 3 }}>

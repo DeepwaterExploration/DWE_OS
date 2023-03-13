@@ -85,13 +85,13 @@ class Device {
     // iterate through the formats
     this.resolutions = []
     this.cam.formats.forEach(format => {
-      if (format.formatName == 'MJPG') {
+     if (format.formatName == 'MJPG') {
         this.caps.h264 = true
         let resolution = `${format.width}x${format.height}`
         if (!this.resolutions.includes(resolution))
           this.resolutions.push(resolution)
         this.name = this.info.name
-      }
+     }
     })
     if (this.caps.h264) {
       this.info = await getUdevInfo(devicePath)
