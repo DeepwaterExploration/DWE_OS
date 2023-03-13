@@ -9,13 +9,12 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
-import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
 import Box from '@mui/system/Box'
 import { mainListItems, secondaryListItems } from './listItems'
 import DWELogo_white from '../images/DWELogo_white.svg'
-import { Grid, Typography } from '@mui/material'
+import { Grid, Typography, Divider } from '@mui/material'
 import WifiMenu from './WifiMenu'
 import CssBaseline from '@mui/material/CssBaseline'
 import ListSubheader from '@mui/material/ListSubheader'
@@ -224,39 +223,36 @@ export default function Dashboard(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ pr: 3 }}>
-            <div style={{ marginTop: '5px' }}>
-              <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo" />
-              </div>
-            </Box>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Home
-            </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-             
-            </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
+            <Box display="flex" flexDirection="row" alignItems="center" spacing={2} style={{ width: '100%' }}>
+              <Box style={{ marginTop: '5px'}} sx={{ pr: 3 }}>
+                <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo" />
+              </Box>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                Home
+              </Typography>
+              <Divider orientation="vertical" sx={{ mx: 3 }} style={{ backgroundColor: 'white', height: 40, width: 3}} />
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
               
-            </Typography>
- 
+              </Typography>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                
+              </Typography>
+            </Box>
             <Grid justifyContent="flex-end">
               <WifiMenu />
             </Grid>
