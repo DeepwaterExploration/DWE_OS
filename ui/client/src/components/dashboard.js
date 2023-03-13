@@ -225,7 +225,9 @@ export default function Dashboard(props) {
               <MenuIcon />
             </IconButton>
             <Box sx={{ pr: 3 }}>
+            <div style={{ marginTop: '5px' }}>
               <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo" />
+              </div>
             </Box>
             <Typography
               component="h1"
@@ -243,7 +245,7 @@ export default function Dashboard(props) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Stereo
+             
             </Typography>
             <Typography
               component="h1"
@@ -252,8 +254,9 @@ export default function Dashboard(props) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              ML/AI
+              
             </Typography>
+ 
             <Grid justifyContent="flex-end">
               <WifiMenu />
             </Grid>

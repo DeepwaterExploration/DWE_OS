@@ -112,23 +112,6 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="Wired" />
     </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon
-        paddingY="auto"
-        paddingX="auto"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <StorageOutlinedIcon
-          paddingY="auto"
-          paddingX="auto"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        />
-      </ListItemIcon>
-      <ListItemText primary="Interface" />
-    </ListItemButton>
+
   </React.Fragment>
 )
