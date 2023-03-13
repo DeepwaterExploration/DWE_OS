@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'HelveticaNeueLight';
   font-display: swap;
-  font-weight: 400;
+  src: url(./fonts/HelveticaNeue-Light.otf) format('opentype');
+  font-weight: normal;
   font-style: normal;
-  src: url(./fonts/HelveticaNeue-Light.otf) ('otf');
 }

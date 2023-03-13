@@ -1,4 +1,4 @@
-// import { Roboto } from 'next/font/google';
+import './main.css'
 import { createTheme } from '@mui/material/styles'
 import { grey } from '@mui/material/colors'
 // import { red } from '@mui/material/colors';
@@ -8,6 +8,22 @@ export const lightTheme = createTheme({
     fontFamily: 'HelveticaNeueLight, sans-serif',
     fontWeightRegular: 400,
     fontWeightItalic: 400
+  },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '@font-face': {
+          fontFamily: 'HelveticaNeueLight',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          src: `
+          local('HelveticaNeueLight'),
+          local('HelveticaNeueLight'),
+          url(./fonts/HelveticaNeue-Light.otf) format('opentype')
+        `
+        }
+      }
+    }
   },
   palette: {
     grey: {
@@ -26,6 +42,22 @@ export const darkTheme = createTheme({
     fontFamily: 'HelveticaNeueLight, sans-serif',
     fontWeightRegular: 400,
     fontWeightItalic: 400
+  },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '@font-face': {
+          fontFamily: 'HelveticaNeueLight',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          src: `
+          local('HelveticaNeueLight'),
+          local('HelveticaNeueLight'),
+          url(./fonts/HelveticaNeue-Light.otf) format('opentype')
+        `
+        }
+      }
+    }
   },
   palette: {
     mode: 'dark'

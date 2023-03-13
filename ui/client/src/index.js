@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import './main.css';
+import './main.css'
 
 import ReactDOM from 'react-dom'
 import App from './App'
