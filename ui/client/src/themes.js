@@ -10,6 +10,13 @@ export const lightTheme = createTheme({
     fontWeightItalic: 400
   },
   overrides: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          letterSpacing: '0.05em'
+        }
+      }
+    },
     MuiCssBaseline: {
       '@global': {
         '@font-face': {
@@ -44,6 +51,13 @@ export const darkTheme = createTheme({
     fontWeightItalic: 400
   },
   overrides: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          letterSpacing: '0.05em'
+        }
+      }
+    },
     MuiCssBaseline: {
       '@global': {
         '@font-face': {
