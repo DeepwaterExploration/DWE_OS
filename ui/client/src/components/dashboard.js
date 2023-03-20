@@ -101,17 +101,18 @@ export default function Dashboard(props) {
   }
   const addCard = device => {
     if (device.caps.driver) {
-      setExploreHD_cards(
-        exploreHD_cards.concat(
-          <DeviceCard key={exploreHD_cards.length} device={device} />
-        )
-      )
-    } else {
-      setOther_cards(
-        other_cards.concat(
-          <DeviceCard key={other_cards.length} device={device} />
-        )
-      )
+      // takes the prevState, and using the `spread` operator
+      // appends the new Card to the new array
+      // to update the state
+      setExploreHD_cards((prevState) => ([
+        ...prevState, <DeviceCard key={exploreHD_cards.length} device={device} />
+      ]))
+    }
+    
+    else {
+      setOther_cards((prevState) => ([
+        ...prevState, <DeviceCard key={other_cards.length} device={device} />
+      ]))
     }
   }
   const addDevices = devices => {
@@ -122,17 +123,15 @@ export default function Dashboard(props) {
   const removeDevice = device => {
     let devicePath = device.devicePath
     if (device.caps.driver) {
-      setExploreHD_cards(
-        exploreHD_cards.filter(card => {
-          return card.props.device.devicePath != devicePath
-        })
-      )
-    } else {
-      setOther_cards(
-        other_cards.filter(card => {
-          return card.props.device.devicePath != devicePath
-        })
-      )
+      setExploreHD_cards((prevState) => (prevState.filter(card => {
+        return card.props.device.devicePath != devicePath
+      })))
+    }
+    
+    else {
+      setOther_cards((prevState) => (prevState.filter(card => {
+        return card.props.device.devicePath != devicePath
+      })))
     }
   }
 
