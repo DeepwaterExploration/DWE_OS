@@ -122,6 +122,8 @@ export default function Dashboard(props) {
   }
   const removeDevice = device => {
     let devicePath = device.devicePath
+    // modifies state using the "previous state"
+    // rather than directly modifying current state variable
     if (device.caps.driver) {
       setExploreHD_cards((prevState) => (prevState.filter(card => {
         return card.props.device.devicePath != devicePath
