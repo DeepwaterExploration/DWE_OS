@@ -10,10 +10,23 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+  # Raise all npm pull requests with custom labels
+    labels:
+      - "github-actions"
+      - "dependencies"
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/ui"
+    schedule:
+      interval: "daily"
+    # Raise all npm pull requests with custom labels
+    labels:
+      - "npm"
+      - "dependencies"
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directory: "/ui/client"
     schedule:
       interval: "daily"
     # Raise all npm pull requests with custom labels
