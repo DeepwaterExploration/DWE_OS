@@ -102,7 +102,6 @@ class Device {
 
             this.controls = [];
             for (let control of this.cam.controls) {
-                console.log(control.name);
                 let id = control.id;
                 this.controls.push({
                     name: control.name,

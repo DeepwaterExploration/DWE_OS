@@ -18,9 +18,9 @@ class APIServer {
             res.send(this.wifiManager.networks);
         });
 
-        this.app.get('/connectedNetwork', (req, res) => {
+        this.app.get('/connectedNetwork', async (req, res) => {
             res.send({
-                network: this.wifiManager.getConnectedNetwork()
+                network: await this.wifiManager.getConnectedNetwork()
             });
         })
 
