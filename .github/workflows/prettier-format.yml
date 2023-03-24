@@ -1,0 +1,28 @@
+name: React Quality Check and Formatting
+
+on: [push, pull_request]
+
+jobs:
+  run-linters:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Configure npm caching
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/prettier.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Run prettier
+        run: |-
+          npx prettier --check --config ".prettierrc" "**/*.{css,js,json}"
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: ${{ github.actor }}
+          author_email: ${{ github.actor }}@users.noreply.github.com
+          message: "Code formatting and linting"
+          add: "."
+          branch: ${{ github.ref }}
