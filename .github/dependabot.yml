@@ -17,7 +17,7 @@ updates:
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    directory: "/ui"
+    directory: "/ui/"
     schedule:
       interval: "daily"
     # Raise all npm pull requests with custom labels
@@ -26,7 +26,7 @@ updates:
       - "dependencies"
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    directory: "/ui/client"
+    directory: "/ui/client/"
     schedule:
       interval: "daily"
     # Raise all npm pull requests with custom labels
