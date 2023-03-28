@@ -13,10 +13,9 @@ jobs:
       - name: Streaming Dependencies
         run: |
           sudo apt update && sudo apt upgrade -y
-          sudo apt install libudev-devlibgstreamer-plugins-base1.0-dev -y
-          sudo apt install libgstreamer1.0-dev -y
-          sudo apt install gstreamer1.0-plugins-good -y
-          sudo apt install gstreamer1.0-plugins-bad -y
+          sudo apt install libunwind-dev
+          sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+          sudo apt install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
       - name: Set Up Node
         uses: actions/setup-node@v3
         with:
@@ -30,5 +29,6 @@ jobs:
           cd ..
       - name: Build Repository Code
         run: |
+          cd ui
           npm run build
           npm start
