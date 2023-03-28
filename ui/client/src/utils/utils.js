@@ -41,8 +41,9 @@ export const networkConnect = async (ssid, password = undefined) => {
   })
 }
 
-export const networkConnect = async (ssid, password=undefined) => {
-    await makeAsyncPostRequest('/network', {
-        ssid, password
-    });
+export const networkConnect = async (ssid, password = undefined) => {
+  await makeAsyncPostRequest('/network', {
+    ssid,
+    password,
+  })
 }
