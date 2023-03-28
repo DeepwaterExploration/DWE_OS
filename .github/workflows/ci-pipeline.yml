@@ -31,8 +31,10 @@ jobs:
       - name: Install Node Dependencies
         run: |
           cd ui
+          npm install
           npm ci
           cd client
+          npm install
           cd ..
       - name: Build Repository Code
         run: |
