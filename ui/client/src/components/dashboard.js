@@ -33,25 +33,25 @@ import { io } from 'socket.io-client'
 const drawerWidth = 240
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: prop => prop !== 'open'
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
+    duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }))
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: prop => prop !== 'open'
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     position: 'relative',
@@ -59,21 +59,21 @@ const Drawer = styled(MuiDrawer, {
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
+      duration: theme.transitions.duration.enteringScreen,
     }),
     boxSizing: 'border-box',
     ...(!open && {
       overflowX: 'hidden',
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
+        duration: theme.transitions.duration.leavingScreen,
       }),
       width: theme.spacing(7),
       [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9)
-      }
-    })
-  }
+        width: theme.spacing(9),
+      },
+    }),
+  },
 }))
 
 const mdTheme = createTheme()
@@ -99,41 +99,43 @@ export default function Dashboard(props) {
   const toggleDrawer = () => {
     setOpen(!open)
   }
-  const addCard = device => {
+  const addCard = (device) => {
     if (device.caps.driver) {
       // takes the prevState, and using the `spread` operator
       // appends the new Card to the new array
       // to update the state
-      setExploreHD_cards((prevState) => ([
-        ...prevState, <DeviceCard key={exploreHD_cards.length} device={device} />
-      ]))
-    }
-    
-    else {
-      setOther_cards((prevState) => ([
-        ...prevState, <DeviceCard key={other_cards.length} device={device} />
-      ]))
+      setExploreHD_cards((prevState) => [
+        ...prevState,
+        <DeviceCard key={exploreHD_cards.length} device={device} />,
+      ])
+    } else {
+      setOther_cards((prevState) => [
+        ...prevState,
+        <DeviceCard key={other_cards.length} device={device} />,
+      ])
     }
   }
-  const addDevices = devices => {
+  const addDevices = (devices) => {
     for (let device of devices) {
       addCard(device)
     }
   }
-  const removeDevice = device => {
+  const removeDevice = (device) => {
     let devicePath = device.devicePath
     // modifies state using the "previous state"
     // rather than directly modifying current state variable
     if (device.caps.driver) {
-      setExploreHD_cards((prevState) => (prevState.filter(card => {
-        return card.props.device.devicePath != devicePath
-      })))
-    }
-    
-    else {
-      setOther_cards((prevState) => (prevState.filter(card => {
-        return card.props.device.devicePath != devicePath
-      })))
+      setExploreHD_cards((prevState) =>
+        prevState.filter((card) => {
+          return card.props.device.devicePath != devicePath
+        })
+      )
+    } else {
+      setOther_cards((prevState) =>
+        prevState.filter((card) => {
+          return card.props.device.devicePath != devicePath
+        })
+      )
     }
   }
 
@@ -142,26 +144,26 @@ export default function Dashboard(props) {
     socket.on('connect', () => {
       console.log('connect')
       fetch('/devices')
-        .then(response => response.json())
-        .then(devices => addDevices(devices))
+        .then((response) => response.json())
+        .then((devices) => addDevices(devices))
     })
     socket.on('disconnect', () => {
       console.log('disconnect')
       fetch('/devices')
-        .then(response => response.json())
-        .then(devices => {
+        .then((response) => response.json())
+        .then((devices) => {
           for (let device of devices) {
             removeDevice(device)
           }
         })
     })
-    socket.on('added', addedDevices => {
+    socket.on('added', (addedDevices) => {
       console.log('added', addedDevices)
       for (let device of addedDevices) {
         addCard(device)
       }
     })
-    socket.on('removed', removedDevices => {
+    socket.on('removed', (removedDevices) => {
       console.log('removed', removedDevices)
       for (let device of removedDevices) {
         removeDevice(device)
@@ -189,7 +191,7 @@ export default function Dashboard(props) {
     // setTheme(localStorage.getItem('theme') == 'dark' ? darkTheme : lightTheme)
   }, [])
 
-  const updateTheme = e => {
+  const updateTheme = (e) => {
     localStorage.setItem('theme', e.target.checked ? 'dark' : 'light')
     setTheme(e.target.checked ? darkTheme : lightTheme)
     // this.setState({
@@ -209,7 +211,7 @@ export default function Dashboard(props) {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px' // keep right padding when drawer closed
+              pr: '24px', // keep right padding when drawer closed
             }}
           >
             <IconButton
@@ -219,40 +221,45 @@ export default function Dashboard(props) {
               onClick={toggleDrawer}
               sx={{
                 marginRight: '20px',
-                ...(open && { display: 'none' })
+                ...(open && { display: 'none' }),
               }}
             >
               <MenuIcon />
             </IconButton>
-            <Box display="flex" flexDirection="row" alignItems="center" spacing={2} style={{ width: '100%' }}>
-              <Box style={{ marginTop: '5px'}} sx={{ pr: 3 }}>
-                <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo" />
+            <Box
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+              spacing={2}
+              style={{ width: '100%' }}
+            >
+              <Box style={{ marginTop: '5px' }} sx={{ pr: 3 }}>
+                <img
+                  src={DWELogo_white}
+                  style={{ height: 30 }}
+                  alt="DWE Logo"
+                />
               </Box>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-              >
+              <Typography component="h1" variant="h6" color="inherit" noWrap>
                 Home
               </Typography>
-              <Divider orientation="vertical" sx={{ mx: 3 }} style={{ backgroundColor: 'white', height: 40, width: 3}} />
+              <Divider
+                orientation="vertical"
+                sx={{ mx: 3 }}
+                style={{ backgroundColor: 'white', height: 40, width: 3 }}
+              />
               <Typography
                 component="h1"
                 variant="h6"
                 color="inherit"
                 noWrap
-              >
-              
-              </Typography>
+              ></Typography>
               <Typography
                 component="h1"
                 variant="h6"
                 color="inherit"
                 noWrap
-              >
-                
-              </Typography>
+              ></Typography>
             </Box>
             <Grid justifyContent="flex-end">
               <WifiMenu />
@@ -267,13 +274,13 @@ export default function Dashboard(props) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              px: [1]
+              px: [1],
             }}
           >
             <ListItemText
               style={{
                 textAlign: 'center',
-                padding: 'auto'
+                padding: 'auto',
               }}
               primary={'DWE OS Pre-Alpha'}
               secondary={'Version: ' + packageBackend.version}
@@ -336,13 +343,13 @@ export default function Dashboard(props) {
         <Box
           component="main"
           sx={{
-            backgroundColor: theme =>
+            backgroundColor: (theme) =>
               theme.palette.mode === 'light'
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
-            overflow: 'auto'
+            overflow: 'auto',
           }}
         >
           <Toolbar />

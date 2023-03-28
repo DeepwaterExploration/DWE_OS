@@ -20,13 +20,13 @@ class APIServer {
 
     this.app.get('/connectedNetwork', (req, res) => {
       res.send({
-        network: this.wifiManager.getConnectedNetwork()
+        network: this.wifiManager.getConnectedNetwork(),
       })
     })
 
     this.app.get('/app', (req, res) => {
       res.send({
-        version
+        version,
       })
     })
 
@@ -42,7 +42,7 @@ class APIServer {
       let device = this.deviceManager.getDeviceFromPath(req.body.devicePath)
       await device.addStream(req.body.stream.hostAddress)
       res.send({
-        port: device.stream.port
+        port: device.stream.port,
       })
     })
 
@@ -68,7 +68,7 @@ class APIServer {
         parseInt(height)
       )
       res.send({
-        port: device.stream.port
+        port: device.stream.port,
       })
     })
 

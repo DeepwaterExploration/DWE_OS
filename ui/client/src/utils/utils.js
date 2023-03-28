@@ -10,7 +10,7 @@ export function makePostRequest(path, body, onload = () => {}) {
 }
 
 export function makeAsyncPostRequest(path, body) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     console.log(`Making post request to ${path} with ${JSON.stringify(body)}`)
     var xhr = new XMLHttpRequest()
     xhr.open('POST', path, true)
@@ -37,6 +37,6 @@ export const LineBreak = () => {
 export const networkConnect = async (ssid, password = undefined) => {
   await makeAsyncPostRequest('/network', {
     ssid,
-    password
+    password,
   })
 }

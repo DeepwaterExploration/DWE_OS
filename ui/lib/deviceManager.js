@@ -20,7 +20,7 @@ class Device {
     this.controls = []
     this.caps = {
       h264: false,
-      driver: false
+      driver: false,
     }
     this.deviceManager = deviceManager
     this.name = ''
@@ -39,7 +39,7 @@ class Device {
           min: control.min,
           max: control.max,
           default: control.default,
-          id
+          id,
         })
       }
     } catch (e) {}
@@ -58,7 +58,7 @@ class Device {
       isStreaming: this.stream != null,
       host: this.stream ? this.stream.host : '192.168.2.1',
       port: this.stream ? this.stream.port : 5600,
-      resolution: resolution
+      resolution: resolution,
     }
     return {
       devicePath: this.devicePath,
@@ -70,7 +70,7 @@ class Device {
       deviceIndex: this.deviceIndex,
       stream,
       controls: this.controls,
-      name: this.name
+      name: this.name,
     }
   }
 
@@ -84,14 +84,14 @@ class Device {
     this.cam = new v4l2camera.Camera(devicePath)
     // iterate through the formats
     this.resolutions = []
-    this.cam.formats.forEach(format => {
-     if (format.formatName == 'MJPG') {
+    this.cam.formats.forEach((format) => {
+      if (format.formatName == 'MJPG') {
         this.caps.h264 = true
         let resolution = `${format.width}x${format.height}`
         if (!this.resolutions.includes(resolution))
           this.resolutions.push(resolution)
         this.name = this.info.name
-     }
+      }
     })
     if (this.caps.h264) {
       this.info = await getUdevInfo(devicePath)
@@ -113,7 +113,7 @@ class Device {
           min: control.min,
           max: control.max,
           default: control.default,
-          id
+          id,
         })
       }
     }
@@ -204,11 +204,11 @@ class DeviceManager extends EventEmitter {
   }
 
   getExploreHD(deviceIndex = 0) {
-    return this.devices.find(device => device.deviceIndex === deviceIndex)
+    return this.devices.find((device) => device.deviceIndex === deviceIndex)
   }
 
   getDeviceFromPath(devicePath) {
-    return this.devices.find(device => device.devicePath === devicePath)
+    return this.devices.find((device) => device.devicePath === devicePath)
   }
 
   async startMonitoring() {
@@ -274,10 +274,10 @@ class DeviceManager extends EventEmitter {
 
     // find the removed and added devices
     let removedDevices = this.devices.filter(
-      a => devices.find(b => a.devicePath == b.devicePath) == undefined
+      (a) => devices.find((b) => a.devicePath == b.devicePath) == undefined
     )
     let addedDevices = devices.filter(
-      a => this.devices.find(b => a.devicePath == b.devicePath) == undefined
+      (a) => this.devices.find((b) => a.devicePath == b.devicePath) == undefined
     )
 
     // set the new devices
