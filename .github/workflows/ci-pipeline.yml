@@ -10,16 +10,22 @@ jobs:
     steps:
       - name: Check out Repository Code
         uses: actions/checkout@v3
+      - name: Streaming Dependencies
+        run: |
+          sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+          sudo apt install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
       - name: Set Up Node
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Build Repository Code
+      - name: Install Node Dependencies
         run: |
           cd ui
-          npm install
-          npm run build
-          cd client 
-          npm install
+          npm --logevel=error install
+          cd client
+          npm --logevel=error install
           cd ..
-          npm run start
+      - name: Build Repository Code
+        run: |
+          npm run build
+          npm start
