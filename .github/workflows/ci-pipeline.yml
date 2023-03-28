@@ -31,4 +31,3 @@ jobs:
         run: |
           cd ui
           npm run build
-          npm start
