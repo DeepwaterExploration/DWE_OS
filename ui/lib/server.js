@@ -22,7 +22,6 @@ apiServer.createEndpoints()
 var socketServer = new SocketServer(server, deviceManager)
 socketServer.constructEvents()
 
-
 // send a friendly page instead of 404
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'))

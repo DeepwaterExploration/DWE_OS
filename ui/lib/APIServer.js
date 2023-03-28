@@ -14,25 +14,13 @@ class APIServer {
       res.send(this.deviceManager.getSerializableDevices())
     })
 
-        this.app.get('/networks', (req, res) => {
-            res.send(this.wifiManager.networks);
-        });
+    this.app.get('/networks', (req, res) => {
+      res.send(this.wifiManager.networks)
+    })
 
-        this.app.get('/connectedNetwork', async (req, res) => {
-            res.send({
-                network: await this.wifiManager.getConnectedNetwork()
-            });
-        })
-
-        this.app.get('/app', (req, res) => {
-            res.send({
-                version
-            });
-        });
-
-    this.app.get('/connectedNetwork', (req, res) => {
+    this.app.get('/connectedNetwork', async (req, res) => {
       res.send({
-        network: this.wifiManager.getConnectedNetwork(),
+        network: await this.wifiManager.getConnectedNetwork(),
       })
     })
 
