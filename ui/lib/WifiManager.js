@@ -68,7 +68,8 @@ class WifiManager {
     let currentConnections = await wifi.getCurrentConnections()
     let currentNetwork =
       currentConnections.length > 0 ? new Network(currentConnections[0]) : null
-    return currentNetwork
+    console.log(currentNetwork.ssid)
+    return currentNetwork.ssid
   }
 }
 
