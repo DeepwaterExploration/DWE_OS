@@ -1,0 +1,38 @@
+name: Test Building Code
+# Controls when the workflow will run
+on: [push, pull_request, workflow_dispatch]
+# The sequence of runs in this workflow:
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out Repository Code
+        uses: actions/checkout@v3
+      - name: Cache APT Packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libunwind-dev libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
+          version: 1.1
+      # - name: Streaming Dependencies
+      #   run: |
+      #     sudo apt update && sudo apt upgrade -y
+      #     sudo apt install libunwind-dev
+      #     sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+      #     sudo apt install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
+      - name: Set Up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Node Dependencies
+        run: |
+          cd ui
+          npm --logevel=error install
+          cd client
+          npm --logevel=error install
+          cd ..
+      - name: Build Repository Code
+        run: |
+          cd ui
+          npm run build
