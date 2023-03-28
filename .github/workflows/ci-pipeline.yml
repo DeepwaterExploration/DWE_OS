@@ -10,5 +10,16 @@ jobs:
     steps:
       - name: Check out Repository Code
         uses: actions/checkout@v3
-      # - name: Build Repository Code
-      #   uses:
+      - name: Set Up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Build Repository Code
+        run: |
+          cd ui
+          npm install
+          npm run build
+          cd client 
+          npm install
+          cd ..
+          npm run start
