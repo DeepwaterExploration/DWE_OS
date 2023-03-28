@@ -1,0 +1,14 @@
+name: Test Building Code
+# Controls when the workflow will run
+on: [push, pull_request, workflow_dispatch]
+# The sequence of runs in this workflow:
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out Repository Code
+        uses: actions/checkout@v3
+      # - name: Build Repository Code
+      #   uses:
