@@ -33,7 +33,6 @@ jobs:
           cd ui
           npm ci
           cd client
-          npm ci
           cd ..
       - name: Build Repository Code
         run: |
