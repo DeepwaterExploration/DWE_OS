@@ -20,7 +20,7 @@ class Network {
 class WifiManager {
   constructor() {
     wifi.init({
-      iface: null
+      iface: null,
     })
     this.networks = []
   }
@@ -33,10 +33,10 @@ class WifiManager {
           console.log(error)
           reject(error)
         } else {
-          networks.forEach(networkInfo => {
+          networks.forEach((networkInfo) => {
             let network = new Network(networkInfo)
             let existingNetworkIndex = this.networks.findIndex(
-              n => n.ssid == network.ssid
+              (n) => n.ssid == network.ssid
             )
             let existingNetwork =
               existingNetworkIndex >= 0
@@ -60,7 +60,7 @@ class WifiManager {
   }
 
   connect(ssid, password = undefined) {
-    let network = this.networks.find(network => network.ssid == ssid)
+    let network = this.networks.find((network) => network.ssid == ssid)
     network.connect(password)
   }
 
@@ -68,7 +68,8 @@ class WifiManager {
     let currentConnections = await wifi.getCurrentConnections()
     let currentNetwork =
       currentConnections.length > 0 ? new Network(currentConnections[0]) : null
-    return currentNetwork
+    console.log(currentNetwork.ssid)
+    return currentNetwork.ssid
   }
 }
 

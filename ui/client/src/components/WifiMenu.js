@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import WifiIcon from '@mui/icons-material/Wifi'
 import WifiLockIcon from '@mui/icons-material/WifiLock'
 import SignalWifi4Bar from '@mui/icons-material/SignalWifi4Bar'
-import { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { Button, Grid, Modal, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { LineBreak, networkConnect } from '../utils/utils'
@@ -17,7 +17,7 @@ const modalStyle = {
   width: 500,
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 4
+  p: 4,
 }
 
 function WifiConnection(props) {
@@ -41,14 +41,20 @@ export default function WifiMenu(props) {
   const [requiresPassword, setRequiresPassword] = useState(false)
   const [connectedNetwork, setConnectedNetwork] = useState(null)
 
-  // fetch('/connectedNetwork')
-  //     .then((response) => response.json())
-  //     .then((network) => {
-  //         setConnectedNetwork(network.ssid);
-  //     })
+  const updateConnectedNetwork = () => {
+    fetch('/connectedNetwork')
+      .then((response) => response.json())
+      .then((network) => {
+        setConnectedNetwork(network.network)
+      })
+  }
+
+  useLayoutEffect(() => {
+    updateConnectedNetwork()
+  }, [])
 
   const open = Boolean(anchorEl)
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
@@ -56,35 +62,37 @@ export default function WifiMenu(props) {
   }
 
   const [wifiNetworks, setWifiNetworks] = useState([])
-  fetch('/networks')
-    .then(response => response.json())
-    .then(networks => {
-      setWifiNetworks(
-        networks.map(network => {
-          return (
-            <>
-              <MenuItem
-                onClick={function() {
-                  setSelectedWifi(network.ssid)
-                  setRequiresPassword(network.requiresPasskey)
-                  setWifiModalOpen(true)
-                  handleClose()
-                }}
-              >
-                <WifiConnection
-                  ssid={network.ssid}
-                  locked={network.requiresPasskey}
-                />
-              </MenuItem>
-            </>
-          )
-        })
-      )
-    })
+  useLayoutEffect(() => {
+    fetch('/networks')
+      .then((response) => response.json())
+      .then((networks) => {
+        setWifiNetworks(
+          networks.map((network) => {
+            return (
+              <>
+                <MenuItem
+                  onClick={function () {
+                    setSelectedWifi(network.ssid)
+                    setRequiresPassword(network.requiresPasskey)
+                    setWifiModalOpen(true)
+                    handleClose()
+                  }}
+                >
+                  <WifiConnection
+                    ssid={network.ssid}
+                    locked={network.requiresPasskey}
+                  />
+                </MenuItem>
+              </>
+            )
+          })
+        )
+      })
+  }, [])
 
   return (
     <div>
-      {/* <Typography>Connected Network: {connectedNetwork}</Typography> */}
+      <Typography>Connected Network: {connectedNetwork}</Typography>
       <IconButton
         id="wifi-menu-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -100,7 +108,7 @@ export default function WifiMenu(props) {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'wifi-menu-button'
+          'aria-labelledby': 'wifi-menu-button',
         }}
       >
         {wifiNetworks}
@@ -120,7 +128,7 @@ export default function WifiMenu(props) {
               type="password"
               label="Password"
               variant="standard"
-              onChange={function(e) {
+              onChange={function (e) {
                 setPasswordField(e.target.value)
               }}
             />
@@ -135,7 +143,7 @@ export default function WifiMenu(props) {
             <Button
               sx={{ width: '40%', margin: 1 }}
               variant="contained"
-              onClick={function() {
+              onClick={function () {
                 setWifiModalOpen(false)
               }}
             >
@@ -144,10 +152,20 @@ export default function WifiMenu(props) {
             <Button
               sx={{ width: '40%', margin: 1 }}
               variant="contained"
-              onClick={function() {
+              onClick={function () {
                 networkConnect(selectedWifi, passwordField)
                 setPasswordField(null)
                 setWifiModalOpen(false)
+
+                // TODO: Switch to websocket for wifi
+                let numTries = 5
+                let interval = setInterval(() => {
+                  updateConnectedNetwork()
+                  numTries--
+                  if (connectedNetwork === selectedWifi || numTries === 0) {
+                    clearInterval(interval)
+                  }
+                }, 2000)
               }}
             >
               Connect

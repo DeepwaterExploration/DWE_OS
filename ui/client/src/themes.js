@@ -7,15 +7,15 @@ export const lightTheme = createTheme({
   typography: {
     fontFamily: 'HelveticaNeueLight, sans-serif',
     fontWeightRegular: 400,
-    fontWeightItalic: 400
+    fontWeightItalic: 400,
   },
   overrides: {
     MuiTypography: {
       styleOverrides: {
         root: {
-          letterSpacing: '0.05em'
-        }
-      }
+          letterSpacing: '0.05em',
+        },
+      },
     },
     MuiCssBaseline: {
       '@global': {
@@ -27,36 +27,36 @@ export const lightTheme = createTheme({
           local('HelveticaNeueLight'),
           local('HelveticaNeueLight'),
           url(./fonts/HelveticaNeue-Light.otf) format('opentype')
-        `
-        }
-      }
-    }
+        `,
+        },
+      },
+    },
   },
   palette: {
     grey: {
       main: grey[200],
-      dark: grey[300]
+      dark: grey[300],
     },
     primary: {
       dark: '#092037',
-      main: '#15314d'
-    }
-  }
+      main: '#15314d',
+    },
+  },
 })
 
 export const darkTheme = createTheme({
   typography: {
     fontFamily: 'HelveticaNeueLight, sans-serif',
     fontWeightRegular: 400,
-    fontWeightItalic: 400
+    fontWeightItalic: 400,
   },
   overrides: {
     MuiTypography: {
       styleOverrides: {
         root: {
-          letterSpacing: '0.05em'
-        }
-      }
+          letterSpacing: '0.05em',
+        },
+      },
     },
     MuiCssBaseline: {
       '@global': {
@@ -68,14 +68,14 @@ export const darkTheme = createTheme({
           local('HelveticaNeueLight'),
           local('HelveticaNeueLight'),
           url(./fonts/HelveticaNeue-Light.otf) format('opentype')
-        `
-        }
-      }
-    }
+        `,
+        },
+      },
+    },
   },
   palette: {
-    mode: 'dark'
-  }
+    mode: 'dark',
+  },
 })
 
 // export const roboto = Roboto({

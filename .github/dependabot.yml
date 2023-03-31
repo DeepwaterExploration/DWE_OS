@@ -8,6 +8,7 @@ updates:
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
+    open-pull-requests-limit: 10
     schedule:
       interval: "daily"
   # Raise all npm pull requests with custom labels
@@ -17,7 +18,8 @@ updates:
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    directory: "/ui"
+    directory: "/ui/"
+    open-pull-requests-limit: 10
     schedule:
       interval: "daily"
     # Raise all npm pull requests with custom labels
@@ -26,7 +28,8 @@ updates:
       - "dependencies"
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    directory: "/ui/client"
+    directory: "/ui/client/"
+    open-pull-requests-limit: 10
     schedule:
       interval: "daily"
     # Raise all npm pull requests with custom labels
