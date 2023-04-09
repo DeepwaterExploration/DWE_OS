@@ -1,4 +1,5 @@
 const wifi = require('node-wifi');
+const EventEmitter = require('events');
 
 class Network {
     constructor(networkInfo) {
@@ -23,6 +24,10 @@ class WifiManager {
             iface: null
         });
         this.networks = []
+        setInterval(async () => {
+            let connectedNetwork = await this.getConnectedNetwork();
+            // TODO: Finish
+        }, 1000);
     }
 
     async scan() {

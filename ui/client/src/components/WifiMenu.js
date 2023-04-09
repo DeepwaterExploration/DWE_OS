@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import WifiIcon from '@mui/icons-material/Wifi';
 import WifiLockIcon from '@mui/icons-material/WifiLock';
 import SignalWifi4Bar from '@mui/icons-material/SignalWifi4Bar';
+import CheckIcon from '@mui/icons-material/Check';
 import React, { useLayoutEffect, useState } from 'react';
 import { Button, Grid, Modal, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
@@ -27,6 +28,7 @@ function WifiConnection(props) {
     }
     return (
         <IconButton>
+            {props.isConnected ? <CheckIcon></CheckIcon> : undefined}
             <Icon sx={{ marginRight: 1 }} />
             {props.ssid}
         </IconButton>
@@ -50,7 +52,7 @@ export default function WifiMenu(props) {
     }
 
     useLayoutEffect(() => {
-        updateConnectedNetwork()
+        updateConnectedNetwork();
     }, []);
 
     const open = Boolean(anchorEl);
@@ -74,16 +76,16 @@ export default function WifiMenu(props) {
                             setWifiModalOpen(true);
                             handleClose();
                         }}>
-                        <WifiConnection ssid={network.ssid} locked={network.requiresPasskey} />
+                        <WifiConnection ssid={network.ssid} locked={network.requiresPasskey} isConnected={connectedNetwork == network.ssid} />
                     </MenuItem>
                 </>
             }));
         });
-    }, []);
+    }, [connectedNetwork]);
     
     return (
         <div>
-            <Typography>Connected Network: {connectedNetwork}</Typography>
+            {/* <Typography>Connected Network: {connectedNetwork}</Typography> */}
             <IconButton id="wifi-menu-button" aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
