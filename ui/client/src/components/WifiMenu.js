@@ -63,12 +63,25 @@ export default function WifiMenu(props) {
         setAnchorEl(null);
     };
 
-    const [wifiNetworks, setWifiNetworks] = useState([]);
+    const [connectedWifiNetworks, setConnectedWifiNetworks] = useState([]);
+    const [availableWifiNetworks, setAvailableWifiNetworks] = useState([]);
     useLayoutEffect(() => {
         fetch('/networks')
         .then((response) => response.json())
         .then((networks) => {
-            setWifiNetworks(networks.map((network) => {
+            setConnectedNetwork(networks.find((network) => network.ssid == connectedNetwork));
+            setConnectedWifiNetworks(<>
+                <MenuItem onClick={function() {
+                        setSelectedWifi(connectedNetwork.ssid);
+                        setRequiresPassword(connectedNetwork.requiresPasskey);
+                        setWifiModalOpen(true);
+                        handleClose();
+                    }}>
+                    <WifiConnection ssid={connectedNetwork.ssid} locked={connectedNetwork.requiresPasskey} />
+                </MenuItem>
+            </>);
+            setAvailableWifiNetworks(networks.map((network) => {
+                if (connectedNetwork == network.ssid) return undefined;
                 return <>
                     <MenuItem onClick={function() {
                             setSelectedWifi(network.ssid);
@@ -100,7 +113,10 @@ export default function WifiMenu(props) {
                 MenuListProps={{
                     'aria-labelledby': 'wifi-menu-button',
                 }}>
-                { wifiNetworks }
+                <Typography sx={{marginLeft: 2}}>Active Connections</Typography>
+                { connectedWifiNetworks }
+                <Typography sx={{marginLeft: 2}}>Available Connections</Typography>
+                { availableWifiNetworks }
             </Menu>
             <Modal
                 open={wifiModalOpen}
