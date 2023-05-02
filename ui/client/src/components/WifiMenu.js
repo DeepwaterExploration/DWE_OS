@@ -77,7 +77,7 @@ export default function WifiMenu(props) {
                         setWifiModalOpen(true);
                         handleClose();
                     }}>
-                    <WifiConnection ssid={connectedNetwork.ssid} locked={connectedNetwork.requiresPasskey} />
+                    <WifiConnection ssid={connectedNetwork?.ssid} locked={connectedNetwork?.requiresPasskey} />
                 </MenuItem>
             </>);
             setAvailableWifiNetworks(networks.map((network) => {
