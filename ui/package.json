@@ -4,12 +4,7 @@
   "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
   "main": "lib/index.js",
   "bin": "bin/index.js",
-  "keywords": [
-    "linux",
-    "explorehd",
-    "v4l2",
-    "deepwaterexploration"
-  ],
+  "keywords": ["linux", "explorehd", "v4l2", "deepwaterexploration"],
   "repository": {
     "url": "https://github.com/DeepwaterExploration/DWE_OS"
   },
@@ -24,16 +19,12 @@
   },
   "author": "DeepWater Exploration Inc.",
   "license": "GPL-3.0",
-  "os": [
-    "linux"
-  ],
+  "os": ["linux"],
   "dependencies": {
     "express": "^4.17.2",
     "gstreamer-superficial": "^1.7.4",
     "node-persist": "^3.1.0",
     "node-wifi": "^2.0.16",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
     "socket.io": "^4.5.1",
     "usb-detection": "^4.14.1",
     "v4l2camera-pr48": "^1.2.1",
@@ -42,16 +33,5 @@
   "contributors": [
     "Brandon Stevens <brandon@exploredeepwater.com> (https://github.com/brandonhs)",
     "Miguel Villa Floran <miguel@exploredeepwater.com> (https://github.com/Kaweees)"
-  ],
-  "devDependencies": {
-    "@vitejs/plugin-react": "^3.1.0",
-    "eslint": "^8.37.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.8.7",
-    "vite": "^4.2.1"
-  }
+  ]
 }
