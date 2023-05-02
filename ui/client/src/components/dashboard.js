@@ -354,7 +354,7 @@ export default function Dashboard(props) {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} style={{ paddingTop: '16px' }}>
               {/* DeviceCards */}
               <div style={{ minHeight: '14px' }} />
               <div style={{ height: 'calc(100vh - 14px)' }}>
