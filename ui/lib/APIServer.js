@@ -14,15 +14,15 @@ class APIServer {
             res.send(this.deviceManager.getSerializableDevices());
         });
 
-        this.app.get('/networks', (req, res) => {
-            res.send(this.wifiManager.networks);
-        });
+        // this.app.get('/networks', (req, res) => {
+        //     res.send(this.wifiManager.networks);
+        // });
 
-        this.app.get('/connectedNetwork', async (req, res) => {
-            res.send({
-                network: await this.wifiManager.getConnectedNetwork()
-            });
-        })
+        // this.app.get('/connectedNetwork', async (req, res) => {
+        //     res.send({
+        //         network: await this.wifiManager.getConnectedNetwork()
+        //     });
+        // })
 
         this.app.get('/app', (req, res) => {
             res.send({
@@ -85,10 +85,10 @@ class APIServer {
             res.send();
         });
 
-        this.app.post('/network', (req, res) => {
-            this.wifiManager.connect(req.body.ssid, req.body.password);
-            res.send();
-        })
+        // this.app.post('/network', (req, res) => {
+        //     this.wifiManager.connect(req.body.ssid, req.body.password);
+        //     res.send();
+        // })
 
         // this.app.post('/setResolution', async (req, res) => {
         //     let device = this.deviceManager.getDeviceFromPath(req.body.devicePath);

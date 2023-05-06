@@ -44,7 +44,7 @@ export default function Header(props) {
                 </Drawer>
                 <img src={DWELogo_white} style={{ height: 30 }} alt="DWE Logo"/>
                 <Grid container justifyContent="flex-end">
-                    <WifiMenu />
+                    {/* <WifiMenu /> */}
                 </Grid>
                 { props.children }
             </Toolbar>
