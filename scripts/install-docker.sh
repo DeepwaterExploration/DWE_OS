@@ -13,8 +13,8 @@ systemctl enable docker
 echo "Pulling docker image"
 docker pull brandondwe/dwe-controls
 
-# Create docker image
-echo "Creating docker image"
+# Create docker container
+echo "Creating docker container"
 if [ "$(docker ps -q -f name=dwe-controls)" ]; then
     docker rm dwe-controls --force
 fi
