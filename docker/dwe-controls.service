@@ -4,7 +4,7 @@ Description=Web Based UVC Control Driver for the DeepWater Exploration exploreHD
 [Service]
 Type=simple
 TimeoutStartSec=0
-Restart=always
+Restart=on-failure
 ExecStart=/usr/bin/docker start dwe-controls
 
 [Install]
