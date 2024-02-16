@@ -1,10 +1,10 @@
-<a href="https://exploredeepwater.com/">
-    <img src="https://docs.exploredeepwater.com/_static/dwe_transparent.png" alt="DWE Logo" title="DeepWater Exploration" align="right" height="60" />
+<a href="https://dwe.ai/">
+    <img src="https://docs.dwe.ai/_static/DWELogo_white_WEB.svg" alt="DWE Logo" title="DeepWater Exploration" align="right" height="60" />
 </a>
 
 # DWE OS
 
-**NOTE: exploreHD settings can only be adjusted on the lower bandwidth / configurable firmware. Learn how to upgrade [here](https://docs.exploredeepwater.com/software/firmware.html)**.
+**NOTE: exploreHD settings can only be adjusted on the lower bandwidth / configurable firmware. Learn how to upgrade [here](https://docs.dwe.ai/software/firmware.html)**.
 
 - [Documentation](#documentation)
     - [Basic Setup Guides](#basic-setup-guides)
@@ -19,17 +19,17 @@
 
 ## Documentation
 
-The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [documentation site](https://docs.exploredeepwater.com/).
+The guide in [COMPANION.md](./COMPANION.md) has been superseded by our [documentation site](https://docs.dwe.ai/).
 
 ### Basic Setup Guides
-- [Pi Setup](https://docs.exploredeepwater.com/guides/pi_setup.html)
-- [ArduSub Companion Setup](https://docs.exploredeepwater.com/guides/ardusub_companion.html)
+- [Pi Setup](https://docs.dwe.ai/guides/pi_setup.html)
+- [BlueOS Companion Setup](https://docs.dwe.ai/guides/blueos_companion.html)
 
 ## Getting Started
 
 ### Connecting
 
-To connect to the pi, we suggest using ssh with Putty. You can read our documentation on that on [SSH Into a Raspberry Pi](https://docs.exploredeepwater.com/guides/ssh_into_pi.html) of our pi setup docs.
+To connect to the pi, we suggest using ssh with Putty. You can read our documentation on that on [SSH Into a Raspberry Pi](https://docs.dwe.ai/guides/ssh_into_pi.html) of our pi setup docs.
 
 ### Installing with Docker
 
