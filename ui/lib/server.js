@@ -10,7 +10,7 @@ const SocketServer = require('./socketServer');
 const app = express();
 const server = http.createServer(app);
 
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 app.use(express.json());
 
 var deviceManager = new DeviceManager();
@@ -25,7 +25,7 @@ socketServer.constructEvents();
 
 // send a friendly page instead of 404
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // server
@@ -37,7 +37,7 @@ async function serve(port=5000, host='0.0.0.0') {
 
     // server
     server.listen(port, host, () => {
-        console.log(`App listening on port: ${port}`);
+        console.log(`App listening here: http://${host}:${port}`);
     });
 }
 

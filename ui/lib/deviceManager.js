@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const usbDetect = require('usb-detection');
-const v4l2camera = require("v4l2camera-pr48");
+const v4l2camera = require("@dwe.ai/v4l2camera");
 const SettingsManager = require('./settingsManager');
 const StreamManager = require('./streamManager');
 const { getDriverOptions, setDriverOptions } = require('./utils/driver');
@@ -51,11 +51,11 @@ class Device {
         if (this.stream && this.stream.width) {
             resolution = this.stream.width + 'x' + this.stream.height;
         }
-        
+
         this.updateControls();
 
         let stream = {
-            isStreaming: this.stream != null, 
+            isStreaming: this.stream != null,
             host: this.stream ? this.stream.host : '192.168.2.1',
             port: this.stream ? this.stream.port : 5600,
             resolution: resolution
