@@ -1,42 +1,34 @@
 {
-  "name": "@deepwaterexploration/dwe-controls",
-  "version": "0.2.7",
-  "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
-  "main": "lib/index.js",
-  "bin": "bin/index.js",
-  "keywords": [
-    "linux",
-    "explorehd",
-    "v4l2",
-    "deepwaterexploration"
-  ],
-  "repository": {
-    "url": "https://github.com/DeepwaterExploration/DWE_OS"
-  },
-  "homepage": "https://github.com/DeepwaterExploration/DWE_OS#readme",
-  "scripts": {
-    "build": "cd client && npm run build",
-    "prepack": "npm run build",
-    "install": "cd camera_controls && make",
-    "start": "node bin/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "name": "@dwe.ai/dwe-os-1",
   "author": "DeepWater Exploration Inc.",
   "license": "GPL-3.0",
   "os": [
     "linux"
   ],
+  "version": "24.3.1",
+  "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
+  "main": "lib/index.js",
+  "bin": "bin/index.js",
+  "scripts": {
+    "build": "cd client && npm run build",
+    "prepack": "npm run build",
+    "install": "cd camera_controls && make",
+    "start": "node bin/index.js",
+    "format": "npx prettier --write \"lib/**/*.{js,jsx,ts,tsx}\" && npx prettier --write \"client/**/*.{js,jsx,ts,tsx}\" && npx prettier --write \"bin/**/*.{js,jsx,ts,tsx}\" && npx prettier --write \"examples/**/*.{js,jsx,ts,tsx}\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "express": "^4.17.2",
+    "@dwe.ai/v4l2camera": "^1.2.3",
+    "express": "^4.18.2",
     "gstreamer-superficial": "^1.7.4",
-    "node-persist": "^3.1.0",
+    "node-persist": "^4.0.1",
     "node-wifi": "^2.0.16",
-    "socket.io": "^4.5.1",
-    "usb-detection": "^4.14.1",
-    "v4l2camera-pr48": "^1.2.1",
-    "yargs": "^17.3.1"
+    "socket.io": "^4.7.4",
+    "usb-detection": "^4.14.2",
+    "yargs": "^17.7.2"
   },
   "contributors": [
-    "Brandon Stevens <brandon@exploredeepwater.com> (https://github.com/brandonhs)"
+    "Brandon Stevens <team@dwe.ai> (https://github.com/brandonhs)",
+    "Kunal Singla <team@dwe.ai> (https://github.com/tekunalogy)"
   ]
 }

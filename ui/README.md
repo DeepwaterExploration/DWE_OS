@@ -1,8 +1,8 @@
-<a href="https://exploredeepwater.com/">
-    <img src="https://docs.exploredeepwater.com/_static/dwe_transparent.png" alt="DWE Logo" title="DeepWater Exploration" align="right" height="60" />
+<a href="https://dwe.ai/">
+    <img src="https://docs.dwe.ai/_static/dwe_transparent.png" alt="DWE Logo" title="DeepWater Exploration" align="right" height="60" />
 </a>
 
-# dwe-controls
+# DWE OS
 
 Control system for the DeepWater Exploration exploreHD and HDCam. Additional streaming functionality is available for all UVC compatible H264 devices.
 
@@ -12,13 +12,13 @@ On linux devices:
 
 `sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev`
 
-`sudo npm install -g @deepwaterexploration/dwe-controls`
+`sudo npm install -g @dwe.ai/dwe-os-1`
 
 ## Usage
 
 **Running**
 
-Start the server: `dwe-controls start [port=5000] [host=0.0.0.0]`
+Start the server: `dwe-os-1 start [port=5000] [host=0.0.0.0]`
 
 *[pm2](https://www.npmjs.com/package/pm2) is recommended for auto-start*
 
@@ -57,5 +57,5 @@ init();
 
 Running the server:
 ```js
-require('dwe-controls').serve();
+require('dwe-os-1').serve();
 ```
