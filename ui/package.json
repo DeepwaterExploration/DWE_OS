@@ -1,11 +1,11 @@
 {
-  "name": "@deepwaterexploration/dweos1",
+  "name": "@dwe.ai/dwe-os-1",
   "author": "DeepWater Exploration Inc.",
   "license": "GPL-3.0",
   "os": [
     "linux"
   ],
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Web Based UVC Control Driver for the DeepWater Exploration exploreHD and HDCam",
   "main": "lib/index.js",
   "bin": "bin/index.js",
@@ -14,6 +14,7 @@
     "prepack": "npm run build",
     "install": "cd camera_controls && make",
     "start": "node bin/index.js",
+    "format": "npx prettier --write \"lib/**/*.{js,jsx,ts,tsx}\" && npx prettier --write \"client/**/*.{js,jsx,ts,tsx}\" && npx prettier --write \"bin/**/*.{js,jsx,ts,tsx}\" && npx prettier --write \"examples/**/*.{js,jsx,ts,tsx}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -25,5 +26,9 @@
     "socket.io": "^4.7.4",
     "usb-detection": "^4.14.2",
     "yargs": "^17.7.2"
-  }
+  },
+  "contributors": [
+    "Brandon Stevens <team@dwe.ai> (https://github.com/brandonhs)",
+    "Kunal Singla <team@dwe.ai> (https://github.com/tekunalogy)"
+  ]
 }

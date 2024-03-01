@@ -12,7 +12,7 @@ On linux devices:
 
 `sudo apt install libudev-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev`
 
-`sudo npm install -g @dwe.ai/dwe-os1`
+`sudo npm install -g @dwe.ai/dwe-os-1`
 
 ## Usage
 
