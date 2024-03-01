@@ -11,7 +11,7 @@ echo -e "Installing NodeJS/NPM...\n"
 # Install version 20.x of nodejs
 if ! [ -x "$(command -v node)" ]; then
     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-    apt-get install nodejs -y
+    apt install nodejs -y
 else
     echo "Nodejs already installed. Skipping..."
 fi
