@@ -18,7 +18,7 @@ On linux devices:
 
 **Running**
 
-Start the server: `dwe-controls start [port=5000] [host=0.0.0.0]`
+Start the server: `dwe-os-1 start [port=5000] [host=0.0.0.0]`
 
 *[pm2](https://www.npmjs.com/package/pm2) is recommended for auto-start*
 
@@ -57,5 +57,5 @@ init();
 
 Running the server:
 ```js
-require('dwe-controls').serve();
+require('dwe-os-1').serve();
 ```

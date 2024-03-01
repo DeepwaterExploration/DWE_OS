@@ -37,7 +37,7 @@ npm install -g pm2
 
 echo "Starting DWE OS 1..."
 
-# Start the dwe-controls application
+# Start the dwe-os-1 application
 sudo -u "$SUDO_USER" pm2 start dwe-os-1
 
 echo "Setting up autostart..."
