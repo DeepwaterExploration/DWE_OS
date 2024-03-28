@@ -1,5 +1,5 @@
 const EventEmitter = require("events");
-const usbDetect = require("usb-detection");
+const { usb } = require("usb");
 const v4l2camera = require("@dwe.ai/v4l2camera");
 const SettingsManager = require("./settingsManager");
 const StreamManager = require("./streamManager");
@@ -217,12 +217,13 @@ class DeviceManager extends EventEmitter {
     this.emit("added", this.devices);
 
     // start monitoring for usb device changes
-    usbDetect.startMonitoring();
-    usbDetect.on("change", () => setTimeout(() => this.enumerate(), 250)); // the timeout is to ensure Linux can initialize the device properly
+    usb.on("attach", () => setTimeout(() => this.enumerate(), 250)); // the timeout is to ensure Linux can initialize the device properly
+    usb.on("detach", () => setTimeout(() => this.enumerate(), 250)); // the timeout is to ensure Linux can initialize the device properly
   }
 
   stopMonitoring() {
-    usbDetect.stopMonitoring();
+    usb.removeAllListeners("attach");
+    usb.removeAllListeners("detach");
   }
 
   // construct a serializable array of devices

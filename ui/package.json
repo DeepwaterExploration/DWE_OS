@@ -24,7 +24,7 @@
     "node-persist": "^4.0.1",
     "node-wifi": "^2.0.16",
     "socket.io": "^4.7.4",
-    "usb-detection": "^4.14.2",
+    "usb": "^2.12.1",
     "yargs": "^17.7.2"
   },
   "contributors": [
